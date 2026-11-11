@@ -1,0 +1,717 @@
+{
+  "source": "wifi-source.xlsx",
+  "apartments": [
+    {
+      "name": "Кандинский",
+      "networks": [
+        {
+          "ssid": "Kandinsky1",
+          "password": "kandinsky1st"
+        }
+      ],
+      "slug": "kandinsky"
+    },
+    {
+      "name": "Дега",
+      "networks": [
+        {
+          "ssid": "Dega2",
+          "password": "dega2ond"
+        }
+      ],
+      "slug": "dega"
+    },
+    {
+      "name": "малевич",
+      "networks": [
+        {
+          "ssid": "Malevich4",
+          "password": "malevich4th"
+        }
+      ],
+      "slug": "malevich"
+    },
+    {
+      "name": "ван гог",
+      "networks": [
+        {
+          "ssid": "VanGog3",
+          "password": "vangog3rd"
+        }
+      ],
+      "slug": "van-gog"
+    },
+    {
+      "name": "Мондриан",
+      "networks": [
+        {
+          "ssid": "netis-24G_D6E7D4",
+          "password": "password"
+        },
+        {
+          "ssid": "netis-5G_D6E7D4",
+          "password": "password"
+        }
+      ],
+      "slug": "mondrian"
+    },
+    {
+      "name": "Дарк",
+      "networks": [
+        {
+          "ssid": "Odintsovo2hz",
+          "password": "1odintsovo1"
+        }
+      ],
+      "slug": "dark-blyu"
+    },
+    {
+      "name": "Грин",
+      "networks": [
+        {
+          "ssid": "Odintsovo2hz",
+          "password": "1odintsovo1"
+        }
+      ],
+      "slug": "grin-grass"
+    },
+    {
+      "name": "Милк",
+      "networks": [
+        {
+          "ssid": "Odintsovo2hz",
+          "password": "1odintsovo1"
+        }
+      ],
+      "slug": "milk-sheyk"
+    },
+    {
+      "name": "Парамаунт",
+      "networks": [
+        {
+          "ssid": "cinemaStudios5G",
+          "password": "cinemaStudios5G"
+        },
+        {
+          "ssid": "cinemaStudios2G",
+          "password": "cinemaStudios2G"
+        }
+      ],
+      "slug": "paramount"
+    },
+    {
+      "name": "Мирамакс",
+      "networks": [
+        {
+          "ssid": "cinemaStudios5G",
+          "password": "cinemaStudios5G"
+        },
+        {
+          "ssid": "cinemaStudios2G",
+          "password": "cinemaStudios2G"
+        }
+      ],
+      "slug": "miramaks"
+    },
+    {
+      "name": "Юниверсал",
+      "networks": [
+        {
+          "ssid": "cinemaStudios5G",
+          "password": "cinemaStudios5G"
+        },
+        {
+          "ssid": "cinemaStudios2G",
+          "password": "cinemaStudios2G"
+        }
+      ],
+      "slug": "universal"
+    },
+    {
+      "name": "Чехов",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON_cSS6",
+          "password": "EfknKg7R"
+        }
+      ],
+      "slug": "chekhov"
+    },
+    {
+      "name": "Шаляпин",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON_cSS6",
+          "password": "EfknKg7R"
+        }
+      ]
+    },
+    {
+      "name": "Дягилев",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON_cSS6",
+          "password": "EfknKg7R"
+        }
+      ],
+      "slug": "dyagilev"
+    },
+    {
+      "name": "Маяковский",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON_0BC9",
+          "password": "Y5G7N67Q"
+        }
+      ],
+      "slug": "mayakovskiy"
+    },
+    {
+      "name": "Чаплин",
+      "networks": [
+        {
+          "ssid": "MTS_GPON_C452",
+          "password": "PXx3KEfR"
+        }
+      ],
+      "slug": "chaplin"
+    },
+    {
+      "name": "Монро",
+      "networks": [
+        {
+          "ssid": "MTS_GPON_11B8",
+          "password": "AY6nq3EMi5"
+        },
+        {
+          "ssid": "MTS_GPON5_11B8",
+          "password": "AY6nq3EMi5"
+        }
+      ],
+      "slug": "monro"
+    },
+    {
+      "name": "Талисман",
+      "networks": [
+        {
+          "ssid": "TP-Link_166D/(5G)",
+          "password": "98663095"
+        }
+      ],
+      "slug": "talisman"
+    },
+    {
+      "name": "сапфир",
+      "networks": [
+        {
+          "ssid": "MTS_GPON_OA72",
+          "password": "uEiYPCUyHV"
+        }
+      ],
+      "slug": "sapfir"
+    },
+    {
+      "name": "сойка",
+      "networks": [
+        {
+          "ssid": "Home24Apartments",
+          "password": "Home24ap"
+        }
+      ],
+      "slug": "soyka"
+    },
+    {
+      "name": "рим",
+      "networks": [
+        {
+          "ssid": "TP-LINK_256A",
+          "password": "14834516"
+        }
+      ],
+      "slug": "rim"
+    },
+    {
+      "name": "Снежные вершины",
+      "networks": [
+        {
+          "ssid": "Keenetic -1168",
+          "password": "8jRErYad"
+        }
+      ],
+      "slug": "vershiny"
+    },
+    {
+      "name": "Вояж",
+      "networks": [
+        {
+          "ssid": "Formula580",
+          "password": "Roman!2019"
+        }
+      ],
+      "slug": "voyazh"
+    },
+    {
+      "name": "Хомлин",
+      "networks": [
+        {
+          "ssid": "79 5G",
+          "password": "rada0000"
+        }
+      ],
+      "slug": "homlin"
+    },
+    {
+      "name": "бриз",
+      "networks": [
+        {
+          "ssid": "TP-Link_7F-92",
+          "password": "86934053"
+        }
+      ],
+      "slug": "briz"
+    },
+    {
+      "name": "нуар",
+      "networks": [
+        {
+          "ssid": "",
+          "password": "9uNxnRhfcBsk"
+        }
+      ],
+      "slug": "nuar"
+    },
+    {
+      "name": "артмен",
+      "networks": [
+        {
+          "ssid": "Keenetic-8674",
+          "password": "dFtoMrZn"
+        }
+      ],
+      "slug": "artmen"
+    },
+    {
+      "name": "карма",
+      "networks": [
+        {
+          "ssid": "TP-Link_3216",
+          "password": "63737431"
+        }
+      ],
+      "slug": "karma"
+    },
+    {
+      "name": "жизель",
+      "networks": [
+        {
+          "ssid": "Formula_671",
+          "password": "89255999382"
+        }
+      ],
+      "slug": "gizelle"
+    },
+    {
+      "name": "Матис",
+      "networks": [
+        {
+          "ssid": "ELTEX - 19C8",
+          "password": "GP21232106"
+        }
+      ],
+      "slug": "matiss"
+    },
+    {
+      "name": "Шамбала",
+      "networks": [
+        {
+          "ssid": "DIR-842-5G-6505",
+          "password": "59823452"
+        }
+      ],
+      "slug": "shambala"
+    },
+    {
+      "name": "романс",
+      "networks": [
+        {
+          "ssid": "ELTEX - 61С0",
+          "password": "GP21407328"
+        }
+      ],
+      "slug": "romans"
+    },
+    {
+      "name": "Феррари",
+      "networks": [
+        {
+          "ssid": "Keenetic-8325",
+          "password": "HELrCsXZ"
+        }
+      ],
+      "slug": "ferrari"
+    },
+    {
+      "name": "Россо",
+      "networks": [
+        {
+          "ssid": "Home24",
+          "password": "Home24ap"
+        }
+      ],
+      "slug": "rosso"
+    },
+    {
+      "name": "Идальго",
+      "networks": [
+        {
+          "ssid": "MTS_GPON_E20F",
+          "password": "FRAUbTRU"
+        }
+      ],
+      "slug": "idalgo"
+    },
+    {
+      "name": "Симфония",
+      "networks": [
+        {
+          "ssid": "",
+          "password": "89183852111"
+        }
+      ]
+    },
+    {
+      "name": "Скандинавия",
+      "networks": [
+        {
+          "ssid": "Xaomi_А92Е_Plus",
+          "password": "31121982"
+        }
+      ],
+      "slug": "scandi"
+    },
+    {
+      "name": "Сити",
+      "networks": [
+        {
+          "ssid": "Dir-842-0AC1.5G",
+          "password": "69538674"
+        }
+      ]
+    },
+    {
+      "name": "Вайт",
+      "networks": [
+        {
+          "ssid": "Home24ap",
+          "password": "Home24ap@"
+        }
+      ],
+      "slug": "white"
+    },
+    {
+      "name": "Артледи",
+      "networks": [
+        {
+          "ssid": "1.2-15-234 5G",
+          "password": "24257824"
+        }
+      ],
+      "slug": "artledi"
+    },
+    {
+      "name": "Дзен",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON5_5674",
+          "password": "BQN6BNTE"
+        }
+      ],
+      "slug": "dzen"
+    },
+    {
+      "name": "Аквамарин",
+      "networks": [
+        {
+          "ssid": "Zyxel_141_Sky blue",
+          "password": "2208128562"
+        }
+      ],
+      "slug": "akvamarin"
+    },
+    {
+      "name": "Минт",
+      "networks": [
+        {
+          "ssid": "Zyxel_141_sun",
+          "password": "2208128755"
+        }
+      ],
+      "slug": "mint"
+    },
+    {
+      "name": "Санлайт",
+      "networks": [
+        {
+          "ssid": "Zyxel_141_sun",
+          "password": "2208128755"
+        }
+      ]
+    },
+    {
+      "name": "Меркурий",
+      "networks": [
+        {
+          "ssid": "Home24ap223",
+          "password": "Home24ap223@"
+        }
+      ],
+      "slug": "merkuriy"
+    },
+    {
+      "name": "Марс",
+      "networks": [
+        {
+          "ssid": "Home24ap223",
+          "password": "Home24ap223@"
+        }
+      ],
+      "slug": "mars"
+    },
+    {
+      "name": "Венера",
+      "networks": [
+        {
+          "ssid": "Home24ap223",
+          "password": "Home24ap223@"
+        }
+      ],
+      "slug": "venera"
+    },
+    {
+      "name": "Фрейя",
+      "networks": [
+        {
+          "ssid": "213",
+          "password": "89057486464"
+        }
+      ]
+    },
+    {
+      "name": "Эллида",
+      "networks": [
+        {
+          "ssid": "213",
+          "password": "89057486464"
+        }
+      ]
+    },
+    {
+      "name": "Энигма",
+      "networks": [
+        {
+          "ssid": "213",
+          "password": "89057486464"
+        }
+      ]
+    },
+    {
+      "name": "Сага",
+      "networks": [
+        {
+          "ssid": "213",
+          "password": "89057486464"
+        }
+      ],
+      "slug": "saga"
+    },
+    {
+      "name": "Монблан",
+      "networks": [
+        {
+          "ssid": "Home24",
+          "password": "Home24ap"
+        }
+      ],
+      "slug": "montblanc"
+    },
+    {
+      "name": "Индиго",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON5_vFv9",
+          "password": "XHbM6Gy2"
+        }
+      ],
+      "slug": "indigo"
+    },
+    {
+      "name": "Сандал",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON5_vFv9",
+          "password": "XHbM6Gy2"
+        }
+      ]
+    },
+    {
+      "name": "Рубин",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON5_vFv9",
+          "password": "XHbM6Gy2"
+        }
+      ]
+    },
+    {
+      "name": "Олимп",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON5_CE66",
+          "password": "RJHHE4PK"
+        }
+      ],
+      "slug": "olimp"
+    },
+    {
+      "name": "Эверест",
+      "networks": [
+        {
+          "ssid": "MGTS_GPON5_CE66",
+          "password": "RJHHE4PK"
+        }
+      ],
+      "slug": "everest"
+    },
+    {
+      "name": "Магнолия",
+      "networks": [
+        {
+          "ssid": "ROOM_1173",
+          "password": "Z_pass_1173"
+        }
+      ],
+      "slug": "magnoliya"
+    },
+    {
+      "name": "белуха",
+      "networks": [
+        {
+          "ssid": "home24",
+          "password": "home24home24"
+        }
+      ],
+      "slug": "beluha"
+    },
+    {
+      "name": "казбек",
+      "networks": [
+        {
+          "ssid": "home24",
+          "password": "home24home24"
+        }
+      ],
+      "slug": "kazbek"
+    },
+    {
+      "name": "эльбрус",
+      "networks": [
+        {
+          "ssid": "home24",
+          "password": "home24home24"
+        }
+      ]
+    },
+    {
+      "name": "аннапурна",
+      "networks": [
+        {
+          "ssid": "home24",
+          "password": "home24home24"
+        }
+      ],
+      "slug": "annapurna"
+    },
+    {
+      "name": "Перо",
+      "networks": [
+        {
+          "ssid": "TP-Link_8420_5G",
+          "password": "72363324"
+        }
+      ],
+      "slug": "pero"
+    },
+    {
+      "name": "Мёд",
+      "networks": [
+        {
+          "ssid": "TP-Link_8420_5G",
+          "password": "72363324"
+        }
+      ],
+      "slug": "med"
+    },
+    {
+      "name": "Шир",
+      "networks": [
+        {
+          "ssid": "Home24",
+          "password": "Home24ap"
+        }
+      ],
+      "slug": "shir"
+    },
+    {
+      "name": "Лориэн",
+      "networks": [
+        {
+          "ssid": "Home24",
+          "password": "Home24ap"
+        }
+      ],
+      "slug": "lorien"
+    },
+    {
+      "name": "Дюма",
+      "networks": [
+        {
+          "ssid": "MTS_HOME_BBE1",
+          "password": "TDjkD2gp"
+        }
+      ],
+      "slug": "dyuma"
+    },
+    {
+      "name": "Твен",
+      "networks": [
+        {
+          "ssid": "MTS_HOME_BBE1",
+          "password": "TDjkD2gp"
+        }
+      ],
+      "slug": "tven"
+    },
+    {
+      "name": "Диккенс",
+      "networks": [
+        {
+          "ssid": "zGOD",
+          "password": "ssbWHdPt"
+        }
+      ],
+      "slug": "dickens"
+    }
+  ],
+  "unmatched": [
+    "Шаляпин",
+    "Симфония",
+    "Сити",
+    "Санлайт",
+    "Фрейя",
+    "Эллида",
+    "Энигма",
+    "Сандал",
+    "Рубин",
+    "эльбрус"
+  ]
+}

@@ -246,21 +246,25 @@ function PartnerForTwo() {
 
         <div className="mt-6 grid grid-cols-1 gap-px bg-[#1a1612]/10 sm:grid-cols-2">
           <a
-            href={`https://t.me/share/url?url=${encodeURIComponent(`Набор «Для двоих» — ${PHONE_LABEL}`)}`}
+            href={`https://wa.me/${PHONE_TEL.replace(/\D/g, "")}?text=${encodeURIComponent(
+              "Здравствуйте! Нужен набор «Для двоих» (доп. услуга).",
+            )}`}
+            target="_blank"
+            rel="noreferrer"
             className="bg-[#1a1612] px-3 py-3.5 text-center text-[11px] uppercase tracking-[0.16em] text-[#efe8dc] no-underline"
           >
-            {o.cta}
+            {o.ctaWrite}
           </a>
           <a
             href={`tel:${PHONE_TEL}`}
             className="bg-[#9a7b4f] px-3 py-3.5 text-center text-[11px] uppercase tracking-[0.16em] text-[#efe8dc] no-underline"
           >
-            {PHONE_LABEL}
+            {o.ctaCall} · {PHONE_LABEL}
           </a>
         </div>
         <p className="mt-3 text-[12px] leading-relaxed text-[#1a1612]/45">
-          Персональный менеджер · {MANAGER_HOURS}. Набор в квартире не ищите — это доп. услуга, получение
-          только через менеджера.
+          Персональный менеджер · {MANAGER_HOURS}. Набор в квартире не ищите — это доп. услуга, оплата и
+          получение только через менеджера.
         </p>
       </div>
     </div>

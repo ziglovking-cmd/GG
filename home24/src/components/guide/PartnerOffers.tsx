@@ -47,7 +47,7 @@ export function PartnerOffers() {
 
       {!offer ? (
         <p className="text-[13px] leading-relaxed text-[#1a1612]/45">
-          Нажмите карточку выше. У «Для двоих» стоит плашка 18+ — откроется после подтверждения возраста.
+          Нажмите карточку выше. У «Для двоих» плашка 18+ — нужен ввод даты рождения.
         </p>
       ) : null}
     </div>
@@ -99,7 +99,27 @@ function OfferTab({
   );
 }
 
+function ageFromIsoDate(value: string, today = new Date()): number | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  const [y, m, d] = value.split("-").map(Number);
+  const born = new Date(y, m - 1, d);
+  if (born.getFullYear() !== y || born.getMonth() !== m - 1 || born.getDate() !== d) return null;
+  if (born > today) return null;
+  let age = today.getFullYear() - y;
+  const beforeBirthday =
+    today.getMonth() < m - 1 || (today.getMonth() === m - 1 && today.getDate() < d);
+  if (beforeBirthday) age -= 1;
+  return age;
+}
+
 function AgeGate({ onConfirm }: { onConfirm: () => void }) {
+  const [dob, setDob] = useState("");
+  const [touched, setTouched] = useState(false);
+  const age = ageFromIsoDate(dob);
+  const ok = age !== null && age >= 18;
+  const tooYoung = age !== null && age < 18;
+  const badDate = touched && dob && age === null;
+
   return (
     <div className="border border-[#1a1612]/10 bg-[#faf6ef] px-5 py-6 sm:px-7">
       <p className="text-[11px] uppercase tracking-[0.2em] text-[#9a7b4f]">Ограничение 18+</p>
@@ -107,13 +127,41 @@ function AgeGate({ onConfirm }: { onConfirm: () => void }) {
         {FOR_TWO_KIT.title}
       </p>
       <p className="mt-3 text-[15px] leading-relaxed text-[#3a342c]">
-        Этот блок только для совершеннолетних гостей. Набор уже в квартире — детали откроются после
-        подтверждения.
+        Этот блок только для совершеннолетних гостей. Чтобы открыть описание набора, укажите дату
+        рождения.
       </p>
+
+      <label className="mt-6 block">
+        <span className="text-[11px] uppercase tracking-[0.2em] text-[#9a7b4f]">Дата рождения</span>
+        <input
+          type="date"
+          value={dob}
+          max={new Date().toISOString().slice(0, 10)}
+          onChange={(e) => {
+            setDob(e.target.value);
+            setTouched(true);
+          }}
+          className="mt-2 w-full border border-[#1a1612]/15 bg-[#efe8dc] px-4 py-3.5 text-[16px] text-[#1a1612] outline-none"
+        />
+      </label>
+
+      <p className="mt-3 text-[13px] leading-relaxed text-[#1a1612]/50">{FOR_TWO_KIT.ageHint}</p>
+      {badDate ? (
+        <p className="mt-2 text-[13px] leading-relaxed text-[#8a3b2b]">Проверьте дату рождения.</p>
+      ) : null}
+      {tooYoung ? (
+        <p className="mt-2 text-[13px] leading-relaxed text-[#8a3b2b]">
+          Раздел доступен только с 18 лет.
+        </p>
+      ) : null}
+
       <button
         type="button"
+        disabled={!ok}
         onClick={onConfirm}
-        className="mt-6 w-full border-0 bg-[#1a1612] px-4 py-3.5 text-[11px] uppercase tracking-[0.16em] text-[#efe8dc]"
+        className={`mt-6 w-full border-0 px-4 py-3.5 text-[11px] uppercase tracking-[0.16em] ${
+          ok ? "bg-[#1a1612] text-[#efe8dc]" : "bg-[#1a1612]/25 text-[#efe8dc]/70"
+        }`}
       >
         {FOR_TWO_KIT.ageGate}
       </button>

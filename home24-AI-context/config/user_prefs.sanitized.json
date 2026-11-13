@@ -1,0 +1,26 @@
+{
+  "users": {
+    "admin": {
+      "signature": "",
+      "theme": "system",
+      "notify_sound": true,
+      "notify_browser": false,
+      "notify_toast": true,
+      "composer_enter": "send",
+      "font_size": "md",
+      "compact_chat": false,
+      "dialog_filter": "mine"
+    },
+    "gevbnvzh": {
+      "signature": "",
+      "theme": "light",
+      "notify_sound": true,
+      "notify_browser": false,
+      "notify_toast": true,
+      "composer_enter": "send",
+      "font_size": "md",
+      "compact_chat": false,
+      "dialog_filter": "mine"
+    }
+  }
+}

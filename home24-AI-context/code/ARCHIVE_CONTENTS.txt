@@ -1,0 +1,36 @@
+Home24 project archive (sanitized copy from local PC)
+
+Source: [REDACTED]\home24_bot_windows
+Created: 2026-11-09 18:55:30
+Machine copy only — not claimed as the live server deploy.
+
+INCLUDED
+- Source under bot/ (Python modules, prompts, dashboard static/brand)
+- Root runners/docs: run_*.py/bat, README*, script.md, requirements.txt, AMOCRM.md, changelogs, install/uninstall bats
+- managers.example.json
+- tests/ and scripts/
+- Code .bak_* of .py/.txt/.css/.js (source history), not secret backups
+
+EXCLUDED (do not restore secrets from elsewhere into a shared zip)
+- .env and all .env.bak_* / .env.*
+- Entire data/ operational directory (SQLite DBs and backups, mailing.sqlite,
+  managers.json, tg_accounts.json, dashboard_users.json, session_blacklist.json,
+  locks, templates.json runtime copies, QR, brand copies under data/)
+- Entire logs/
+- __pycache__ / *.pyc
+- .git, venv/.venv, node_modules
+- Telegram *.session* / tdata (none were present at pack time under the project root listing)
+- Certificates/private keys if any (*.pem/*.key/*.p12/*.pfx)
+
+HOW TO RESTORE CONFIG (no secrets in this archive)
+1. Copy .env.example if you maintain one, or recreate .env from your password manager / server secrets vault.
+   Typical keys are API tokens, Telegram API id/hash, proxy, dashboard auth — take them from your private store, not from chat.
+2. Recreate data/ (empty DB will be created by the app on first run, or restore a private backup you keep offline).
+3. Re-login Telegram accounts via the project's login flow (login_windows.py / dashboard), do not copy session files into shared archives.
+4. Put managers.json / tg_accounts.json from your private backup if needed (managers.example.json is the shape only).
+5. pip install -r requirements.txt and run via start.bat / run_windows.bat as in README_WINDOWS.md.
+
+UPDATE 2026-11-09 (v9.7)
+- new-materials/ installed into the code: see HOME24_V9_7_CHANGELOG.md and new-materials/STATUS.md
+- script.md = new-materials/home24-script-user.md (+ header mapping sections to code files)
+- .env.example added (no secrets). .env still holds only the owner's GROQ_API_KEY — do not share.

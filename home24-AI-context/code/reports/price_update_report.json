@@ -1,0 +1,54 @@
+{
+  "site": "https://home24.msk.ru",
+  "prices_found": 71,
+  "total": 75,
+  "manual_still_empty": [
+    "belyaevo",
+    "kotelniki",
+    "myata",
+    "forest"
+  ],
+  "newly_filled": [
+    "gizelle"
+  ],
+  "yandex": "SmartCaptcha — not bypassed",
+  "samples": [
+    {
+      "slug": "belyaevo",
+      "name": "Беляево",
+      "price_night": null,
+      "capacity": null,
+      "price_source": null
+    },
+    {
+      "slug": "ferrari",
+      "name": "Феррари",
+      "price_night": 4815,
+      "capacity": 4,
+      "price_source": "https://home24.msk.ru/apartments/феррари-315405"
+    },
+    {
+      "slug": "forest",
+      "name": "Форест",
+      "price_night": null,
+      "capacity": 5,
+      "price_source": null
+    },
+    {
+      "slug": "gizelle",
+      "name": "Жизель",
+      "price_night": 5100,
+      "capacity": 4,
+      "price_source": "https://move.ru/objects/moskva_prospekt_magellana_d_4_9285269404/"
+    },
+    {
+      "slug": "myata",
+      "name": "Мята",
+      "price_night": null,
+      "capacity": null,
+      "price_source": null
+    }
+  ],
+  "updated_at": "2026-09-27T09:36:39.718463+00:00",
+  "details": "reports/five_apartments_price_hunt.md"
+}

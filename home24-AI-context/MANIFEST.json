@@ -1,0 +1,58 @@
+{
+  "title": "Home24 AI context (sanitized)",
+  "created": "2026-11-14 01:23:25 Europe/Moscow",
+  "source_full_zip": "/workspace/exports/home24-FULL-PRIVATE-2026-11-13.zip",
+  "source_note": "Только перепаковка уже снятого архива. Живой production не изменялся и заново не читался.",
+  "purpose": "compact handoff for another model; not a credentials/backup dump",
+  "stats": {
+    "built": "2026-11-14 01:23:25 Europe/Moscow",
+    "source": "FULL PRIVATE archive 2026-11-13, no live server",
+    "identity_clusters": 17,
+    "code_copied": 201,
+    "code_skipped": 76,
+    "env_keys_kept": 39,
+    "env_keys_redacted": 16,
+    "travelline_rooms": true,
+    "tg_accounts_operational": 6,
+    "guest_raw_rows": 491,
+    "guest_unique_messages": 327,
+    "guest_aliases": 4,
+    "owner_source": 894,
+    "owner_kept": 888,
+    "owner_offtopic_removed": 6,
+    "owner_truncated_kept": 243,
+    "scan_hits": 9
+  },
+  "sanitization_scan_remaining_hits": [],
+  "owner_chat": {
+    "source_visible_messages": 894,
+    "kept_home24": 888,
+    "removed_offtopic_non_home24": 6,
+    "truncated_flag_in_kept": 243,
+    "truncation_source": "SearchTranscripts ~300 character cap in the original 5-page export (243 of 894 were truncated before this filter)"
+  },
+  "guest_dialogs": {
+    "unique_messages": 327,
+    "raw_rows_before_dedupe": 491,
+    "aliases": 4,
+    "sources": "live_home24.db + 27 backup snapshots inside the FULL archive"
+  },
+  "excluded": [
+    "raw .env and credential files",
+    "Telegram .session files",
+    "raw SQLite databases",
+    "27 full backup trees / nested tar.gz / nested zips",
+    "venv, __pycache__, fonts, screenshots, brand rasters",
+    "code .bak copies",
+    "large training jsonl dumps (see code/training/OMITTED.md)",
+    "full systemd journal",
+    "off-topic owner-chat segments (e.g. desktop livestream)"
+  ],
+  "gaps": [
+    "Текущее live-состояние сервера после 13.11.2026 22:18 не обновлялось.",
+    "243 исходных реплики владельца/бота обрезаны SearchTranscripts; полных тел нет.",
+    "Сырые учебные jsonl не включены ради размера.",
+    "Скриншоты и вложения исходного диалога не включены."
+  ],
+  "sanitization_scan_note": "Повторный проход: в диалогах, настройках и START_HERE не осталось email/телефонов/gsk_/rtmps/продакшен-IP. В коде тестов и модулей входа встречаются строки вида startswith(\"TELEGRAM_SESSION=\") и параметры api_hash= — это шаблоны кода, не живые секреты. Тестовый шестнадцатеричный литерал api_hash в test_v8_slots_takeover.py заменён на [REDACTED]."
+}

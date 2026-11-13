@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { SECTIONS, type Section, type SectionId } from "@/lib/sections";
 import { GuideSearch } from "@/components/guide/GuideSearch";
+import { GuestRagChat } from "@/components/guide/GuestRagChat";
 import { BrandMark } from "@/components/BrandMark";
 import { TEL_HREF } from "@/components/CallLink";
 
@@ -10,6 +11,7 @@ export type NavFaq = { key: string; q: string };
 
 export function GuideShell({
   slug,
+  aptName,
   title,
   faqs,
   sections = SECTIONS,
@@ -19,6 +21,7 @@ export function GuideShell({
   children,
 }: {
   slug: string;
+  aptName: string;
   title: string;
   faqs: NavFaq[];
   sections?: Section[];
@@ -108,6 +111,8 @@ export function GuideShell({
           <Tab href={TEL_HREF} label="Звонок" call />
         </div>
       </nav>
+
+      <GuestRagChat slug={slug} aptName={aptName} />
     </div>
   );
 }

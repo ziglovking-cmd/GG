@@ -17,6 +17,7 @@ export function GuestChrome({
   return (
     <GuideShell
       slug={apt.slug}
+      aptName={apt.name}
       title={guideTitle(apt)}
       faqs={faqs}
       sections={sectionsFor(apt)}

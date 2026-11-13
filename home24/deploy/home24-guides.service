@@ -1,0 +1,18 @@
+[Unit]
+Description=Home24 guest guides (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/home24-guides
+EnvironmentFile=-/opt/home24-guides/.env
+Environment=NODE_ENV=production
+Environment=PORT=43147
+Environment=HOSTNAME=127.0.0.1
+ExecStart=/usr/bin/node /opt/home24-guides/server.js
+Restart=always
+RestartSec=5
+MemoryMax=700M
+
+[Install]
+WantedBy=multi-user.target

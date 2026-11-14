@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CUES, DURATION, EVENTS, HOLD_PAD, LYRIC_LAG, YT_ID } from './lyrics.js';
+import { AUDIO_SRC, CUES, DURATION, EVENTS, HOLD_PAD, LYRIC_LAG } from './lyrics.js';
 import { createFigure, createPartyLights, createProps } from './figure.js';
 
 const canvas = document.getElementById('stage');
@@ -12,8 +12,10 @@ const timeEl = document.getElementById('time');
 const sceneLabel = document.getElementById('scene-label');
 const seekEl = document.getElementById('seek');
 
-let yt = null;
-let ytReady = false;
+const audio = new Audio(AUDIO_SRC);
+audio.preload = 'auto';
+audio.crossOrigin = 'anonymous';
+let audioReady = false;
 let playing = false;
 let elapsed = 0;
 let cueIndex = 0;
@@ -435,18 +437,10 @@ function processTimeline(t) {
 }
 
 function syncFromPlayer() {
-  if (!ytReady || !yt || typeof yt.getCurrentTime !== 'function') return elapsed;
-  const state = yt.getPlayerState?.();
-  // 1 playing, 2 paused, 0 ended, 3 buffering
-  if (state === 1) {
-    playing = true;
-    elapsed = yt.getCurrentTime();
-  } else if (state === 2) {
-    playing = false;
-    elapsed = yt.getCurrentTime();
-  } else if (state === 0) {
-    playing = false;
-    elapsed = DURATION;
+  if (!audioReady) return elapsed;
+  elapsed = audio.currentTime || 0;
+  playing = !audio.paused && !audio.ended;
+  if (audio.ended) {
     playBtn.textContent = 'Replay';
     document.body.classList.remove('is-playing');
   }
@@ -529,74 +523,59 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 
-function loadYouTube() {
-  return new Promise((resolve) => {
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    document.head.appendChild(tag);
-    window.onYouTubeIframeAPIReady = () => {
-      yt = new window.YT.Player('yt-player', {
-        videoId: YT_ID,
-        width: 200,
-        height: 113,
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          rel: 0,
-          modestbranding: 1,
-          playsinline: 1,
-          origin: window.location.origin,
-        },
-        events: {
-          onReady: () => {
-            ytReady = true;
-            resolve();
-          },
-          onStateChange: (e) => {
-            if (e.data === window.YT.PlayerState.PLAYING) {
-              playBtn.textContent = 'Pause';
-              if (lyricHint) lyricHint.textContent = '';
-            } else if (e.data === window.YT.PlayerState.PAUSED) {
-              playBtn.textContent = 'Play song';
-            } else if (e.data === window.YT.PlayerState.ENDED) {
-              playBtn.textContent = 'Replay';
-            }
-          },
-        },
-      });
+function loadAudio() {
+  return new Promise((resolve, reject) => {
+    const ok = () => {
+      audioReady = true;
+      resolve();
     };
+    if (audio.readyState >= 2) ok();
+    else {
+      audio.addEventListener('canplaythrough', ok, { once: true });
+      audio.addEventListener('error', () => reject(new Error('audio load failed')), {
+        once: true,
+      });
+      audio.load();
+    }
   });
 }
 
 async function togglePlay() {
-  if (!ytReady) {
+  if (!audioReady) {
     playBtn.textContent = 'Loading…';
-    return;
+    try {
+      await loadAudio();
+    } catch {
+      playBtn.textContent = 'Play song';
+      return;
+    }
   }
-  const state = yt.getPlayerState();
-  if (state === window.YT.PlayerState.PLAYING) {
-    yt.pauseVideo();
+  if (!audio.paused && !audio.ended) {
+    audio.pause();
     playing = false;
     playBtn.textContent = 'Play song';
-  } else {
-    if (elapsed >= DURATION - 0.4 || state === window.YT.PlayerState.ENDED) {
-      clearWords();
-      prevLyric = '';
-      lyricPrev.textContent = '';
-      yt.seekTo(0, true);
-      elapsed = 0;
-      rebuildTimelineIndex(0);
-    }
-    yt.playVideo();
+    return;
+  }
+  if (audio.ended || elapsed >= DURATION - 0.35) {
+    clearWords();
+    prevLyric = '';
+    lyricPrev.textContent = '';
+    audio.currentTime = 0;
+    elapsed = 0;
+    rebuildTimelineIndex(0);
+  }
+  try {
+    await audio.play();
     playing = true;
     playBtn.textContent = 'Pause';
+    if (lyricHint) lyricHint.textContent = '';
+  } catch {
+    playBtn.textContent = 'Play song';
   }
 }
 
 playBtn.addEventListener('click', () => {
-  togglePlay().catch(() => {
-    playBtn.textContent = 'Play song';
-  });
+  togglePlay();
 });
 
 window.addEventListener('keydown', (e) => {
@@ -607,14 +586,27 @@ window.addEventListener('keydown', (e) => {
 });
 
 seekEl.addEventListener('click', (e) => {
-  if (!ytReady) return;
+  if (!audioReady) return;
   const rect = seekEl.getBoundingClientRect();
   const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
   const t = ratio * DURATION;
   clearWords();
-  yt.seekTo(t, true);
+  audio.currentTime = t;
   elapsed = t;
   rebuildTimelineIndex(t);
+});
+
+audio.addEventListener('play', () => {
+  playBtn.textContent = 'Pause';
+  playing = true;
+});
+audio.addEventListener('pause', () => {
+  if (!audio.ended) playBtn.textContent = 'Play song';
+  playing = false;
+});
+audio.addEventListener('ended', () => {
+  playBtn.textContent = 'Replay';
+  playing = false;
 });
 
 window.addEventListener('resize', resize);
@@ -625,11 +617,12 @@ async function boot() {
   applyScene('horizon', 0);
   requestAnimationFrame(frame);
   try {
-    await loadYouTube();
+    await loadAudio();
     playBtn.textContent = 'Play song';
+    sceneLabel.textContent = 'credits song · local';
   } catch {
     playBtn.textContent = 'Play song';
-    sceneLabel.textContent = 'YT blocked · open Spotify';
+    sceneLabel.textContent = 'audio missing';
   }
 }
 

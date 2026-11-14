@@ -37,38 +37,6 @@ body {
   z-index: 0;
 }
 
-.yt-wrap {
-  position: fixed;
-  right: 0.75rem;
-  bottom: 4.25rem;
-  z-index: 6;
-  width: 180px;
-  height: 101px;
-  border: 1px solid rgba(242, 246, 252, 0.2);
-  overflow: hidden;
-  opacity: 0.92;
-  pointer-events: none;
-}
-
-.yt-wrap iframe {
-  display: block;
-  width: 180px !important;
-  height: 101px !important;
-}
-
-@media (max-width: 640px) {
-  .yt-wrap {
-    width: 120px;
-    height: 68px;
-    bottom: 5.5rem;
-  }
-
-  .yt-wrap iframe {
-    width: 120px !important;
-    height: 68px !important;
-  }
-}
-
 .grain {
   position: fixed;
   inset: 0;

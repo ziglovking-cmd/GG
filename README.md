@@ -2,10 +2,11 @@
 
 3D lyric visual for **credits song** by **ONDA ANDAR** (*KIDSCRY2DAY*).
 
+Audio is bundled at `public/credits-song.mp3` (from the artist’s SoundCloud release). Lyric cues were timed from that file.
+
 ```bash
 npm install
 npm run dev
 ```
 
-Press **Play lyrics** (or Space) — words fly in Three.js to a ~2:17 timeline.
-Listen on Spotify from the link in the UI.
+Press **Play song** (or Space).

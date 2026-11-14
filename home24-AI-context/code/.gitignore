@@ -9,6 +9,10 @@ data/*.session-journal
 data/*
 !data/.gitkeep
 !data/templates.json
+!data/ideal_dialog_1.md
+!data/style_dialogs.md
+!data/travelline_rooms.json
+!data/home24-script.md
 !data/brand/
 # сессии менеджеров / пароли панели не в git
 data/managers.json

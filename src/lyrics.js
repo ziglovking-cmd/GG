@@ -5,7 +5,7 @@
 export const DURATION = 137.2;
 export const AUDIO_SRC = '/credits-song.mp3';
 /** Slight delay so glyphs land on the ear, not ahead of it. */
-export const LYRIC_LAG = 0.35;
+export const LYRIC_LAG = 0.55;
 
 /**
  * Inclusive window: visible while lagTime ∈ [t, end).

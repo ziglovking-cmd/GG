@@ -17,9 +17,26 @@ audio.preload = 'auto';
 audio.crossOrigin = 'anonymous';
 audio.playbackRate = 1;
 audio.defaultPlaybackRate = 1;
+// Keep element in DOM — some environments race currentTime when detached.
+audio.setAttribute('playsinline', '');
+audio.controls = false;
+Object.assign(audio.style, {
+  position: 'fixed',
+  width: '1px',
+  height: '1px',
+  opacity: '0',
+  pointerEvents: 'none',
+  left: '0',
+  bottom: '0',
+});
+document.body.appendChild(audio);
+
 let audioReady = false;
 let playing = false;
 let elapsed = 0;
+/** Wall-clock anchor so lyrics never outrun real time if audio.currentTime jumps. */
+let railStartPerf = 0;
+let railStartAudio = 0;
 let prevLyric = '';
 let sceneName = 'horizon';
 let flash = 0;
@@ -451,11 +468,29 @@ function processTimeline(t) {
 
 function syncFromPlayer() {
   if (!audioReady) return elapsed;
-  elapsed = audio.currentTime || 0;
   playing = !audio.paused && !audio.ended;
   if (audio.ended) {
+    elapsed = DURATION;
     playBtn.textContent = 'Replay';
     document.body.classList.remove('is-playing');
+    return elapsed;
+  }
+  if (!playing) {
+    elapsed = audio.currentTime || 0;
+    return elapsed;
+  }
+
+  // Primary: wall clock from play start (stable 1×).
+  const wall = railStartAudio + (performance.now() - railStartPerf) / 1000;
+  const media = audio.currentTime || 0;
+  // If media clock stays near wall, gently lock to it; if it races/stalls, trust wall.
+  if (Math.abs(media - wall) < 0.45) {
+    elapsed = media;
+    // re-anchor slowly to avoid drift
+    railStartPerf = performance.now();
+    railStartAudio = media;
+  } else {
+    elapsed = Math.min(DURATION, Math.max(0, wall));
   }
   return elapsed;
 }
@@ -551,6 +586,9 @@ async function togglePlay() {
   audio.playbackRate = 1;
   try {
     await audio.play();
+    railStartPerf = performance.now();
+    railStartAudio = audio.currentTime || 0;
+    elapsed = railStartAudio;
     playing = true;
     playBtn.textContent = 'Pause';
     if (lyricHint) lyricHint.textContent = '';
@@ -575,9 +613,10 @@ seekEl.addEventListener('click', (e) => {
   const rect = seekEl.getBoundingClientRect();
   const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
   const t = ratio * DURATION;
-  clearWords();
   audio.currentTime = t;
   elapsed = t;
+  railStartPerf = performance.now();
+  railStartAudio = t;
   rebuildTimelineIndex(t);
 });
 

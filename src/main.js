@@ -642,7 +642,7 @@ async function boot() {
   try {
     await loadAudio();
     playBtn.textContent = 'Play song';
-    sceneLabel.textContent = 'credits song · local';
+    sceneLabel.textContent = 'credits · sync-v4';
   } catch {
     playBtn.textContent = 'Play song';
     sceneLabel.textContent = 'audio missing';

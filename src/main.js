@@ -429,10 +429,19 @@ function animateFigure(t, dt) {
   flash = Math.max(0, flash - dt * 1.4);
 }
 
+function heardLatency() {
+  if (!audioCtx) return 0.12;
+  const out = Number(audioCtx.outputLatency) || 0;
+  const base = Number(audioCtx.baseLatency) || 0;
+  // Speakers always trail the sample clock a bit — keep lyrics on what you hear.
+  return Math.min(0.35, Math.max(0.05, out + base || 0.12));
+}
+
 function processTimeline(t) {
-  // Recompute every frame from audio clock — no drifting cueIndex.
-  const sceneT = Math.max(0, t - LYRIC_LAG * 0.4);
-  const lyricT = Math.max(0, t - LYRIC_LAG);
+  // Recompute every frame from wall clock — no drifting cueIndex.
+  const lag = LYRIC_LAG + heardLatency();
+  const sceneT = Math.max(0, t - lag * 0.35);
+  const lyricT = Math.max(0, t - lag);
 
   const scene = findActiveScene(sceneT);
   if (scene.scene !== lastScene) {
@@ -512,7 +521,7 @@ function rebuildTimelineIndex(t) {
   lyricPrev.textContent = '';
   clearWords();
   processTimeline(t);
-  if (!findActiveCue(Math.max(0, t - LYRIC_LAG)) && t < 9) {
+  if (!findActiveCue(Math.max(0, t - LYRIC_LAG - heardLatency())) && t < 9) {
     lyricNow.textContent = 'ONDA ANDAR';
     lyricNow.className = 'lyric-now';
     lyricNow.style.opacity = '';

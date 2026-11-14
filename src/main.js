@@ -651,11 +651,22 @@ function animateFigure(t, dt) {
 function updateCamera(now, t) {
   const sway = Math.sin(now * 0.00018) * 0.35;
   if (camMode === 'fp-road') {
-    // вид с обочины / из машины — низко, вперёд по асфальту
+    // FP: глаз с асфальта / из машины. На «лиса» — смотрим на неё справа на обочине.
     const bob = Math.sin(t * (sceneName === 'run' ? 14 : 6)) * (sceneName === 'run' ? 0.08 : 0.03);
-    camera.position.set(2.55 + sway * 0.15, 0.55 + bob, 1.2);
-    camera.lookAt(2.3, 0.35, -8);
-    camera.fov = sceneName === 'run' ? 68 : 60;
+    if (sceneName === 'fox') {
+      camera.position.set(0.35 + sway * 0.12, 0.72 + bob, 0.6);
+      const fox = props.userData.fox;
+      camera.lookAt(fox.position.x, 0.45, fox.position.z);
+      camera.fov = 64;
+    } else if (sceneName === 'run') {
+      camera.position.set(0.2 + sway * 0.2, 0.6 + bob, 1.0);
+      camera.lookAt(0.4, 0.3, -10);
+      camera.fov = 70;
+    } else {
+      camera.position.set(0.4 + sway * 0.15, 0.65 + bob, 1.1);
+      camera.lookAt(1.6, 0.4, -7);
+      camera.fov = 62;
+    }
   } else if (camMode === 'fp-hotel') {
     camera.position.set(0.2 + sway * 0.1, 0.85, 0.4);
     camera.lookAt(0.4, 0.7, -5.5);

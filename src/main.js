@@ -29,8 +29,11 @@ let startedAtPerf = 0;
 let pausedAt = 0;
 let prevLyric = '';
 let sceneName = 'horizon';
+/** @type {'third' | 'fp-road' | 'fp-hotel' | 'fp-under' | 'fp-metro' | 'fp-hands'} */
+let camMode = 'third';
 let flash = 0;
 let beatKick = 0;
+let waveBaseY = -1.35;
 /** @type {null | typeof CUES[number]} */
 let shownCue = null;
 let lastScene = '';
@@ -288,25 +291,62 @@ function updateWords(t, dt) {
   }
 }
 
+function hideStoryProps() {
+  const u = props.userData;
+  u.suitcase.visible = false;
+  u.lifebuoy.visible = false;
+  u.fox.visible = false;
+  u.road.visible = false;
+  u.hotel.visible = false;
+  u.fountain.visible = false;
+  u.metro.visible = false;
+  u.scrub.visible = false;
+  u.hands.visible = false;
+  u.home.visible = false;
+  u.foxGlow.intensity = 0;
+  for (const l of u.lampLights) l.intensity = 0;
+  for (const l of party.userData.lights) l.intensity = 0;
+}
+
 function applyScene(name, t) {
   sceneName = name;
   sceneLabel.textContent = `scene · ${name}`;
-  const { suitcase, lifebuoy, foxGlow } = props.userData;
-  const { lights } = party.userData;
+  const {
+    suitcase,
+    lifebuoy,
+    fox,
+    road,
+    hotel,
+    fountain,
+    metro,
+    scrub,
+    hands,
+    home,
+    foxGlow,
+    lampLights,
+  } = props.userData;
   const { armL, armR, legL, legR } = figure.userData;
 
-  suitcase.visible = false;
-  lifebuoy.visible = false;
-  foxGlow.intensity = 0;
-  for (const l of lights) l.intensity = 0;
+  hideStoryProps();
   flash = Math.max(flash, 0.35);
   beatKick = 1;
+  camMode = 'third';
+  wave.visible = true;
+  waveWire.visible = true;
+  wave.position.y = waveBaseY;
+  particles.material.opacity = 0.7;
+  particles.material.color.setHex(0x9ec7ff);
+  rim.color.setHex(0xff4d3a);
+  scene.fog.density = 0.042;
+  renderer.setClearColor(0x06101c, 1);
 
   figure.visible = true;
   figure.position.set(0, -1.15, -2.2);
   figure.rotation.set(0, 0, 0);
   armL.rotation.set(0, 0, 0.25);
   armR.rotation.set(0, 0, -0.25);
+  legL.rotation.set(0, 0, 0);
+  legR.rotation.set(0, 0, 0);
   if (figure.userData.ground) {
     figure.userData.ground.position.set(0, -1.32, -2.2);
     figure.userData.ground.visible = true;
@@ -322,59 +362,165 @@ function applyScene(name, t) {
       break;
     case 'void':
       flash = 0.8;
-      particles.material.opacity = 0.25;
+      particles.material.opacity = 0.2;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      scene.fog.density = 0.07;
       break;
     case 'chorus-pulse':
       beatKick = 1.4;
       break;
+    case 'home':
+      home.visible = true;
+      figure.position.set(0.8, -1.15, -3.2);
+      figure.rotation.y = 0.4;
+      break;
     case 'party':
+      for (const l of party.userData.lights) l.intensity = 2.2;
+      break;
     case 'drown-party':
-      for (const l of lights) l.intensity = 2.2;
+      camMode = 'fp-under';
+      for (const l of party.userData.lights) l.intensity = 2.6;
+      figure.position.set(0, -1.7, -2.5);
+      wave.position.y = -0.4;
+      scene.fog.density = 0.085;
+      break;
+    case 'fountain':
+      fountain.visible = true;
+      fountain.userData.spray.intensity = 2.4;
+      figure.position.set(-1.6, -1.15, -2.2);
+      flash = 0.55;
       break;
     case 'hotel':
-      rim.color.setHex(0xffd27a);
+      camMode = 'fp-hotel';
+      hotel.visible = true;
+      hotel.userData.neonLight.intensity = 2.4;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      rim.color.setHex(0xff4d6a);
+      scene.fog.density = 0.055;
       break;
     case 'suitcase':
+      camMode = 'fp-hotel';
+      hotel.visible = true;
+      hotel.userData.neonLight.intensity = 1.6;
       suitcase.visible = true;
-      figure.position.set(-0.6, -1.15, -2.0);
+      suitcase.position.set(1.1, -1.0, -3.2);
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'delirium':
+      flash = 0.7;
+      particles.material.opacity = 0.95;
+      scene.fog.density = 0.06;
+      figure.rotation.y = Math.PI;
+      break;
+    case 'potyomkin':
+      flash = 1;
+      rim.color.setHex(0x9ec7ff);
+      particles.material.color.setHex(0xff4d3a);
       break;
     case 'scrub':
-      flash = 0.6;
+      scrub.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      flash = 0.5;
       break;
     case 'melancholy':
       particles.material.color.setHex(0x7a93b8);
+      figure.position.set(0, -1.15, -3.5);
       break;
     case 'hands':
-      armL.rotation.z = 1.1;
-      armR.rotation.z = -1.1;
-      armL.rotation.x = -0.6;
-      armR.rotation.x = -0.6;
+      camMode = 'fp-hands';
+      hands.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.position.y = -0.6;
       break;
     case 'sink':
-      figure.position.y = -1.55;
+      camMode = 'fp-under';
+      figure.position.y = -1.7;
+      wave.position.y = -0.35;
       break;
     case 'lifebuoy':
+      camMode = 'fp-under';
       lifebuoy.visible = true;
+      lifebuoy.position.set(0.3, 0.4, -2.0);
       flash = 1;
+      wave.position.y = -0.5;
+      figure.position.y = -1.85;
       break;
     case 'stamp-onda':
       flash = 0.9;
+      beatKick = 1.5;
       break;
     case 'fox':
-      foxGlow.intensity = 3.2;
+      // FP с обочины: дорога + лиса впереди справа
+      camMode = 'fp-road';
+      road.visible = true;
+      fox.visible = true;
+      fox.scale.setScalar(1.55);
+      fox.position.set(2.15, -1.15, -3.8);
+      fox.rotation.y = -0.85;
+      foxGlow.intensity = 3.4;
+      foxGlow.position.set(2.0, 0.55, -3.4);
+      for (const l of lampLights) l.intensity = 2.2;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      scene.fog.density = 0.028;
+      flash = 0.45;
+      break;
+    case 'chase':
+      camMode = 'fp-road';
+      road.visible = true;
+      fox.visible = true;
+      fox.position.set(1.8, -1.15, -3.5);
+      for (const l of lampLights) l.intensity = 1.2;
+      figure.visible = true;
+      figure.position.set(-0.4, -1.15, -6.5);
+      flash = 0.55;
+      wave.visible = false;
+      waveWire.visible = false;
       break;
     case 'run':
-      figure.position.set(1.5, -1.15, -2.0);
-      legL.rotation.x = 0.6;
-      legR.rotation.x = -0.55;
+      camMode = 'fp-road';
+      road.visible = true;
+      for (const l of lampLights) l.intensity = 2.2;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      flash = 0.65;
+      break;
+    case 'metro':
+      camMode = 'fp-metro';
+      metro.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      scene.fog.density = 0.05;
+      flash = 0.4;
       break;
     case 'scream':
       armL.rotation.z = 1.4;
       armR.rotation.z = -1.4;
-      flash = 1;
+      flash = 1.2;
+      particles.material.color.setHex(0xff4d3a);
+      break;
+    case 'apology':
+      figure.position.set(0, -1.15, -3.0);
+      particles.material.opacity = 0.35;
       break;
     case 'end':
       figure.position.set(0, -1.15, -5);
+      particles.material.opacity = 0.4;
       break;
     default:
       break;
@@ -383,15 +529,29 @@ function applyScene(name, t) {
 
 function animateFigure(t, dt) {
   const { legL, legR, armL, armR } = figure.userData;
-  const walk = sceneName === 'walk' || sceneName === 'run' || sceneName === 'party';
-  if (walk) {
-    const sp = sceneName === 'run' ? 10 : 4.5;
+  const {
+    fox,
+    fountain,
+    scrub,
+    hands,
+    home,
+    suitcase,
+    lifebuoy,
+    hotel,
+    metro,
+  } = props.userData;
+
+  const walk = sceneName === 'walk' || sceneName === 'party' || sceneName === 'chase';
+  if (walk && figure.visible) {
+    const sp = sceneName === 'chase' ? 8 : 4.5;
     legL.rotation.x = Math.sin(t * sp) * 0.55;
     legR.rotation.x = Math.sin(t * sp + Math.PI) * 0.55;
     armL.rotation.x = Math.sin(t * sp + Math.PI) * 0.35;
     armR.rotation.x = Math.sin(t * sp) * 0.35;
-    figure.position.x += (sceneName === 'run' ? 0.9 : 0.25) * dt;
-    if (figure.position.x > 3.5) figure.position.x = -3.2;
+    if (sceneName !== 'chase') {
+      figure.position.x += 0.25 * dt;
+      if (figure.position.x > 3.5) figure.position.x = -3.2;
+    }
     if (figure.userData.ground) {
       figure.userData.ground.position.x = figure.position.x;
       figure.userData.ground.position.z = figure.position.z;
@@ -399,34 +559,127 @@ function animateFigure(t, dt) {
   }
 
   if (sceneName === 'sink' || sceneName === 'drown-party') {
-    figure.position.y = THREE.MathUtils.lerp(figure.position.y, -2.05, dt * 0.6);
+    figure.position.y = THREE.MathUtils.lerp(figure.position.y, -2.05, dt * 0.55);
     figure.rotation.z = Math.sin(t * 2) * 0.08;
   }
 
-  if (sceneName === 'lifebuoy') {
-    const buoy = props.userData.lifebuoy;
-    buoy.rotation.z += dt * 2.5;
-    buoy.scale.setScalar(1 + Math.sin(t * 8) * 0.08);
-    if (elapsed > 102.8) {
-      buoy.position.x += dt * 1.4;
-      buoy.position.y -= dt * 0.6;
-      buoy.rotation.x += dt * 3;
-    }
+  if (sceneName === 'lifebuoy' && lifebuoy.visible) {
+    lifebuoy.rotation.z += dt * 2.5;
+    lifebuoy.scale.setScalar(1 + Math.sin(t * 8) * 0.08);
+    lifebuoy.position.x += dt * 0.35;
+    lifebuoy.position.y -= dt * 0.15;
+    lifebuoy.rotation.x += dt * 1.2;
   }
 
   if (sceneName === 'party' || sceneName === 'drown-party' || sceneName === 'chorus-pulse') {
-    const { lights } = party.userData;
-    lights.forEach((l, i) => {
+    party.userData.lights.forEach((l, i) => {
       l.intensity = 1.2 + Math.sin(t * 8 + i) * 1.4 + beatKick * 0.8;
     });
   }
 
-  if (sceneName === 'suitcase') {
-    props.userData.suitcase.rotation.y = Math.sin(t * 1.2) * 0.15;
+  if ((sceneName === 'suitcase' || sceneName === 'hotel') && suitcase.visible) {
+    suitcase.rotation.y = Math.sin(t * 1.2) * 0.15;
+  }
+
+  if (hotel.visible) {
+    hotel.userData.neon.emissiveIntensity = 1.1 + Math.sin(t * 6) * 0.4;
+    hotel.userData.neonLight.intensity = 1.8 + Math.sin(t * 6) * 0.6;
+  }
+
+  if (fountain.visible) {
+    fountain.userData.jets.forEach((jet, i) => {
+      const h = 0.85 + Math.sin(t * 12 + i) * 0.55;
+      jet.scale.y = h;
+      jet.position.y = -0.85 + h * 0.7;
+    });
+    fountain.userData.spray.intensity = 1.8 + Math.sin(t * 9) * 0.8;
+  }
+
+  if (fox.visible) {
+    const { tail, legFL, legFR, legBL, legBR, head } = fox.userData;
+    tail.rotation.z = 0.85 + Math.sin(t * 5) * 0.25;
+    head.rotation.y = Math.sin(t * 2.2) * 0.15;
+    const gait = Math.sin(t * 9) * 0.35;
+    legFL.rotation.x = gait;
+    legBR.rotation.x = gait;
+    legFR.rotation.x = -gait;
+    legBL.rotation.x = -gait;
+    if (sceneName === 'fox' || sceneName === 'chase') {
+      fox.position.z += (sceneName === 'chase' ? -1.6 : -0.55) * dt;
+      if (fox.position.z < -14) fox.position.z = -3.5;
+    }
+  }
+
+  if (scrub.visible) {
+    const caret = scrub.userData.caret;
+    caret.position.x = -1.2 + ((t * 1.8) % 2.4);
+    scrub.userData.bar.position.y = -0.2 + Math.sin(t * 14) * 0.03;
+  }
+
+  if (hands.visible) {
+    const { handL, handR } = hands.userData;
+    handL.position.y = 0.25 + Math.sin(t * 3) * 0.12;
+    handR.position.y = 0.2 + Math.sin(t * 3 + 1) * 0.12;
+    handL.rotation.z = Math.sin(t * 2) * 0.2;
+    handR.rotation.z = -Math.sin(t * 2.2) * 0.2;
+    handL.position.z = -1.4 - (t % 4) * 0.08;
+    handR.position.z = -1.5 - (t % 4) * 0.08;
+  }
+
+  if (home.visible) {
+    home.userData.win.material.opacity = 0.35 + Math.sin(t * 1.5) * 0.2;
+  }
+
+  if (metro.visible) {
+    metro.position.z = ((t * 4.5) % 4.4);
+  }
+
+  if (sceneName === 'run') {
+    // «сверкают пятки» — вспышки на дороге
+    flash = Math.max(flash, 0.25 + Math.abs(Math.sin(t * 14)) * 0.55);
+  }
+
+  if (sceneName === 'delirium') {
+    figure.rotation.y += dt * 0.8;
+    figure.position.x = Math.sin(t * 1.7) * 0.8;
   }
 
   beatKick = Math.max(0, beatKick - dt * 2.2);
   flash = Math.max(0, flash - dt * 1.4);
+}
+
+function updateCamera(now, t) {
+  const sway = Math.sin(now * 0.00018) * 0.35;
+  if (camMode === 'fp-road') {
+    // вид с обочины / из машины — низко, вперёд по асфальту
+    const bob = Math.sin(t * (sceneName === 'run' ? 14 : 6)) * (sceneName === 'run' ? 0.08 : 0.03);
+    camera.position.set(2.55 + sway * 0.15, 0.55 + bob, 1.2);
+    camera.lookAt(2.3, 0.35, -8);
+    camera.fov = sceneName === 'run' ? 68 : 60;
+  } else if (camMode === 'fp-hotel') {
+    camera.position.set(0.2 + sway * 0.1, 0.85, 0.4);
+    camera.lookAt(0.4, 0.7, -5.5);
+    camera.fov = 62;
+  } else if (camMode === 'fp-under') {
+    camera.position.set(sway * 0.2, -0.35 + Math.sin(t * 2) * 0.08, 2.2);
+    camera.lookAt(0, -0.6, -2);
+    camera.fov = 72;
+  } else if (camMode === 'fp-metro') {
+    camera.position.set(sway * 0.4, 1.0, 2.0 - (t % 3) * 0.15);
+    camera.lookAt(0, 1.0, -8);
+    camera.fov = 70;
+  } else if (camMode === 'fp-hands') {
+    camera.position.set(0, 0.55, 1.5);
+    camera.lookAt(0, 0.2, -1.6);
+    camera.fov = 65;
+  } else {
+    camera.position.x = sway * 1.3 + flash * 0.15;
+    camera.position.y = 1.4 + Math.sin(now * 0.0003) * 0.12;
+    camera.position.z = 8.8;
+    camera.lookAt(0, 1.0, 0);
+    camera.fov = 55;
+  }
+  camera.updateProjectionMatrix();
 }
 
 function heardLatency() {
@@ -547,13 +800,19 @@ function frame(now) {
   // Keep lyrics locked to the audio clock whenever we have a position
   if (audioReady && (playing || elapsed > 0.05)) processTimeline(elapsed);
   animateFigure(elapsed, dt);
+  updateCamera(now, elapsed);
 
   particles.rotation.y = now * 0.00005;
-  camera.position.x = Math.sin(now * 0.00018) * 0.45 + flash * 0.15;
-  camera.position.y = 1.4 + Math.sin(now * 0.0003) * 0.12;
-  camera.lookAt(0, 1.0, 0);
   rim.intensity = 1.0 + Math.sin(now * 0.004) * 0.35 + flash * 1.5;
-  renderer.setClearColor(flash > 0.05 ? 0x1a3058 : 0x06101c, 1);
+  if (camMode === 'fp-under') {
+    renderer.setClearColor(0x041828, 1);
+  } else if (camMode === 'fp-hotel') {
+    renderer.setClearColor(0x1a0e12, 1);
+  } else if (camMode === 'fp-road') {
+    renderer.setClearColor(0x05070c, 1);
+  } else {
+    renderer.setClearColor(flash > 0.05 ? 0x1a3058 : 0x06101c, 1);
+  }
 
   progressEl.style.width = `${(elapsed / DURATION) * 100}%`;
   timeEl.textContent = `${formatTime(elapsed)} / 2:17`;
@@ -642,7 +901,7 @@ async function boot() {
   try {
     await loadAudio();
     playBtn.textContent = 'Play song';
-    sceneLabel.textContent = 'credits · sync-v4';
+    sceneLabel.textContent = 'credits · sync-v5';
   } catch {
     playBtn.textContent = 'Play song';
     sceneLabel.textContent = 'audio missing';

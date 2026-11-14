@@ -92,19 +92,28 @@ export const EVENTS = [
   { t: 19.5, scene: 'void' },
   { t: 24.2, scene: 'horizon' },
   { t: 28.9, scene: 'chorus-pulse' },
-  { t: 44.5, scene: 'party' },
-  { t: 47.0, scene: 'drown-party' },
-  { t: 54.4, scene: 'hotel' },
-  { t: 56.4, scene: 'suitcase' },
-  { t: 63.5, scene: 'scrub' },
+  // куплет 1 — сюжетные декорации
+  { t: 44.5, scene: 'home' }, // Не ждите меня дома
+  { t: 47.0, scene: 'drown-party' }, // утонул в празднике
+  { t: 49.0, scene: 'party' },
+  { t: 52.4, scene: 'fountain' }, // Из коробки бьёт фонтан
+  { t: 54.4, scene: 'hotel' }, // В дешёвых отелях
+  { t: 56.4, scene: 'suitcase' }, // забыть чемодан
+  { t: 58.8, scene: 'delirium' }, // ты просто бредишь
+  { t: 61.9, scene: 'potyomkin' }, // ща в ушах потемкин
+  { t: 63.5, scene: 'scrub' }, // стуком пробела
   { t: 70.8, scene: 'melancholy' },
-  { t: 73.5, scene: 'hands' },
+  { t: 73.5, scene: 'hands' }, // Смотри мне на руки
   { t: 75.5, scene: 'sink' },
-  { t: 76.6, scene: 'lifebuoy' },
+  { t: 76.6, scene: 'lifebuoy' }, // Рвётся спасательный круг
   { t: 81.3, scene: 'stamp-onda' },
-  { t: 89.5, scene: 'fox' },
-  { t: 93.7, scene: 'run' },
-  { t: 97.7, scene: 'scream' },
+  // куплет 2
+  { t: 89.5, scene: 'fox' }, // Смеюсь как лиса — FP обочина
+  { t: 92.2, scene: 'chase' }, // они хотят меня
+  { t: 93.7, scene: 'run' }, // Сверкают пятки
+  { t: 95.2, scene: 'metro' }, // до метро не добежал
+  { t: 97.7, scene: 'scream' }, // хочу кричать
+  { t: 99.3, scene: 'apology' },
   { t: 103.0, scene: 'chorus-pulse' },
   { t: 125.5, scene: 'end' },
 ];

@@ -101,7 +101,7 @@ HELP = """Команды (Избранное или личка с админ-а�
 /assign @user id_менеджера — закрепить клиента
 /import_csv — импорт CSV из файла в Избранном (ответом на файл)
 /ai — статус ИИ
-/add [REDACTED] Имя — в вашу очередь
+/add +79001234567 Имя — в вашу очередь
 /add @username Имя
 /list — ваши контакты
 /send — превью (лимит дня, перенос)
@@ -189,7 +189,7 @@ def _take_speaker(store: Any, chat_id: str, message_id: str, account_id: str) ->
             "skip other bot chat=%s owner=%s this=%s", chat_id, owner, account_id
         )
         return False
-    [REDACTED] or "").strip()
+    key = str(message_id or "").strip()
     if key and not store.claim_meta(f"speak:{chat_id}:{key}"):
         logger.info(
             "skip duplicate speaker chat=%s id=%s this=%s", chat_id, key, account_id
@@ -688,7 +688,7 @@ async def run_manager(
             elif cmd == "/add":
                 if not args:
                     await answer(
-                        "Пример: /add [REDACTED] Анна\nили /add @username Анна"
+                        "Пример: /add +79001234567 Анна\nили /add @username Анна"
                     )
                 else:
                     joined = " ".join(args)
@@ -1314,8 +1314,21 @@ async def run_manager(
             if HOLD_NOTE.lower() not in safe[-1].lower():
                 safe[-1] = f"{safe[-1].rstrip()} {HOLD_NOTE}"
         if not safe:
-            logger.info("skip echo reply chat=%s", chat_id)
-            return
+            # повторный запрос квартир/района — не молчим после антидубля
+            guest_ask = (text or "").strip()
+            if re.search(
+                r"(?i)свободн|квартир|вариант|пришлите|покажите|центр|какие\s+есть",
+                guest_ask,
+            ):
+                if not str(sess.get("guests") or "").strip():
+                    safe = ["Напишите, сколько вас будет — сверю свободные под вас."]
+                elif ((sess.get("context") or {}).get("offers")):
+                    safe = ["Варианты выше. Напишите номер или название."]
+                else:
+                    safe = ["Напишите даты, район и сколько вас — подберу свободные."]
+            else:
+                logger.info("skip echo reply chat=%s", chat_id)
+                return
         from bot.handoff_hold import already_answered
 
         if already_answered(store.recent_messages(chat_id, limit=12), safe):
@@ -1680,7 +1693,7 @@ async def run_manager(
                 text = str(row.get("text") or "").strip()
                 if not cid or not text:
                     continue
-                [REDACTED] or text}"
+                key = f"{cid}:{row.get('message_id') or text}"
                 if key in seen or _duplicate_live(
                     cid, str(row.get("message_id") or ""), text
                 ):
@@ -1772,7 +1785,7 @@ async def run_manager(
                         body = str(item.get("text") or "").strip()
                         if not body:
                             continue
-                        [REDACTED] or body}"
+                        key = f"{cid}:{item.get('id') or body}"
                         seen.add(key)
                         pending_guests.append(
                             _queue_item(
@@ -1829,7 +1842,7 @@ async def run_manager(
                                     continue
                             except Exception:
                                 pass
-                        [REDACTED] 'id', '') or body}"
+                        key = f"{cid}:{getattr(msg, 'id', '') or body}"
                         if key in seen or _duplicate_live(
                             cid, str(getattr(msg, "id", "") or ""), body
                         ):

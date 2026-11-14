@@ -503,9 +503,9 @@ def _slot_summary_line(
 
 
 PETS_EARLY_LINE = (
-    "Да, с животными можно, но это зависит от конкретной квартиры. "
-    "После выбора района я пришлю вам список свободных на ваши даты квартир — "
-    "и там укажу, где можно с животными, а где нет, и уточню про стоимость."
+    "С питомцами можно не во всех квартирах. "
+    "В карточке будет пометка, где можно и какая доплата. "
+    "Напишите даты и район — подберу подходящие."
 )
 
 _GUIDE_INTENT_RE = re.compile(
@@ -1219,7 +1219,7 @@ def _status_line(heard: dict[str, Any], *, ask: str | None = None) -> tuple[str,
     ask = ask or _open_ask(heard)
     q = _next_question(ask, heard) or ""
     step = _ask_step(ask, str(heard.get("step") or "await_returning"))
-    key = "returning" if ask == "pick" else ask
+    key = "" if ask == "pick" else ask
     head = ", ".join(bits)
     if head:
         head = head[:1].upper() + head[1:]
@@ -2607,9 +2607,10 @@ def _craft_early_raw(
 
     if _AVAIL_RE.search(raw) and not re.search(r"(?i)вариант[ыа]?\s*ещё|другие", raw):
         place = _guest_place_phrase(raw, sess)
+        said_district_now = parse_district(raw) or ""
         if not place:
             # «квартиры в Прокшино» — район из текста, даже если в календаре ни у кого нет такого адреса
-            named = parse_district(raw)
+            named = said_district_now
             if named and named not in ("центр", "спокойный район", "не принципиально"):
                 place = named
         dates = str(sess.get("dates") or "").strip()
@@ -2617,19 +2618,38 @@ def _craft_early_raw(
 
         phrase = normalize_dates_phrase(parse_dates(raw) or dates) or (parse_dates(raw) or dates)
         span = stay_span(phrase)
-        from bot.travelline import availability_offer
+        from bot.travelline import availability_offer, free_offer_cards
 
-        calendar_line, avail_names = (
-            availability_offer(
+        adults_need = _guest_need(parse_guests(raw) or sess.get("guests"))
+        have_guests = bool(parse_guests(raw) or sess.get("guests"))
+        # «центр» / зона из сессии — через free_offer_cards (фильтр + ссылки), не простыня
+        district_cards = (
+            said_district_now
+            or str(sess.get("district") or "").strip()
+            or place
+        )
+        calendar_line: str | None = None
+        avail_names: list[str] = []
+        if span and district_cards:
+            calendar_line, avail_names = free_offer_cards(
                 phrase,
-                _guest_need(parse_guests(raw) or sess.get("guests")),
+                adults_need,
+                district=district_cards,
+                lead="",
+            )
+            if calendar_line and not calendar_line.lower().startswith("свободны"):
+                pass
+            elif calendar_line:
+                # нормализуем заголовок под даты
+                pass
+        if span and not calendar_line:
+            calendar_line, avail_names = availability_offer(
+                phrase,
+                adults_need,
                 place,
                 text=raw,
-                next_step=bool(parse_guests(raw) or sess.get("guests")),
+                next_step=have_guests,
             )
-            if span
-            else (None, [])
-        )
         if not span:
             merged = dict(sess)
             if phrase:
@@ -3161,11 +3181,40 @@ def _craft_early_raw(
             line += " На какие даты смотрите?"
             step = "await_dates"
         elif not heard.get("guests"):
-            line += " Сколько вас будет?"
+            # не оставляем голое «Центр.» — ведём к вместимости (и не копируем старый хвост 1:1)
+            if heard.get("dates"):
+                line = "Напишите, сколько вас будет — сверю свободные под вас."
+            else:
+                line += " Сколько вас будет?"
             step = "await_guests"
         else:
             if said_district and not side:
-                # все слоты есть — дальше карточки / «были у нас?» как в скрипте (engine)
+                # район уже есть + слоты заполнены — показать свободные, а не echo «Центр.»
+                dates_now = str(heard.get("dates") or "").strip()
+                if dates_now:
+                    from bot.travelline import free_offer_cards
+
+                    cards, names = free_offer_cards(
+                        dates_now,
+                        _guest_need(heard.get("guests")),
+                        district=str(heard.get("district") or said_district),
+                    )
+                    if cards:
+                        return (
+                            [cards],
+                            None,
+                            _craft_state(
+                                heard,
+                                step="await_returning",
+                                path="smart:rule/heard-cards",
+                                ctx_extra={
+                                    "tl_offers": names,
+                                    "offers": names,
+                                    "tl_dates": dates_now,
+                                },
+                            ),
+                            False,
+                        )
                 return _DELEGATE
             step = str(sess.get("step") or "await_returning")
         return (

@@ -114,9 +114,9 @@ def test_pets_early_answer_wording() -> None:
 
     out = _pets_answer("можно ли с собакой?", {})
     assert out == PETS_EARLY_LINE
-    assert "зависит от конкретной квартиры" in out
-    assert "после выбора района" in out.lower()
-    assert "укажу" in out.lower() and "стоимость" in out.lower()
+    assert "не во всех" in out.lower()
+    assert "доплата" in out.lower() or "карточк" in out.lower()
+    assert "уточню про стоимость" not in out.lower()
     with_offers = _pets_answer(
         "можно ли с собакой?",
         {},

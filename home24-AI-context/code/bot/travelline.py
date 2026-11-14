@@ -305,7 +305,7 @@ def matches_place(stay: Stay, place: str) -> bool:
         pass
     if _is_zone(raw):
         return False
-    [REDACTED] ]+", "", raw).strip()
+    token = re.sub(r"[^а-яa-z0-9 ]+", "", raw).strip()
     stem = re.sub(r"(ский|ская|ское|о|а|е)$", "", token.split(" ")[0])
     if len(stem) >= 5 and (stem in addr or stem in title):
         return True
@@ -400,7 +400,7 @@ def _rooms_from_sync(payload: dict[str, Any]) -> list[Room]:
     return [r for r in out if r.room_id]
 
 
-def _field(card: dict[str, Any], [REDACTED] -> Any:
+def _field(card: dict[str, Any], key: str) -> Any:
     blob = (card.get("fields") or {}).get(key) or {}
     if not isinstance(blob, dict):
         return blob
@@ -467,7 +467,7 @@ def search_stays(arrival: date, departure: date, adults: int) -> list[Stay] | No
         except Exception:
             logger.exception("travelline hook failed")
             return None
-    [REDACTED] departure.isoformat(), adults)
+    key = (arrival.isoformat(), departure.isoformat(), adults)
     now = time.monotonic()
     with _lock:
         hit = _search_cache.get(key)
@@ -606,7 +606,7 @@ def describe_availability_offer(
     nights = max(1, (departure - arrival).days)
     place_s = " ".join((place or "").split())
     picked = [s for s in stays if matches_place(s, place_s)] if place_s else list(stays)
-    picked.sort([REDACTED] s: (s.price_total or s.price_night or 10**9, s.title))
+    picked.sort(key=lambda s: (s.price_total or s.price_night or 10**9, s.title))
     if place_s and not picked:
         return f"По «{place_s}» на {when} в календаре свободных квартир нет.", []
     if not picked:
@@ -673,21 +673,40 @@ def describe_availability_offer(
             )
         tail = "\n\nКакая нравится? Напишите номер или название, передам менеджеру." if next_step else ""
         return f"{head}, по календарю свободны:\n\n" + "\n".join(rows) + (f"\n\n{more.strip()}" if more else "") + tail, names
-    from bot.apartments_map import pets_note
+    from bot.apartments_map import link_for, pets_note
 
-    bits: list[str] = []
-    for stay in shown:
+    # без района — тоже карточки со ссылками, не простыня через «;»
+    rows = []
+    any_link = False
+    for i, stay in enumerate(shown, 1):
         money = _guest_money(stay, nights) if show_money else ""
         pet = pets_note(stay.title)
-        label = f"«{stay.title}»" + (f" {pet}" if pet else "")
-        bits.append(f"{label}, {money}" if money else label)
-    ask = (
-        " Какой район удобнее — центр, ближе к центру, зелёный, спальный или Подмосковье? Выберу из свободных."
-        if next_step
-        else ""
-    )
-    sep = "; " if show_money else ", "
-    return f"На {when} по календарю свободны: {sep.join(bits)}.{more}{ask}".rstrip(), names
+        link = link_for(stay.title)
+        row = (
+            f"{i}) «{stay.title}»"
+            + (f" {pet}" if pet else "")
+            + (f", {money}" if money else "")
+        )
+        if link:
+            row += f"\n{link}"
+            any_link = True
+        rows.append(row)
+    tail = ""
+    if more:
+        tail += f"\n\n{more.strip()}"
+    if not any_link:
+        import os
+
+        site = (os.getenv("SITE_URL") or "https://home24.msk.ru/").strip()
+        tail += f"\n\nПосмотреть квартиры: {site}"
+    if next_step:
+        tail += (
+            "\n\nКакой район удобнее — центр, ближе к центру, зелёный, спальный или Подмосковье? "
+            "Выберу из свободных."
+        )
+    return (
+        f"На {when} по календарю свободны:\n\n" + "\n".join(rows) + tail
+    ).rstrip(), names
 
 
 def _prices_on() -> bool:
@@ -731,7 +750,7 @@ def hint_place(text: str, stays: list[Stay]) -> str:
     if not raw:
         return ""
     for stay in stays:
-        [REDACTED]
+        key = _title_key(stay.title)
         if len(key) >= 4 and re.search(rf"(?<![а-яa-z]){re.escape(key)}(?![а-яa-z])", raw):
             return stay.title
     for token in re.findall(r"[а-яa-z]{5,}", raw):
@@ -863,7 +882,7 @@ def free_offer_cards(
             # чужие районы не подмешиваем (only_area или любой именованный район)
             return "", []
     # open_pref / пустой district → все свободные на даты из календаря
-    picked = sorted(stays, [REDACTED] s: (s.price_total or s.price_night or 10**9, s.title))
+    picked = sorted(stays, key=lambda s: (s.price_total or s.price_night or 10**9, s.title))
     if limit is not None:
         picked = picked[: max(0, int(limit))]
     show_money = _prices_on()

@@ -7,8 +7,8 @@
   --wine: #3a1c24;
   --cream-glow: #fff6f4;
   --mist: rgba(255, 246, 244, 0.72);
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Sora', system-ui, sans-serif;
+  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-body: 'Onest', system-ui, sans-serif;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   color-scheme: light;
 }

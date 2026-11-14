@@ -1,53 +1,45 @@
-import { useEffect, useMemo, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { site } from './config'
 
-type Piece = {
+type Phase = 'boot' | 'shatter' | 'collect' | 'assemble' | 'reveal' | 'leaving'
+
+type Shard = {
   id: number
-  startX: number
-  startY: number
-  targetX: number
-  targetY: number
+  angle: number
+  radius: number
+  homeX: number
+  homeY: number
   size: number
-  rotate: number
-  delay: number
-  hue: number
+  spin: number
 }
 
-type Phase = 'playing' | 'complete' | 'leaving'
-
-/** Relative slots that form a heart silhouette (percent of stage) */
-const HEART_SLOTS: Array<[number, number]> = [
+/** Heart mosaic home slots, percent of stage */
+const HOME: Array<[number, number]> = [
   [50, 28],
-  [38, 22],
-  [62, 22],
-  [28, 32],
-  [72, 32],
-  [34, 44],
-  [66, 44],
-  [42, 56],
-  [58, 56],
-  [50, 68],
-  [44, 40],
-  [56, 40],
+  [36, 22],
+  [64, 22],
+  [26, 36],
+  [74, 36],
+  [32, 52],
+  [68, 52],
+  [42, 66],
+  [58, 66],
+  [50, 78],
 ]
 
-const HINTS = [
-  'тапни все огоньки — соберём сердечко',
-  'ещё чуть-чуть, ты справишься',
-  'почти… оно уже бьётся',
-  'осталось совсем капелька',
-]
-
-function scatterAround(index: number, total: number): [number, number] {
-  const ring = index % 2 === 0 ? 1 : 0
-  const angle = (index / total) * Math.PI * 2 + (ring ? 0.4 : 0)
-  const radius = ring === 0 ? 34 : 42
-  const cx = 50 + Math.cos(angle) * radius
-  const cy = 48 + Math.sin(angle) * (radius * 0.72)
-  return [
-    Math.min(92, Math.max(8, cx + ((index * 7) % 9) - 4)),
-    Math.min(88, Math.max(12, cy + ((index * 5) % 11) - 5)),
-  ]
+function makeShards(): Shard[] {
+  return HOME.map(([hx, hy], id) => {
+    const angle = -Math.PI / 2 + (id / HOME.length) * Math.PI * 2
+    return {
+      id,
+      angle,
+      radius: 38 + (id % 3) * 4,
+      homeX: hx,
+      homeY: hy,
+      size: 56 + (id % 3) * 6,
+      spin: -25 + ((id * 23) % 50),
+    }
+  })
 }
 
 type HeartIntroProps = {
@@ -55,33 +47,12 @@ type HeartIntroProps = {
 }
 
 export function HeartIntro({ onDone }: HeartIntroProps) {
-  const pieces = useMemo<Piece[]>(
-    () =>
-      HEART_SLOTS.map(([tx, ty], index) => {
-        const [sx, sy] = scatterAround(index, HEART_SLOTS.length)
-        return {
-          id: index,
-          startX: sx,
-          startY: sy,
-          targetX: tx,
-          targetY: ty,
-          size: 18 + (index % 4) * 4,
-          rotate: -28 + ((index * 17) % 56),
-          delay: index * 0.06,
-          hue: index % 3,
-        }
-      }),
-    [],
-  )
-
+  const shards = useMemo(() => makeShards(), [])
+  const [phase, setPhase] = useState<Phase>('boot')
   const [collected, setCollected] = useState<Set<number>>(() => new Set())
-  const [phase, setPhase] = useState<Phase>('playing')
-  const [entered, setEntered] = useState(false)
-
-  useEffect(() => {
-    const id = window.requestAnimationFrame(() => setEntered(true))
-    return () => window.cancelAnimationFrame(id)
-  }, [])
+  const [activeId, setActiveId] = useState(0)
+  const doneRef = useRef(onDone)
+  doneRef.current = onDone
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -91,18 +62,38 @@ export function HeartIntro({ onDone }: HeartIntroProps) {
   }, [])
 
   useEffect(() => {
-    if (collected.size !== pieces.length || phase !== 'playing') return
-    setPhase('complete')
-    const leave = window.setTimeout(() => setPhase('leaving'), 1600)
-    const done = window.setTimeout(() => onDone(), 2400)
+    const t1 = window.setTimeout(() => setPhase('shatter'), 800)
+    const t2 = window.setTimeout(() => setPhase('collect'), 2000)
     return () => {
-      window.clearTimeout(leave)
-      window.clearTimeout(done)
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
     }
-  }, [collected, pieces.length, phase, onDone])
+  }, [])
+
+  // Keep one clearly highlighted target among remaining shards
+  useEffect(() => {
+    if (phase !== 'collect') return
+    if (collected.has(activeId) || activeId >= shards.length) {
+      const next = shards.find((s) => !collected.has(s.id))
+      if (next) setActiveId(next.id)
+    }
+  }, [activeId, collected, phase, shards])
+
+  useEffect(() => {
+    if (collected.size < shards.length) return
+    setPhase('assemble')
+    const t1 = window.setTimeout(() => setPhase('reveal'), 1100)
+    const t2 = window.setTimeout(() => setPhase('leaving'), 2700)
+    const t3 = window.setTimeout(() => doneRef.current(), 3500)
+    return () => {
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
+      window.clearTimeout(t3)
+    }
+  }, [collected.size, shards.length])
 
   function collect(id: number) {
-    if (phase !== 'playing') return
+    if (phase !== 'collect') return
     setCollected((prev) => {
       if (prev.has(id)) return prev
       const next = new Set(prev)
@@ -111,103 +102,134 @@ export function HeartIntro({ onDone }: HeartIntroProps) {
     })
   }
 
-  const progress = collected.size / pieces.length
-  const hintIndex = Math.min(HINTS.length - 1, Math.floor(progress * HINTS.length))
+  const progress = collected.size / shards.length
+  const canTap = phase === 'collect'
 
   return (
     <div
-      className={`intro ${entered ? 'intro--in' : ''} ${phase === 'leaving' ? 'intro--out' : ''} ${phase !== 'playing' ? 'intro--done' : ''}`}
+      className={`quest quest--${phase}`}
       role="dialog"
       aria-modal="true"
-      aria-label="Собери сердечко"
+      aria-label="3D квест: собери сердце"
     >
-      <div className="intro__glow" aria-hidden="true" />
-      <div className="intro__dust" aria-hidden="true">
-        {Array.from({ length: 18 }, (_, i) => (
+      <div className="quest__stars" aria-hidden="true">
+        {Array.from({ length: 48 }, (_, i) => (
           <span
             key={i}
-            className="intro__dot"
+            className="quest__star"
             style={{
-              left: `${(i * 17 + 9) % 100}%`,
-              top: `${(i * 23 + 11) % 100}%`,
-              animationDelay: `${i * 0.35}s`,
+              left: `${(i * 17 + 3) % 100}%`,
+              top: `${(i * 29 + 7) % 100}%`,
+              animationDelay: `${(i % 8) * 0.4}s`,
+              width: `${1 + (i % 3)}px`,
+              height: `${1 + (i % 3)}px`,
             }}
           />
         ))}
       </div>
+      <div className="quest__nebula" aria-hidden="true" />
+      <div className="quest__vignette" aria-hidden="true" />
 
-      <div className="intro__top">
-        <p className="intro__eyebrow">мини-квест · 12 кусочков</p>
-        <h2 className="intro__title">
-          {phase === 'playing' ? `собери сердечко для ${site.herName}` : 'готово. оно твоё'}
+      <header className="quest__hud">
+        <p className="quest__eyebrow">cutscene · level 01</p>
+        <h2 className="quest__title">
+          {phase === 'boot' && 'подожди…'}
+          {phase === 'shatter' && 'сердце разлетелось'}
+          {phase === 'collect' && `собери его снова, ${site.herName}`}
+          {(phase === 'assemble' || phase === 'reveal') && 'вот оно'}
+          {phase === 'leaving' && 'для тебя'}
         </h2>
-        <p className="intro__hint">
-          {phase === 'playing' ? HINTS[hintIndex] : 'сейчас откроется кое-что милое…'}
+        <p className="quest__hint">
+          {phase === 'boot' && 'загрузка кадра'}
+          {phase === 'shatter' && 'смотри…'}
+          {phase === 'collect' && 'тапай по яркому осколку'}
+          {phase === 'assemble' && 'собирается…'}
+          {phase === 'reveal' && 'бьётся'}
+          {phase === 'leaving' && 'открываю письмо'}
         </p>
-      </div>
+      </header>
 
-      <div className="intro__stage">
-        <div
-          className={`intro__ghost ${collected.size > 0 ? 'intro__ghost--soft' : ''}`}
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 24 24">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-          </svg>
-        </div>
-
-        {pieces.map((piece) => {
-          const isIn = collected.has(piece.id)
-          return (
-            <button
-              key={piece.id}
-              type="button"
-              className={`intro__piece hue-${piece.hue} ${isIn ? 'is-home' : 'is-loose'} ${phase !== 'playing' ? 'is-locked' : ''}`}
-              style={
-                {
-                  left: `${isIn ? piece.targetX : piece.startX}%`,
-                  top: `${isIn ? piece.targetY : piece.startY}%`,
-                  width: piece.size,
-                  height: piece.size,
-                  '--rot': `${isIn ? 0 : piece.rotate}deg`,
-                  animationDelay: `${piece.delay}s`,
-                } as CSSProperties
-              }
-              onClick={() => collect(piece.id)}
-              aria-label={isIn ? 'Уже на месте' : 'Взять кусочек сердца'}
-              disabled={isIn || phase !== 'playing'}
+      <div className="quest__viewport">
+        <div className="quest__stage" aria-hidden={phase === 'boot'}>
+          <div className="quest__floor" aria-hidden="true" />
+          <div className="quest__core" aria-hidden="true">
+            <div
+              className={`quest__heart3d ${phase === 'boot' || phase === 'shatter' ? 'is-whole' : ''} ${phase === 'assemble' || phase === 'reveal' || phase === 'leaving' ? 'is-assembled' : ''} ${phase === 'reveal' || phase === 'leaving' ? 'is-beating' : ''}`}
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <defs>
+                  <linearGradient id="heartGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#ff8fa3" />
+                    <stop offset="55%" stopColor="#ff4d6d" />
+                    <stop offset="100%" stopColor="#c9184a" />
+                  </linearGradient>
+                </defs>
                 <path
-                  fill="currentColor"
+                  fill="url(#heartGrad)"
                   d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
                 />
               </svg>
-            </button>
-          )
-        })}
+            </div>
+            <div className="quest__ring" />
+            <div className="quest__ring quest__ring--2" />
+          </div>
 
-        <div
-          className={`intro__assembled ${phase !== 'playing' ? 'is-visible' : ''}`}
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 24 24">
-            <path
-              fill="currentColor"
-              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-            />
-          </svg>
+          {shards.map((shard) => {
+            const home =
+              collected.has(shard.id) ||
+              phase === 'assemble' ||
+              phase === 'reveal' ||
+              phase === 'leaving'
+            const isActive = canTap && !home && shard.id === activeId
+            const orbitX = 50 + Math.cos(shard.angle) * shard.radius
+            const orbitY = 50 + Math.sin(shard.angle) * shard.radius * 0.78
+            const left = home ? shard.homeX : orbitX
+            const top = home ? shard.homeY : orbitY
+
+            return (
+              <button
+                key={shard.id}
+                type="button"
+                className={`quest__shard ${home ? 'is-home' : 'is-loose'} ${isActive ? 'is-active' : ''} ${phase === 'boot' ? 'is-hidden' : ''}`}
+                style={
+                  {
+                    left: `${left}%`,
+                    top: `${top}%`,
+                    width: shard.size,
+                    height: shard.size,
+                    zIndex: isActive ? 30 : home ? 5 : 10 + shard.id,
+                    '--spin': `${shard.spin}deg`,
+                    '--delay': `${shard.id * 0.05}s`,
+                  } as CSSProperties
+                }
+                onClick={() => collect(shard.id)}
+                disabled={!canTap || home}
+                aria-label={home ? 'Уже собрано' : isActive ? 'Взять яркий осколок' : 'Взять осколок'}
+              >
+                <span className="quest__hit" aria-hidden="true" />
+                <span className="quest__shard-visual" aria-hidden="true">
+                  <span className="quest__shard-glow" />
+                  <svg viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                    />
+                  </svg>
+                </span>
+              </button>
+            )
+          })}
         </div>
       </div>
 
-      <div className="intro__progress" aria-live="polite">
-        <div className="intro__bar">
+      <footer className="quest__footer">
+        <div className="quest__bar">
           <span style={{ width: `${progress * 100}%` }} />
         </div>
-        <p className="intro__count">
-          {collected.size} / {pieces.length}
+        <p className="quest__count">
+          {phase === 'collect' ? `${collected.size} / ${shards.length}` : '\u00A0'}
         </p>
-      </div>
+      </footer>
     </div>
   )
 }

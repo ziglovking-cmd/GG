@@ -23,198 +23,320 @@
   }
 }
 
-/* —— Heart intro quest —— */
-.intro {
+/* —— 3D black quest cutscene —— */
+.quest {
   position: fixed;
   inset: 0;
   z-index: 100;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 0.5rem;
-  padding: clamp(1.2rem, 4vw, 2rem);
-  background:
-    radial-gradient(90% 70% at 20% 10%, #ffe0e6 0%, transparent 55%),
-    radial-gradient(80% 60% at 90% 80%, #f7c4cc 0%, transparent 50%),
-    linear-gradient(165deg, #fff7f8 0%, #f8dce2 55%, #f0c4cd 100%);
-  opacity: 0;
-  transform: scale(1.02);
-  transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out);
+  padding: clamp(1rem, 3vw, 1.75rem);
+  color: #f7e9ec;
+  background: #050507;
+  overflow: hidden;
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
 }
 
-.intro--in {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.intro--out {
+.quest--leaving {
   opacity: 0;
   transform: scale(1.04);
   pointer-events: none;
 }
 
-.intro__glow {
-  position: absolute;
-  inset: 20% 25%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 180, 190, 0.55), transparent 70%);
-  filter: blur(20px);
-  pointer-events: none;
-  transition: opacity 0.6s ease, transform 0.8s var(--ease-out);
-}
-
-.intro--done .intro__glow {
-  opacity: 0.95;
-  transform: scale(1.25);
-}
-
-.intro__dust {
+.quest__stars,
+.quest__nebula,
+.quest__vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
 }
 
-.intro__dot {
+.quest__star {
   position: absolute;
-  width: 5px;
-  height: 5px;
   border-radius: 50%;
-  background: #e8929c;
+  background: #fff;
   opacity: 0.35;
-  animation: twinkle 3.2s ease-in-out infinite;
+  animation: starPulse 3.6s ease-in-out infinite;
 }
 
-@keyframes twinkle {
+@keyframes starPulse {
   0%,
   100% {
     opacity: 0.15;
-    transform: scale(0.7);
+    transform: scale(0.8);
   }
   50% {
-    opacity: 0.55;
+    opacity: 0.7;
+    transform: scale(1.3);
+  }
+}
+
+.quest__nebula {
+  background:
+    radial-gradient(40% 35% at 30% 30%, rgba(255, 40, 90, 0.18), transparent 70%),
+    radial-gradient(35% 30% at 75% 65%, rgba(120, 40, 180, 0.12), transparent 70%);
+}
+
+.quest__vignette {
+  background:
+    radial-gradient(55% 50% at 50% 48%, rgba(255, 60, 90, 0.14), transparent 70%),
+    radial-gradient(120% 100% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.88) 100%);
+}
+
+.quest__hud {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  max-width: 26rem;
+  margin: 0.4rem auto 0;
+}
+
+.quest__eyebrow {
+  margin: 0 0 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #ff6b86;
+}
+
+.quest__title {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 6vw, 2.7rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.quest__hint {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(247, 233, 236, 0.65);
+}
+
+.quest__viewport {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+}
+
+.quest__stage {
+  position: relative;
+  width: min(460px, 94vw);
+  height: min(460px, 60svh);
+  border-radius: 50%;
+}
+
+.quest__floor {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 72%;
+  height: 28%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(255, 70, 110, 0.2), transparent 70%);
+  transform: translate(-50%, 0) rotateX(70deg);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.quest__core {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.quest__heart3d {
+  width: min(170px, 40vw);
+  opacity: 0;
+  transform: scale(0.65);
+  filter: drop-shadow(0 0 28px rgba(255, 70, 110, 0.55));
+  transition: opacity 0.5s ease, transform 0.8s var(--ease-out);
+}
+
+.quest__heart3d.is-whole {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.quest__heart3d.is-assembled {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.quest__heart3d.is-beating {
+  animation: beat3d 0.9s ease-in-out infinite;
+}
+
+.quest__heart3d svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@keyframes beat3d {
+  0%,
+  100% {
+    transform: scale(1.08);
+  }
+  40% {
     transform: scale(1.2);
   }
 }
 
-.intro__top {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  max-width: 28rem;
-  margin: 0 auto;
-}
-
-.intro__eyebrow {
-  margin: 0 0 0.55rem;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--rose);
-}
-
-.intro__title {
-  margin: 0 0 0.55rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.7rem, 5.5vw, 2.5rem);
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--wine);
-  text-wrap: balance;
-}
-
-.intro__hint {
-  margin: 0;
-  font-size: 0.98rem;
-  font-weight: 300;
-  color: var(--ink-soft);
-}
-
-.intro__stage {
-  position: relative;
-  z-index: 2;
-  width: min(420px, 92vw);
-  height: min(420px, 58svh);
-  margin: 0 auto;
-}
-
-.intro__ghost {
+.quest__ring {
   position: absolute;
-  left: 50%;
-  top: 48%;
   width: 58%;
-  color: color-mix(in srgb, var(--rose) 28%, transparent);
-  transform: translate(-50%, -50%);
-  transition: opacity 0.5s ease;
-  pointer-events: none;
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 90, 120, 0.25);
+  border-radius: 50%;
+  transform: rotateX(68deg);
+  animation: ringSpin 10s linear infinite;
 }
 
-.intro__ghost svg {
-  width: 100%;
-  height: auto;
-  fill: currentColor;
+.quest__ring--2 {
+  width: 78%;
+  border-color: rgba(255, 90, 120, 0.12);
+  animation-duration: 16s;
+  animation-direction: reverse;
 }
 
-.intro__ghost--soft {
-  opacity: 0.35;
+@keyframes ringSpin {
+  to {
+    transform: rotateX(68deg) rotateZ(360deg);
+  }
 }
 
-.intro__piece {
+.quest--shatter .quest__heart3d.is-whole {
+  animation: shatterPop 0.75s var(--ease-out) forwards;
+}
+
+@keyframes shatterPop {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.28);
+    filter: drop-shadow(0 0 48px rgba(255, 90, 130, 0.9));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.15);
+  }
+}
+
+.quest__shard {
   position: absolute;
-  z-index: 3;
   display: grid;
   place-items: center;
+  margin: 0;
   padding: 0;
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #e07886;
+  color: #ff6b86;
   cursor: pointer;
-  transform: translate(-50%, -50%) rotate(var(--rot, 0deg));
+  transform: translate(-50%, -50%) scale(0.15);
+  opacity: 0;
   transition:
-    left 0.7s var(--ease-out),
-    top 0.7s var(--ease-out),
-    transform 0.7s var(--ease-out),
-    opacity 0.35s ease,
-    filter 0.35s ease;
-  filter: drop-shadow(0 6px 12px rgba(180, 70, 90, 0.28));
+    left 0.75s var(--ease-out),
+    top 0.75s var(--ease-out),
+    transform 0.75s var(--ease-out),
+    opacity 0.35s ease;
+  transition-delay: var(--delay, 0s);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.intro__piece svg {
+.quest__hit {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.quest__shard-visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 68%;
+  height: 68%;
+  transform: rotate(var(--spin, 0deg)) rotateX(18deg) rotateY(-12deg);
+  filter: drop-shadow(0 10px 18px rgba(255, 50, 90, 0.45));
+  pointer-events: none;
+}
+
+.quest__shard-visual svg {
   width: 100%;
   height: 100%;
   display: block;
+  position: relative;
+  z-index: 1;
 }
 
-.intro__piece.hue-1 {
-  color: #d45d72;
+.quest__shard-glow {
+  position: absolute;
+  inset: -20%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 120, 150, 0.55), transparent 68%);
+  filter: blur(4px);
 }
 
-.intro__piece.hue-2 {
-  color: #f0a0aa;
-}
-
-.intro__piece.is-loose {
-  animation: bob 2.8s ease-in-out infinite;
-}
-
-.intro__piece.is-loose:hover {
-  transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(1.18);
-  filter: drop-shadow(0 8px 16px rgba(180, 70, 90, 0.42));
-}
-
-.intro__piece.is-home {
-  animation: none;
-  pointer-events: none;
-  filter: drop-shadow(0 2px 6px rgba(180, 70, 90, 0.2));
-}
-
-.intro__piece.is-locked {
+.quest__shard.is-hidden {
+  opacity: 0;
   pointer-events: none;
 }
 
-@keyframes bob {
+.quest--shatter .quest__shard,
+.quest--collect .quest__shard.is-loose {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.quest--collect .quest__shard.is-loose {
+  animation: floatSoft 2.8s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+
+.quest--collect .quest__shard.is-active {
+  animation: activePulse 1.1s ease-in-out infinite;
+  filter: drop-shadow(0 0 22px rgba(255, 140, 170, 0.95));
+}
+
+.quest--collect .quest__shard.is-active .quest__hit {
+  box-shadow: 0 0 0 2px rgba(255, 180, 200, 0.55);
+}
+
+.quest--collect .quest__shard.is-loose:hover .quest__shard-visual,
+.quest--collect .quest__shard.is-loose:focus-visible .quest__shard-visual {
+  transform: rotate(var(--spin, 0deg)) rotateX(18deg) rotateY(-12deg) scale(1.12);
+}
+
+.quest__shard.is-home {
+  opacity: 0.95;
+  animation: none !important;
+  pointer-events: none !important;
+  transform: translate(-50%, -50%) scale(0.78);
+  transition-delay: 0s;
+  filter: drop-shadow(0 0 10px rgba(255, 80, 120, 0.4));
+}
+
+.quest--assemble .quest__shard.is-home,
+.quest--reveal .quest__shard,
+.quest--leaving .quest__shard {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+  pointer-events: none !important;
+}
+
+@keyframes floatSoft {
   0%,
   100% {
     translate: 0 0;
@@ -224,85 +346,54 @@
   }
 }
 
-.intro__assembled {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  width: 58%;
-  color: #d45d72;
-  transform: translate(-50%, -50%) scale(0.7);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.45s ease, transform 0.7s var(--ease-out);
-  filter: drop-shadow(0 12px 28px rgba(180, 60, 80, 0.35));
-}
-
-.intro__assembled svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.intro__assembled.is-visible {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-  animation: heartPop 1.2s var(--ease-out) 0.15s both;
-}
-
-.intro--done .intro__piece.is-home {
-  opacity: 0;
-}
-
-@keyframes heartPop {
-  0% {
-    transform: translate(-50%, -50%) scale(0.75);
-  }
-  45% {
-    transform: translate(-50%, -50%) scale(1.12);
-  }
+@keyframes activePulse {
+  0%,
   100% {
     transform: translate(-50%, -50%) scale(1);
   }
+  50% {
+    transform: translate(-50%, -50%) scale(1.12);
+  }
 }
 
-.intro__progress {
+.quest__footer {
   position: relative;
-  z-index: 2;
+  z-index: 5;
   width: min(280px, 70vw);
-  margin: 0 auto 0.5rem;
+  margin: 0 auto 0.4rem;
   text-align: center;
 }
 
-.intro__bar {
-  height: 6px;
+.quest__bar {
+  height: 5px;
   border-radius: 999px;
-  background: rgba(58, 28, 36, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   overflow: hidden;
 }
 
-.intro__bar span {
+.quest__bar span {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #e8929c, #c45c6a);
-  transition: width 0.45s var(--ease-out);
+  background: linear-gradient(90deg, #ff8fa3, #ff4d6d);
+  transition: width 0.35s var(--ease-out);
 }
 
-.intro__count {
-  margin: 0.55rem 0 0;
+.quest__count {
+  margin: 0.5rem 0 0;
   font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+  color: rgba(247, 233, 236, 0.55);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro__piece.is-loose {
-    animation: none;
-  }
-
-  .intro__assembled.is-visible {
-    animation: none;
+  .quest__shard.is-loose,
+  .quest__shard.is-active,
+  .quest__heart3d.is-beating,
+  .quest__ring,
+  .quest__star {
+    animation: none !important;
   }
 }
 

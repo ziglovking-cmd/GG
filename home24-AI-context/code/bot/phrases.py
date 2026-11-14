@@ -594,11 +594,17 @@ _OFFER_UNSURE_RE = re.compile(r"(?i)^\s*(не знаю|хз|\?+|а что име
 
 _OFFER_ASK_RE = re.compile(
     r"(?i)(?:рассказать(?:\s+подробнее)?|интересно|можно|хотите(?:,?\s*подбер\w*)?|"
-    r"подберу\s+квартир\w*)\s*[?)]*\s*$"
+    r"подберу\s+квартир\w*|за\s+город|спокойн\w*\s+район)\s*[?)]*\s*$"
 )
-# После фактов про баллы/услуги — мягкий CTA, не анкета дат.
-OFFER_PICK_ASK = "Хотите, подберу квартиру?"
-_OFFER_PICK_ASK_RE = re.compile(r"(?i)хотите,?\s*подбер|подберу\s+квартир\w*\s*\?")
+# После фактов про баллы/услуги — сразу выбор района/квартир, не пауза «напишите потом».
+OFFER_PICK_ASK = (
+    "Хотите, подберу квартиру? "
+    "Вам ближе центр, спокойный район или за город?"
+)
+_OFFER_PICK_ASK_RE = re.compile(
+    r"(?i)хотите,?\s*подбер|подберу\s+квартир\w*\s*\?|"
+    r"ближе\s+центр|спокойн\w*\s+район|за\s+город"
+)
 
 
 def offer_topic_in(text: str | None) -> str:
@@ -754,13 +760,13 @@ def offer_reply(
             return [ask], _ctx(sess), "await_district"
         line = offer_facts("services" if (services_question and topic == "need") else topic)
         if line and not services_question:
-            # вопрос «хотите?» вместо пассивного «напишите» и вместо анкеты дат
+            # сразу выбор квартир/района — не ждать второго «да» и не закрывать «Будем ждать!»
             sep = "\n\n" if re.search(r"https?://\S+$", line.rstrip()) else " "
             line = line.rstrip() + sep + OFFER_PICK_ASK
         ctx["perk"] = "orient"
         ctx["offer_told"] = topic
         ctx["offer_pick_ask"] = True
-        return [line], ctx, "await_dates"
+        return [line], ctx, "await_district"
     if is_later_think(raw) or is_offer_refusal(raw):
         ctx["offer_open"] = False
         ctx["perk"] = ""

@@ -1553,7 +1553,12 @@ def _script_reply(
             state["context"] = {**(state.get("context") or {}), **o_ctx, "reply_path": "smart:rule/offer-reply"}
             if o_step == "done":
                 state["step"] = "done"
-            buttons = BUTTONS.get("dates") if o_step == "await_dates" and o_msgs[0].endswith("?") else None
+            buttons = None
+            if o_msgs and str(o_msgs[0]).rstrip().endswith("?"):
+                if o_step == "await_dates":
+                    buttons = BUTTONS.get("dates")
+                elif o_step == "await_district":
+                    buttons = BUTTONS.get("district")
             return o_msgs, buttons, state, False
     known_dates = str(sess.get("dates") or "").strip()
     dates_ready = bool(known_dates and known_dates != "ещё не определились")

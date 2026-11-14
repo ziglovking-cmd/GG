@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ONDA ANDAR — credits song</title>
+    <meta
+      name="description"
+      content="credits song — финальный трек альбома KIDSCRY2DAY от ONDA ANDAR. 168 BPM. End credits forever."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <canvas id="wave" aria-hidden="true"></canvas>
+
+    <header class="top">
+      <a class="mark" href="#top">KC2D</a>
+      <nav class="nav">
+        <a href="#pulse">pulse</a>
+        <a href="#roll">credits</a>
+        <a href="#listen">listen</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-media" aria-hidden="true">
+          <img
+            class="hero-cover"
+            src="/cover.webp"
+            alt=""
+            width="1600"
+            height="1600"
+          />
+          <div class="hero-wash"></div>
+        </div>
+
+        <div class="hero-copy">
+          <p class="eyebrow">KIDSCRY2DAY · track 14</p>
+          <h1 class="brand">
+            <span class="brand-line">ONDA</span>
+            <span class="brand-line">ANDAR</span>
+          </h1>
+          <p class="song">credits song</p>
+          <p class="lede">
+            Конец альбома. Титры идут. Волна уносит в ноль.
+          </p>
+          <div class="cta-row">
+            <button class="cta primary" id="feel-bpm" type="button">
+              Feel 168 BPM
+            </button>
+            <a
+              class="cta ghost"
+              href="https://open.spotify.com/artist/2gGvBjb55mnnbQO2gNQSLo"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Open Spotify</a
+            >
+          </div>
+        </div>
+
+        <div class="scroll-hint" aria-hidden="true">
+          <span>scroll</span>
+          <i></i>
+        </div>
+      </section>
+
+      <section class="pulse" id="pulse">
+        <div class="pulse-copy">
+          <h2>одна волна — один удар</h2>
+          <p>
+            2:17 · G♯/A♭ · 168 BPM. Высокая энергия, холодный финал
+            KIDSCRY2DAY. Нажми pulse — холст бьётся в темпе трека.
+          </p>
+        </div>
+        <div class="meters" aria-hidden="true">
+          <div class="meter" data-n="1"></div>
+          <div class="meter" data-n="2"></div>
+          <div class="meter" data-n="3"></div>
+          <div class="meter" data-n="4"></div>
+          <div class="meter" data-n="5"></div>
+          <div class="meter" data-n="6"></div>
+          <div class="meter" data-n="7"></div>
+          <div class="meter" data-n="8"></div>
+        </div>
+      </section>
+
+      <section class="roll" id="roll">
+        <div class="roll-frame">
+          <div class="roll-track" id="credit-track">
+            <p class="roll-kicker">end credits</p>
+            <h2 class="roll-title">credits song</h2>
+            <ul class="roll-list">
+              <li><span>artist</span><strong>ONDA ANDAR</strong></li>
+              <li><span>album</span><strong>KIDSCRY2DAY</strong></li>
+              <li><span>track</span><strong>14 / 14</strong></li>
+              <li><span>length</span><strong>2:17</strong></li>
+              <li><span>tempo</span><strong>168 BPM</strong></li>
+              <li><span>key</span><strong>G♯ / A♭</strong></li>
+              <li><span>label</span><strong>TRV · 2026</strong></li>
+              <li><span>writer</span><strong>Ivan Matveykin</strong></li>
+            </ul>
+            <p class="roll-outro">thank you for listening</p>
+            <p class="roll-outro soft">kids cry today · sleep mode later</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="listen" id="listen">
+        <h2>слушать сейчас</h2>
+        <p>Официальные площадки — без фейковых плееров.</p>
+        <div class="listen-links">
+          <a
+            href="https://open.spotify.com/artist/2gGvBjb55mnnbQO2gNQSLo"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Spotify</a
+          >
+          <a
+            href="https://audiomack.com/onda-andar/song/credits-song"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Audiomack</a
+          >
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <span>ONDA ANDAR</span>
+      <span>fan visual · not official</span>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

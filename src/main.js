@@ -480,9 +480,17 @@ function syncFromPlayer() {
     return elapsed;
   }
 
-  // Hard 1× rail from play/seek — never follow a racing media clock.
+  // Hard 1× rail from play/seek.
   const wall = railStartAudio + (performance.now() - railStartPerf) / 1000;
   elapsed = Math.min(DURATION, Math.max(0, wall));
+  // If media clock races ahead (headless / decode quirks), pull it back to the rail.
+  if (audio.currentTime > elapsed + 0.3) {
+    try {
+      audio.currentTime = elapsed;
+    } catch {
+      /* ignore seek errors mid-buffer */
+    }
+  }
   return elapsed;
 }
 
@@ -575,11 +583,20 @@ async function togglePlay() {
     rebuildTimelineIndex(0);
   }
   audio.playbackRate = 1;
+  // Anchor BEFORE play() — media time can jump during the play() promise.
+  const anchor = audio.currentTime || 0;
+  railStartAudio = anchor;
+  railStartPerf = performance.now();
+  elapsed = anchor;
   try {
     await audio.play();
+    // Re-assert rail after play starts; clamp runaway media.
     railStartPerf = performance.now();
-    railStartAudio = audio.currentTime || 0;
-    elapsed = railStartAudio;
+    railStartAudio = anchor;
+    if (audio.currentTime > anchor + 0.35) {
+      audio.currentTime = anchor;
+    }
+    elapsed = anchor;
     playing = true;
     playBtn.textContent = 'Pause';
     if (lyricHint) lyricHint.textContent = '';

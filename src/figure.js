@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import {
   makeAsphaltTexture,
+  makeChatTexture,
+  makeClockFaceTexture,
   makeConcreteTexture,
   makeFurTexture,
   makeGrassTexture,
@@ -643,6 +645,158 @@ export function createProps() {
   const foxGlow = new THREE.PointLight(0xff7a3a, 0, 10);
   foxGlow.position.set(2.0, 0.6, -4.0);
 
+  // --- телефон с перепиской (я не напишу) ---
+  const phone = new THREE.Group();
+  const phoneBody = new THREE.Mesh(
+    new THREE.BoxGeometry(0.55, 1.05, 0.08),
+    new THREE.MeshStandardMaterial({
+      color: 0x111418,
+      metalness: 0.7,
+      roughness: 0.3,
+      emissive: 0x0a1020,
+    })
+  );
+  const screen = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.48, 0.92),
+    new THREE.MeshBasicMaterial({ map: makeChatTexture() })
+  );
+  screen.position.z = 0.045;
+  const screenLight = new THREE.PointLight(0x4a90ff, 0, 3);
+  screenLight.position.set(0, 0, 0.4);
+  // рука держит телефон
+  const grip = new THREE.Mesh(
+    new THREE.SphereGeometry(0.14, 14, 14),
+    skinMat(0x2a3448)
+  );
+  grip.scale.set(1.3, 0.55, 1.1);
+  grip.position.set(0.05, -0.55, -0.05);
+  phone.add(phoneBody, screen, screenLight, grip);
+  phone.position.set(0.15, 0.15, -1.5);
+  phone.rotation.x = -0.35;
+  phone.visible = false;
+  phone.userData = { screen, screenLight };
+
+  // --- часы (время ушло) ---
+  const clock = new THREE.Group();
+  const clockFace = new THREE.Mesh(
+    new THREE.CircleGeometry(0.9, 48),
+    new THREE.MeshBasicMaterial({ map: makeClockFaceTexture() })
+  );
+  const handH = new THREE.Mesh(
+    new THREE.BoxGeometry(0.06, 0.4, 0.03),
+    new THREE.MeshBasicMaterial({ color: 0xff4d3a })
+  );
+  handH.position.y = 0.15;
+  const handM = new THREE.Mesh(
+    new THREE.BoxGeometry(0.04, 0.55, 0.03),
+    new THREE.MeshBasicMaterial({ color: 0x9ec7ff })
+  );
+  handM.position.y = 0.22;
+  const clockRim = new THREE.Mesh(
+    new THREE.TorusGeometry(0.92, 0.05, 10, 40),
+    new THREE.MeshStandardMaterial({ color: 0x8899aa, metalness: 0.6, roughness: 0.35 })
+  );
+  clock.add(clockFace, handH, handM, clockRim);
+  clock.position.set(0, 0.8, -3.2);
+  clock.visible = false;
+  clock.userData = { handH, handM };
+
+  // --- кинолента (моменты фоном) ---
+  const film = new THREE.Group();
+  for (let i = 0; i < 6; i++) {
+    const frame = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.4, 1.0),
+      new THREE.MeshStandardMaterial({
+        color: 0x1a2433,
+        emissive: 0x2a4058,
+        emissiveIntensity: 0.4 + (i % 3) * 0.15,
+        roughness: 0.7,
+      })
+    );
+    frame.position.set(-4 + i * 1.6, 0.6 + Math.sin(i) * 0.2, -4 - (i % 2) * 0.4);
+    frame.rotation.y = -0.25;
+    const sprocket = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.5, 1.2),
+      new THREE.MeshBasicMaterial({ color: 0x0a0c10, transparent: true, opacity: 0.5 })
+    );
+    sprocket.position.copy(frame.position);
+    sprocket.position.z -= 0.02;
+    sprocket.rotation.y = -0.25;
+    film.add(sprocket, frame);
+  }
+  film.visible = false;
+
+  // --- второй силуэт (мы такие разные) ---
+  const twin = createFigure();
+  twin.visible = false;
+  twin.position.set(1.4, -1.15, -3.0);
+  twin.userData.mat.color.setHex(0xff4d3a);
+  twin.userData.mat.emissive.setHex(0x4a1520);
+
+  // --- маска / злая шутка ---
+  const joke = new THREE.Group();
+  const mask = new THREE.Mesh(
+    new THREE.SphereGeometry(0.35, 20, 20),
+    new THREE.MeshStandardMaterial({
+      color: 0xf0e6d0,
+      emissive: 0x3a3020,
+      roughness: 0.55,
+    })
+  );
+  mask.scale.set(1, 1.1, 0.7);
+  const smile = new THREE.Mesh(
+    new THREE.TorusGeometry(0.14, 0.025, 8, 20, Math.PI),
+    new THREE.MeshBasicMaterial({ color: 0x111111 })
+  );
+  smile.rotation.z = Math.PI;
+  smile.position.set(0, -0.08, 0.22);
+  const eyeJokeL = new THREE.Mesh(
+    new THREE.SphereGeometry(0.05, 10, 10),
+    new THREE.MeshBasicMaterial({ color: 0x111111 })
+  );
+  const eyeJokeR = eyeJokeL.clone();
+  eyeJokeL.position.set(-0.12, 0.08, 0.24);
+  eyeJokeR.position.set(0.12, 0.08, 0.24);
+  joke.add(mask, smile, eyeJokeL, eyeJokeR);
+  joke.position.set(0, 0.9, -2.8);
+  joke.visible = false;
+
+  // --- горло (чешется горло) ---
+  const throat = new THREE.Group();
+  const neckGlow = new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 16, 16),
+    new THREE.MeshStandardMaterial({
+      color: 0xff4d3a,
+      emissive: 0xff2a20,
+      emissiveIntensity: 1.2,
+      transparent: true,
+      opacity: 0.75,
+    })
+  );
+  neckGlow.position.set(0, 0.35, -1.8);
+  const throatLight = new THREE.PointLight(0xff4d3a, 0, 5);
+  throatLight.position.set(0, 0.4, -1.5);
+  throat.add(neckGlow, throatLight);
+  throat.visible = false;
+  throat.userData = { neckGlow, throatLight };
+
+  // --- слёзы / сопли (стать старше) ---
+  const tears = new THREE.Group();
+  for (let i = 0; i < 5; i++) {
+    const drop = new THREE.Mesh(
+      new THREE.SphereGeometry(0.04, 8, 8),
+      new THREE.MeshStandardMaterial({
+        color: 0x9ec7ff,
+        emissive: 0x3a70aa,
+        transparent: true,
+        opacity: 0.7,
+      })
+    );
+    drop.position.set(-0.1 + i * 0.05, 1.2 - i * 0.08, -1.9);
+    tears.add(drop);
+  }
+  tears.visible = false;
+
   props.add(
     suitcase,
     lifebuoy,
@@ -655,7 +809,14 @@ export function createProps() {
     blackPhoto,
     hands,
     home,
-    foxGlow
+    foxGlow,
+    phone,
+    clock,
+    film,
+    twin,
+    joke,
+    throat,
+    tears
   );
   props.userData = {
     suitcase,
@@ -671,6 +832,13 @@ export function createProps() {
     home,
     foxGlow,
     lampLights,
+    phone,
+    clock,
+    film,
+    twin,
+    joke,
+    throat,
+    tears,
   };
   return props;
 }

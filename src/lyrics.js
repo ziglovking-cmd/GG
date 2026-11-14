@@ -88,32 +88,52 @@ export const CUES = [
 
 export const EVENTS = [
   { t: 0.0, scene: 'horizon' },
-  { t: 9.83, scene: 'walk' },
-  { t: 19.5, scene: 'void' },
+  { t: 9.83, scene: 'stamp-onda' }, // KI-KI-KIDSCRY2DAY
+  { t: 11.35, scene: 'joke' }, // Злая шутка
+  { t: 14.2, scene: 'clock' }, // время ушло
+  { t: 17.0, scene: 'walk' }, // И после меня
+  { t: 19.5, scene: 'void' }, // ничего не осталось — чёрный кадр
   { t: 24.2, scene: 'horizon' },
   { t: 28.9, scene: 'chorus-pulse' },
-  // куплет 1 — сюжетные декорации
+  { t: 32.5, scene: 'void' }, // не осталось
+  { t: 35.0, scene: 'chorus-pulse' },
+  // куплет 1 — каждая строка своим кадром
   { t: 44.5, scene: 'home' }, // Не ждите меня дома
   { t: 47.0, scene: 'drown-party' }, // утонул в празднике
-  { t: 49.0, scene: 'party' },
+  { t: 49.0, scene: 'different' }, // Мы такие разные
+  { t: 50.3, scene: 'party' }, // говорил иначе
   { t: 52.4, scene: 'fountain' }, // Из коробки бьёт фонтан
   { t: 54.4, scene: 'hotel' }, // В дешёвых отелях
   { t: 56.4, scene: 'suitcase' }, // забыть чемодан
+  { t: 57.7, scene: 'delirium' }, // Всё это кажется
   { t: 58.8, scene: 'delirium' }, // ты просто бредишь
+  { t: 60.5, scene: 'anxiety' }, // Немного переживаю
   { t: 61.9, scene: 'potyomkin' }, // ща в ушах потемкин
   { t: 63.5, scene: 'scrub' }, // стуком пробела
-  { t: 70.8, scene: 'melancholy' },
+  { t: 65.9, scene: 'apology' }, // Извини меня за это
+  { t: 67.9, scene: 'grow-up' }, // Стать старше…
+  { t: 70.8, scene: 'melancholy' }, // Музыка — тоска
+  { t: 72.0, scene: 'film' }, // моменты будут фоном
   { t: 73.5, scene: 'hands' }, // Смотри мне на руки
   { t: 75.5, scene: 'sink' },
   { t: 76.6, scene: 'lifebuoy' }, // Рвётся спасательный круг
+  { t: 79.4, scene: 'how-are-you' }, // Ты как сам-то?
   { t: 81.3, scene: 'stamp-onda' },
+  { t: 85.5, scene: 'how-are-you' },
+  { t: 86.8, scene: 'stamp-onda' },
   // куплет 2
-  { t: 89.5, scene: 'fox' }, // Смеюсь как лиса — FP обочина
+  { t: 89.5, scene: 'fox' }, // Смеюсь как лиса
   { t: 92.2, scene: 'chase' }, // они хотят меня
   { t: 93.7, scene: 'run' }, // Сверкают пятки
   { t: 95.2, scene: 'metro' }, // до метро не добежал
+  { t: 96.7, scene: 'throat' }, // Чешется горло
   { t: 97.7, scene: 'scream' }, // хочу кричать
-  { t: 99.3, scene: 'apology' },
+  { t: 98.5, scene: 'mute' }, // но не могу
+  { t: 99.3, scene: 'phone' }, // Извини меня
+  { t: 101.0, scene: 'phone' }, // я не напишу — телефон + переписка
+  { t: 102.5, scene: 'phone' }, // А чё так?
   { t: 103.0, scene: 'chorus-pulse' },
+  { t: 112.0, scene: 'stamp-onda' },
+  { t: 120.0, scene: 'film' }, // credits song
   { t: 125.5, scene: 'end' },
 ];

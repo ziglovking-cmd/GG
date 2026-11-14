@@ -29,7 +29,7 @@ let startedAtPerf = 0;
 let pausedAt = 0;
 let prevLyric = '';
 let sceneName = 'horizon';
-/** @type {'third' | 'fp-road' | 'fp-hotel' | 'fp-under' | 'fp-metro' | 'fp-hands' | 'top-keys' | 'close-face' | 'black'} */
+/** @type {'third' | 'fp-road' | 'fp-hotel' | 'fp-under' | 'fp-metro' | 'fp-hands' | 'top-keys' | 'close-face' | 'black' | 'phone'} */
 let camMode = 'third';
 let flash = 0;
 let beatKick = 0;
@@ -293,20 +293,33 @@ function updateWords(t, dt) {
 
 function hideStoryProps() {
   const u = props.userData;
-  u.suitcase.visible = false;
-  u.lifebuoy.visible = false;
-  u.fox.visible = false;
+  for (const key of [
+    'suitcase',
+    'lifebuoy',
+    'fox',
+    'road',
+    'hotel',
+    'fountain',
+    'metro',
+    'scrub',
+    'blackPhoto',
+    'hands',
+    'home',
+    'phone',
+    'clock',
+    'film',
+    'twin',
+    'joke',
+    'throat',
+    'tears',
+  ]) {
+    if (u[key]) u[key].visible = false;
+  }
   u.fox.scale.setScalar(1);
-  u.road.visible = false;
-  u.hotel.visible = false;
-  u.fountain.visible = false;
-  u.metro.visible = false;
   u.metro.position.z = 0;
-  u.scrub.visible = false;
-  u.blackPhoto.visible = false;
-  u.hands.visible = false;
-  u.home.visible = false;
   u.foxGlow.intensity = 0;
+  if (u.phone?.userData?.screenLight) u.phone.userData.screenLight.intensity = 0;
+  if (u.throat?.userData?.throatLight) u.throat.userData.throatLight.intensity = 0;
   if (figure.userData.phones) {
     figure.userData.phones.visible = false;
     for (const g of figure.userData.phoneGlow || []) g.intensity = 0;
@@ -332,6 +345,13 @@ function applyScene(name, t) {
     home,
     foxGlow,
     lampLights,
+    phone,
+    clock,
+    film,
+    twin,
+    joke,
+    throat,
+    tears,
   } = props.userData;
   const { armL, armR, legL, legR, phones, phoneGlow } = figure.userData;
 
@@ -349,6 +369,7 @@ function applyScene(name, t) {
   renderer.setClearColor(0x06101c, 1);
 
   figure.visible = true;
+  figure.scale.setScalar(1);
   figure.position.set(0, -1.15, -2.2);
   figure.rotation.set(0, 0, 0);
   armL.rotation.set(0, 0, 0.25);
@@ -364,9 +385,86 @@ function applyScene(name, t) {
     case 'horizon':
       figure.position.set(0.2, -1.15, -4.5);
       break;
+    case 'joke':
+      joke.visible = true;
+      figure.position.set(-1.2, -1.15, -3.0);
+      flash = 0.55;
+      break;
+    case 'clock':
+      clock.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
     case 'walk':
       figure.position.set(-1.2, -1.15, -2.5);
       if (figure.userData.ground) figure.userData.ground.position.copy(figure.position).setY(-1.32);
+      break;
+    case 'different':
+      twin.visible = true;
+      twin.position.set(1.5, -1.15, -3.0);
+      figure.position.set(-1.3, -1.15, -3.0);
+      flash = 0.4;
+      break;
+    case 'anxiety':
+      particles.material.opacity = 1;
+      particles.material.color.setHex(0xff4d3a);
+      figure.position.set(0, -1.15, -2.5);
+      flash = 0.6;
+      scene.fog.density = 0.06;
+      break;
+    case 'grow-up':
+      tears.visible = true;
+      figure.position.set(0, -1.15, -2.4);
+      figure.scale.setScalar(1.15);
+      break;
+    case 'film':
+      film.visible = true;
+      figure.position.set(0, -1.15, -4.5);
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'how-are-you':
+      camMode = 'close-face';
+      figure.position.set(0, -1.35, -1.8);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'throat':
+      throat.visible = true;
+      throat.userData.throatLight.intensity = 2.2;
+      camMode = 'close-face';
+      figure.position.set(0, -1.45, -1.7);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      flash = 0.7;
+      break;
+    case 'mute':
+      armL.rotation.z = 1.2;
+      armR.rotation.z = -1.2;
+      figure.position.set(0, -1.15, -2.4);
+      particles.material.opacity = 0.2;
+      flash = 0.3;
+      break;
+    case 'phone':
+      // «извини / я не напишу» — телефон с перепиской в руках
+      camMode = 'phone';
+      phone.visible = true;
+      phone.position.set(0.15, 0.15, -1.5);
+      phone.rotation.set(-0.35, 0, 0);
+      phone.userData.screenLight.intensity = 2.4;
+      figure.visible = true;
+      figure.position.set(0, -1.45, -2.0);
+      armL.rotation.set(-0.9, 0.2, 0.6);
+      armR.rotation.set(-1.1, -0.3, -0.5);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      particles.material.opacity = 0.2;
+      flash = 0.35;
       break;
     case 'void':
       // «ничего не осталось» — чёрный фото-кадр
@@ -554,8 +652,17 @@ function applyScene(name, t) {
       particles.material.color.setHex(0xff4d3a);
       break;
     case 'apology':
-      figure.position.set(0, -1.15, -2.6);
-      particles.material.opacity = 0.35;
+      // извини — тоже с телефоном, но чуть дальше
+      camMode = 'phone';
+      phone.visible = true;
+      phone.userData.screenLight.intensity = 1.6;
+      phone.position.set(0.2, 0.05, -1.7);
+      figure.position.set(0, -1.4, -2.2);
+      armR.rotation.set(-1.0, -0.2, -0.45);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      particles.material.opacity = 0.3;
       break;
     case 'end':
       figure.position.set(0, -1.15, -5);
@@ -710,6 +817,50 @@ function animateFigure(t, dt) {
     figure.position.x = Math.sin(t * 1.7) * 0.8;
   }
 
+  if (props.userData.clock?.visible) {
+    const { handH, handM } = props.userData.clock.userData;
+    handM.rotation.z = -t * 4;
+    handH.rotation.z = -t * 0.35;
+    props.userData.clock.rotation.y = Math.sin(t * 0.8) * 0.15;
+  }
+
+  if (props.userData.phone?.visible) {
+    const p = props.userData.phone;
+    p.position.y = 0.1 + Math.sin(t * 2.2) * 0.03;
+    p.rotation.x = -0.35 + Math.sin(t * 1.5) * 0.05;
+    p.rotation.z = Math.sin(t * 1.8) * 0.04;
+    p.userData.screenLight.intensity = 1.8 + Math.sin(t * 5) * 0.5;
+  }
+
+  if (props.userData.film?.visible) {
+    props.userData.film.children.forEach((ch, i) => {
+      ch.position.x = ((-4 + (i % 6) * 1.6 + t * 0.6) % 10) - 5;
+    });
+  }
+
+  if (props.userData.throat?.visible) {
+    const { neckGlow, throatLight } = props.userData.throat.userData;
+    neckGlow.scale.setScalar(1 + Math.sin(t * 10) * 0.15);
+    throatLight.intensity = 1.6 + Math.sin(t * 12) * 0.8;
+  }
+
+  if (props.userData.twin?.visible) {
+    props.userData.twin.rotation.y = Math.sin(t * 1.5) * 0.3;
+    figure.rotation.y = -Math.sin(t * 1.5) * 0.3;
+  }
+
+  if (props.userData.joke?.visible) {
+    props.userData.joke.rotation.y = Math.sin(t * 2) * 0.4;
+    props.userData.joke.position.y = 0.9 + Math.sin(t * 3) * 0.08;
+  }
+
+  if (props.userData.tears?.visible) {
+    props.userData.tears.children.forEach((d, i) => {
+      d.position.y = 1.2 - ((t * 0.6 + i * 0.15) % 1.2);
+      d.material.opacity = 0.3 + (d.position.y - 0.2) * 0.4;
+    });
+  }
+
   beatKick = Math.max(0, beatKick - dt * 2.2);
   flash = Math.max(0, flash - dt * 1.4);
 }
@@ -763,6 +914,11 @@ function updateCamera(now, t) {
     camera.position.set(0, 0.6, 1.8);
     camera.lookAt(0, 0.6, -3.5);
     camera.fov = 50;
+  } else if (camMode === 'phone') {
+    // крупно на экран переписки в руке
+    camera.position.set(0.05 + sway * 0.06, 0.35, 0.55);
+    camera.lookAt(0.15, 0.2, -1.45);
+    camera.fov = 46;
   } else {
     camera.position.x = sway * 1.3 + flash * 0.15;
     camera.position.y = 1.4 + Math.sin(now * 0.0003) * 0.12;
@@ -897,6 +1053,8 @@ function frame(now) {
   rim.intensity = 1.0 + Math.sin(now * 0.004) * 0.35 + flash * 1.5;
   if (camMode === 'black') {
     renderer.setClearColor(0x000000, 1);
+  } else if (camMode === 'phone') {
+    renderer.setClearColor(0x050810, 1);
   } else if (camMode === 'top-keys') {
     renderer.setClearColor(0x0c1016, 1);
   } else if (camMode === 'close-face') {
@@ -998,7 +1156,7 @@ async function boot() {
   try {
     await loadAudio();
     playBtn.textContent = 'Play song';
-    sceneLabel.textContent = 'credits · sync-v6';
+    sceneLabel.textContent = 'credits · sync-v7';
   } catch {
     playBtn.textContent = 'Play song';
     sceneLabel.textContent = 'audio missing';

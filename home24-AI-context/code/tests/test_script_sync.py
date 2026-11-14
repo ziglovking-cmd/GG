@@ -143,14 +143,12 @@ def test_yes_after_offer_tells_facts_not_dates() -> None:
         msgs, ctx, step = P.offer_reply(dict(sess), "Да")
         line = msgs[0].lower()
         if topic == "need":
-            assert "дат" in line or "заезд" in line or "район" in line
-            assert step == "await_district"
+            assert "дат" in line or "заезд" in line or "подберу" in line
+            assert step == "await_dates"
         else:
-            assert "дат" not in line
-            assert "хотите, подберу" in line
-            assert "центр" in line or "район" in line
+            assert "даты" in line and "подберу" in line
             assert re.search(r"балл|проектор|украс", line)
-            assert step == "await_district"
+            assert step == "await_dates"
         assert ctx["offer_open"] is False
         refused = P.offer_reply(dict(sess), "нет")
         assert refused and refused[2] == "done"

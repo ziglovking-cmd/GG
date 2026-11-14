@@ -596,14 +596,18 @@ _OFFER_ASK_RE = re.compile(
     r"(?i)(?:рассказать(?:\s+подробнее)?|интересно|можно|хотите(?:,?\s*подбер\w*)?|"
     r"подберу\s+квартир\w*|за\s+город|спокойн\w*\s+район)\s*[?)]*\s*$"
 )
-# После фактов про баллы/услуги — сразу выбор района/квартир, не пауза «напишите потом».
-OFFER_PICK_ASK = (
-    "Хотите, подберу квартиру? "
-    "Вам ближе центр, спокойный район или за город?"
+# После фактов — как живой менеджер: сразу к датам (эталонный диалог), не закрывать «Будем ждать!».
+OFFER_PICK_ASK = "Подскажите удобные даты — подберу квартиру?"
+# Вопрос про условия после дат (эталон: гости + район + важное в одном ходе).
+CONDITIONS_ASK = (
+    "На каких условиях планируете остановиться? "
+    "Например, сколько человек и что важно: район, парковка?"
 )
 _OFFER_PICK_ASK_RE = re.compile(
     r"(?i)хотите,?\s*подбер|подберу\s+квартир\w*\s*\?|"
-    r"ближе\s+центр|спокойн\w*\s+район|за\s+город"
+    r"удобные\s+даты|подскажу удобные|напишите\s+даты|"
+    r"ближе\s+центр|спокойн\w*\s+район|за\s+город|"
+    r"на\s+каких\s+условиях"
 )
 
 
@@ -724,9 +728,9 @@ def offer_reply(
     """Ответ на открытое предложение из рассылки.
 
     Возвращает (messages, context, next_step) или None, если реплика не про предложение.
-    «да / ага / ок / расскажите / ?» → факты по теме, без вопроса про даты.
+    «да / ага / ок / расскажите / ?» → факты по теме + вопрос про даты (как менеджер).
     «нет / не надо» → мягко закрыть, без обиды и без заявки.
-    Тема «need» («может, скоро понадобится?») + «да» → сразу спросить даты.
+    Тема «need» + «да» → сразу даты (эталонный диалог).
     """
     topic = outreach_offer(sess, last_bot)
     if not topic:
@@ -738,35 +742,36 @@ def offer_reply(
                   r"какие\s+есть\s+вариант|^\W*(?:здравствуйте\W+)?(?:да\W+)?вариант", raw)
     )
     if wants_flats and not services_question:
-        # «Да, пришлите варианты» — гость хочет квартиру, а не рассказ о предложении (скрин 66)
+        # «Да, пришлите варианты» — как менеджер: сначала даты
         ctx["offer_open"] = False
         ctx["perk"] = ""
         sess["context"] = ctx
-        return [district_choice_message()], _ctx(sess), "await_district"
+        return [OFFER_PICK_ASK], _ctx(sess), "await_dates"
     if is_consent(raw) or is_offer_unsure(raw) or services_question:
         ctx["offer_open"] = False
-        # «Да» на «Хотите, подберу квартиру?» → воронка, а не повтор фактов
+        # «Да» на уже заданный вопрос про даты/условия — не повторять факты
         if _OFFER_PICK_ASK_RE.search(last_bot or "") and not services_question:
             ctx["perk"] = ""
             ctx.pop("offer_told", None)
             sess["context"] = ctx
-            return [district_choice_message()], _ctx(sess), "await_district"
+            if re.search(r"(?i)на\s+каких\s+условиях|сколько\s+человек\s+и\s+что\s+важно", last_bot or ""):
+                return [CONDITIONS_ASK], _ctx(sess), "await_guests"
+            return [OFFER_PICK_ASK], _ctx(sess), "await_dates"
         if topic == "need" and not services_question:
-            ctx["perk"] = ""  # обычная воронка: район → даты → гости → календарь
+            ctx["perk"] = ""
             sess["context"] = ctx
-            ask = district_choice_message()
+            ask = OFFER_PICK_ASK
             if re.search(r"(?i)вариант|подбер|пришлите|покажите|скиньте", raw):
-                ask = "С удовольствием подберу)\n\n" + district_choice_message()
-            return [ask], _ctx(sess), "await_district"
+                ask = "С удовольствием подберу)\n\n" + OFFER_PICK_ASK
+            return [ask], _ctx(sess), "await_dates"
         line = offer_facts("services" if (services_question and topic == "need") else topic)
         if line and not services_question:
-            # сразу выбор квартир/района — не ждать второго «да» и не закрывать «Будем ждать!»
             sep = "\n\n" if re.search(r"https?://\S+$", line.rstrip()) else " "
             line = line.rstrip() + sep + OFFER_PICK_ASK
         ctx["perk"] = "orient"
         ctx["offer_told"] = topic
         ctx["offer_pick_ask"] = True
-        return [line], ctx, "await_district"
+        return [line], ctx, "await_dates"
     if is_later_think(raw) or is_offer_refusal(raw):
         ctx["offer_open"] = False
         ctx["perk"] = ""

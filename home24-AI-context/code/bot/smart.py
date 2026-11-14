@@ -1201,6 +1201,7 @@ def _ask_step(ask: str, fallback: str) -> str:
         "dates": "await_dates",
         "guests": "await_guests",
         "district": "await_district",
+        "conditions": "await_guests",
         "returning": "await_returning",
     }.get(ask, fallback or "await_returning")
 
@@ -1262,9 +1263,20 @@ def _forward_question(
 ) -> tuple[str, str]:
     """Следующий пробел, кроме вопроса, который бот только что задал."""
     from bot.ai import _ask_key
+    from bot.phrases import CONDITIONS_ASK
 
     slots = _session_slots(sess)
-    last_key = _ask_key(_last_bot_text(history))
+    last = _last_bot_text(history)
+    last_key = _ask_key(last)
+    # Как живой менеджер (эталон): даты есть, гости+район пусты → один вопрос про условия
+    dates_ready = bool(slots.get("dates") and str(slots.get("dates")) != "ещё не определились")
+    if (
+        dates_ready
+        and not slots.get("guests")
+        and not slots.get("district")
+        and not re.search(r"(?i)на\s+каких\s+условиях|сколько\s+человек\s+и\s+что\s+важно", last)
+    ):
+        return CONDITIONS_ASK, "conditions"
     order: list[str] = []
     if not slots.get("district"):
         order.append("district")
@@ -1554,11 +1566,13 @@ def _script_reply(
             if o_step == "done":
                 state["step"] = "done"
             buttons = None
-            if o_msgs and str(o_msgs[0]).rstrip().endswith("?"):
+            if o_msgs and ("?" in str(o_msgs[0])):
                 if o_step == "await_dates":
                     buttons = BUTTONS.get("dates")
                 elif o_step == "await_district":
                     buttons = BUTTONS.get("district")
+                elif o_step == "await_guests":
+                    buttons = BUTTONS.get("guests")
             return o_msgs, buttons, state, False
     known_dates = str(sess.get("dates") or "").strip()
     dates_ready = bool(known_dates and known_dates != "ещё не определились")
@@ -1827,8 +1841,15 @@ def _waiting_reply(
         state = _craft_state(sess, step=str(sess.get("step") or "await_dates"), path="smart:rule/wait",
                              ctx_extra={"wait_stage": 1, "thinking": True, "quiet_turn": False})
         return [WAIT_LINE], None, state, False
-    # «Хорошо» на «Хотите, подберу квартиру?» — не закрывать «Будем ждать!», мягко оставить дверь
-    if re.search(r"(?i)хотите,?\s*подбер|подберу\s+квартир\w*\s*\?", last) and last.rstrip().endswith("?"):
+    # «Хорошо» на вопрос менеджера про даты/условия — не «Будем ждать!»
+    if (
+        re.search(
+            r"(?i)хотите,?\s*подбер|подберу\s+квартир\w*\s*\?|удобные\s+даты|"
+            r"на\s+каких\s+условиях",
+            last,
+        )
+        and last.rstrip().endswith("?")
+    ):
         from bot.phrases import LATER_LINE
 
         state = _craft_state(

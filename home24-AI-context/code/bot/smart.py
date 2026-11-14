@@ -1822,6 +1822,17 @@ def _waiting_reply(
         state = _craft_state(sess, step=str(sess.get("step") or "await_dates"), path="smart:rule/wait",
                              ctx_extra={"wait_stage": 1, "thinking": True, "quiet_turn": False})
         return [WAIT_LINE], None, state, False
+    # «Хорошо» на «Хотите, подберу квартиру?» — не закрывать «Будем ждать!», мягко оставить дверь
+    if re.search(r"(?i)хотите,?\s*подбер|подберу\s+квартир\w*\s*\?", last) and last.rstrip().endswith("?"):
+        from bot.phrases import LATER_LINE
+
+        state = _craft_state(
+            sess,
+            step=str(sess.get("step") or "await_dates"),
+            path="smart:rule/wait",
+            ctx_extra={"wait_stage": 1, "thinking": True, "quiet_turn": False, "offer_pick_ask": False},
+        )
+        return [LATER_LINE], None, state, False
     if last and "?" not in last and not re.search(r"(?m)^1\)", last):
         # «Хорошо» на ответ-факт («С питомцами можно не везде…») — улыбка, без анкеты и без поиска «района Хорошо»
         state = _craft_state(sess, step=str(sess.get("step") or "await_dates"), path="smart:rule/wait",

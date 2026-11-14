@@ -1,6 +1,10 @@
 /** Lyrics synced to credits song (~2:17 / 168 BPM). Bar ≈ 1.429s. */
 export const DURATION = 137;
 export const YT_ID = 'e9l8AnnF0wU';
+/** Text waits this many seconds so it doesn't lead the vocal. */
+export const LYRIC_LAG = 1.35;
+/** Extra dwell after `end` before the HUD fades into a pause. */
+export const HOLD_PAD = 0.45;
 
 /**
  * t = когда показать, end = до когда держать на экране.

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { CUES, DURATION, EVENTS, YT_ID } from './lyrics.js';
+import { CUES, DURATION, EVENTS, HOLD_PAD, LYRIC_LAG, YT_ID } from './lyrics.js';
 import { createFigure, createPartyLights, createProps } from './figure.js';
 
 const canvas = document.getElementById('stage');
@@ -402,13 +402,17 @@ function animateFigure(t, dt) {
 }
 
 function processTimeline(t) {
-  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= t) {
+  // scenes lag a bit less than lyrics so the figure moves with the beat
+  const sceneT = Math.max(0, t - LYRIC_LAG * 0.55);
+  const lyricT = Math.max(0, t - LYRIC_LAG);
+
+  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= sceneT) {
     applyScene(EVENTS[eventIndex].scene, t);
     eventIndex++;
   }
 
-  // fire new cues at their start time
-  while (cueIndex < CUES.length && CUES[cueIndex].t <= t) {
+  // fire new cues at their start time (lagged)
+  while (cueIndex < CUES.length && CUES[cueIndex].t <= lyricT) {
     const cue = CUES[cueIndex];
     const idx = cueIndex;
     cueIndex += 1;
@@ -420,9 +424,9 @@ function processTimeline(t) {
     }
   }
 
-  // hold until end, then pause until next cue
+  // hold until end (+ pad), then pause until next cue
   if (activeCue) {
-    if (t >= activeCue.end) {
+    if (lyricT >= activeCue.end + HOLD_PAD) {
       enterTextPause();
     }
   } else if (!inTextPause && cueIndex > 0) {
@@ -450,30 +454,32 @@ function syncFromPlayer() {
 }
 
 function rebuildTimelineIndex(t) {
+  const sceneT = Math.max(0, t - LYRIC_LAG * 0.55);
+  const lyricT = Math.max(0, t - LYRIC_LAG);
   cueIndex = 0;
   eventIndex = 0;
   spawnedFor = -1;
   activeCue = null;
   inTextPause = false;
-  while (cueIndex < CUES.length && CUES[cueIndex].t <= t) cueIndex++;
-  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= t) eventIndex++;
+  while (cueIndex < CUES.length && CUES[cueIndex].t <= lyricT) cueIndex++;
+  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= sceneT) eventIndex++;
 
   let last = EVENTS[0];
   for (const e of EVENTS) {
-    if (e.t <= t) last = e;
+    if (e.t <= sceneT) last = e;
   }
   applyScene(last.scene, t);
 
   let lastCue = null;
   let lastIdx = -1;
   for (let i = 0; i < CUES.length; i++) {
-    if (CUES[i].t <= t) {
+    if (CUES[i].t <= lyricT) {
       lastCue = CUES[i];
       lastIdx = i;
     }
   }
   if (lastCue) {
-    if (t < lastCue.end) {
+    if (lyricT < lastCue.end + HOLD_PAD) {
       activeCue = lastCue;
       spawnedFor = lastIdx;
       setHudLyric(lastCue.text, lastCue.mode);

@@ -1,0 +1,1166 @@
+import * as THREE from 'three';
+import { AUDIO_SRC, CUES, DURATION, EVENTS, LYRIC_LAG } from './lyrics.js';
+import { createFigure, createPartyLights, createProps } from './figure.js';
+
+const canvas = document.getElementById('stage');
+const lyricNow = document.getElementById('lyric-now');
+const lyricPrev = document.getElementById('lyric-prev');
+const lyricHint = document.getElementById('lyric-hint');
+const playBtn = document.getElementById('play-btn');
+const progressEl = document.getElementById('progress');
+const timeEl = document.getElementById('time');
+const sceneLabel = document.getElementById('scene-label');
+const seekEl = document.getElementById('seek');
+
+/** Web Audio — sample clock stays locked to real playback. */
+let audioCtx = null;
+/** @type {AudioBuffer | null} */
+let audioBuffer = null;
+/** @type {AudioBufferSourceNode | null} */
+let sourceNode = null;
+let audioReady = false;
+let playing = false;
+let elapsed = 0;
+/** buffer offset (sec) when current source started */
+let offsetWhenStarted = 0;
+/** performance.now() when current source started — lyrics rail */
+let startedAtPerf = 0;
+/** position while paused */
+let pausedAt = 0;
+let prevLyric = '';
+let sceneName = 'horizon';
+/** @type {'third' | 'fp-road' | 'fp-hotel' | 'fp-under' | 'fp-metro' | 'fp-hands' | 'top-keys' | 'close-face' | 'black' | 'phone'} */
+let camMode = 'third';
+let flash = 0;
+let beatKick = 0;
+let waveBaseY = -1.35;
+/** @type {null | typeof CUES[number]} */
+let shownCue = null;
+let lastScene = '';
+let spawnedKey = '';
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha: false,
+  powerPreference: 'high-performance',
+});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setClearColor(0x06101c, 1);
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x06101c, 0.042);
+
+const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 120);
+camera.position.set(0, 1.5, 8.8);
+
+const ambient = new THREE.AmbientLight(0x6ea0d8, 0.5);
+const key = new THREE.DirectionalLight(0xcfe4ff, 1.1);
+key.position.set(4, 8, 6);
+const rim = new THREE.PointLight(0xff4d3a, 1.2, 30);
+rim.position.set(-4, 1.2, 2);
+scene.add(ambient, key, rim);
+
+const waveGeo = new THREE.PlaneGeometry(40, 40, 96, 96);
+const waveMat = new THREE.MeshStandardMaterial({
+  color: 0x1d4f8c,
+  emissive: 0x12325a,
+  metalness: 0.45,
+  roughness: 0.4,
+  flatShading: true,
+});
+const wave = new THREE.Mesh(waveGeo, waveMat);
+wave.rotation.x = -Math.PI / 2;
+wave.position.y = -1.35;
+scene.add(wave);
+const waveWire = new THREE.Mesh(
+  waveGeo,
+  new THREE.MeshBasicMaterial({
+    color: 0x9ec7ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.1,
+  })
+);
+waveWire.rotation.copy(wave.rotation);
+waveWire.position.copy(wave.position);
+waveWire.position.y += 0.02;
+scene.add(waveWire);
+const wavePos = waveGeo.attributes.position;
+
+const COUNT = 420;
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(COUNT * 3);
+for (let i = 0; i < COUNT; i++) {
+  pPos[i * 3] = (Math.random() - 0.5) * 28;
+  pPos[i * 3 + 1] = Math.random() * 12 - 1;
+  pPos[i * 3 + 2] = (Math.random() - 0.5) * 28;
+}
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+const particles = new THREE.Points(
+  pGeo,
+  new THREE.PointsMaterial({
+    color: 0x9ec7ff,
+    size: 0.045,
+    transparent: true,
+    opacity: 0.7,
+    depthWrite: false,
+  })
+);
+scene.add(particles);
+
+const figure = createFigure();
+const props = createProps();
+const party = createPartyLights();
+scene.add(figure, props, party);
+
+// Soft ground disc under figure so silhouette reads against the wave
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(1.1, 32),
+  new THREE.MeshBasicMaterial({
+    color: 0x9ec7ff,
+    transparent: true,
+    opacity: 0.12,
+  })
+);
+ground.rotation.x = -Math.PI / 2;
+ground.position.set(0, -1.32, -2.2);
+scene.add(ground);
+figure.userData.ground = ground;
+
+const wordRoot = new THREE.Group();
+scene.add(wordRoot);
+/** @type {{ mesh: THREE.Mesh, born: number, life: number, vx: number, vy: number, vz: number, spin: number }[]} */
+const liveWords = [];
+
+function makeWordTexture(text, mode) {
+  const canvasEl = document.createElement('canvas');
+  const ctx = canvasEl.getContext('2d');
+  const pad = 48;
+  const fontSize = mode === 'chorus' || mode === 'stamp' ? 96 : mode === 'impact' ? 88 : 72;
+  const family =
+    mode === 'line' || mode === 'impact'
+      ? '"Instrument Serif", Georgia, serif'
+      : '"Bebas Neue", Impact, sans-serif';
+  ctx.font = `${mode === 'line' ? 'italic ' : ''}700 ${fontSize}px ${family}`;
+  const metrics = ctx.measureText(text);
+  canvasEl.width = Math.ceil(metrics.width + pad * 2);
+  canvasEl.height = Math.ceil(fontSize * 1.55 + pad);
+  ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+  ctx.font = `${mode === 'line' ? 'italic ' : ''}700 ${fontSize}px ${family}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle =
+    mode === 'glitch' ? '#ff4d3a' : mode === 'chorus' ? '#9ec7ff' : '#f2f6fc';
+  ctx.shadowColor = mode === 'glitch' ? '#ff4d3a' : '#9ec7ff';
+  ctx.shadowBlur = mode === 'impact' || mode === 'stamp' ? 28 : 14;
+  ctx.fillText(text, canvasEl.width / 2, canvasEl.height / 2);
+  const tex = new THREE.CanvasTexture(canvasEl);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;
+  return { tex, aspect: canvasEl.width / canvasEl.height };
+}
+
+function spawnWord(text, mode, t) {
+  if (!text) return;
+  const { tex, aspect } = makeWordTexture(text, mode);
+  const h = mode === 'stamp' ? 2.0 : mode === 'impact' ? 1.7 : mode === 'chorus' ? 1.4 : 1.0;
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(h * aspect, h),
+    new THREE.MeshBasicMaterial({
+      map: tex,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    })
+  );
+  const angle = (Math.random() - 0.5) * Math.PI * 0.9;
+  const radius = mode === 'chorus' ? 1.4 + Math.random() * 2.2 : 0.5 + Math.random() * 1.5;
+  mesh.position.set(
+    Math.sin(angle) * radius,
+    mode === 'stamp' ? 2.0 : 0.7 + Math.random() * 1.6,
+    -1.2 - Math.random() * 2.2
+  );
+  mesh.rotation.y = angle * 0.35;
+  wordRoot.add(mesh);
+  liveWords.push({
+    mesh,
+    born: t,
+    life: mode === 'chorus' ? 2.6 : mode === 'stamp' ? 3.4 : 3.0,
+    vx: Math.sin(angle) * (mode === 'chorus' ? 1.5 : 0.4),
+    vy: mode === 'impact' ? 0.75 : 0.2 + Math.random() * 0.35,
+    vz: mode === 'chorus' ? -1.1 : -0.4,
+    spin: (Math.random() - 0.5) * 1.0,
+  });
+}
+
+function clearWords() {
+  for (const w of liveWords) {
+    wordRoot.remove(w.mesh);
+    w.mesh.geometry.dispose();
+    w.mesh.material.map?.dispose();
+    w.mesh.material.dispose();
+  }
+  liveWords.length = 0;
+}
+
+function setHudLyric(text, mode) {
+  if (shownCue && shownCue.text === text && shownCue.mode === mode) {
+    lyricNow.style.opacity = '';
+    lyricNow.classList.remove('is-pause');
+    return;
+  }
+  lyricPrev.textContent = prevLyric;
+  prevLyric = text;
+  lyricNow.textContent = text;
+  lyricNow.className = `lyric-now is-${mode}`;
+  void lyricNow.offsetWidth;
+  lyricNow.className = `lyric-now is-${mode}`;
+  lyricNow.style.opacity = '';
+}
+
+function enterTextPause() {
+  if (!lyricNow.textContent) return;
+  lyricNow.classList.add('is-pause');
+  lyricNow.style.opacity = '0.22';
+}
+
+function findActiveCue(lyricT) {
+  // Prefer the latest cue whose window contains lyricT
+  let hit = null;
+  for (const c of CUES) {
+    if (lyricT >= c.t && lyricT < c.end) hit = c;
+  }
+  return hit;
+}
+
+function findActiveScene(sceneT) {
+  let hit = EVENTS[0];
+  for (const e of EVENTS) {
+    if (e.t <= sceneT) hit = e;
+  }
+  return hit;
+}
+
+function formatTime(sec) {
+  const s = Math.max(0, Math.min(DURATION, sec | 0));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+function resize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+
+function updateWave(t, intensity) {
+  for (let i = 0; i < wavePos.count; i++) {
+    const x = wavePos.getX(i);
+    const y = wavePos.getY(i);
+    const z =
+      Math.sin(x * 0.55 + t * 1.6) * 0.38 * intensity +
+      Math.cos(y * 0.4 - t * 1.1) * 0.3 * intensity +
+      Math.sin((x + y) * 0.25 + t * 2.2) * 0.14 * intensity;
+    wavePos.setZ(i, z);
+  }
+  wavePos.needsUpdate = true;
+  waveGeo.computeVertexNormals();
+}
+
+function updateWords(t, dt) {
+  for (let i = liveWords.length - 1; i >= 0; i--) {
+    const w = liveWords[i];
+    const age = t - w.born;
+    if (age > w.life) {
+      wordRoot.remove(w.mesh);
+      w.mesh.geometry.dispose();
+      w.mesh.material.map?.dispose();
+      w.mesh.material.dispose();
+      liveWords.splice(i, 1);
+      continue;
+    }
+    const fade = age < 0.25 ? age / 0.25 : age > w.life - 0.5 ? (w.life - age) / 0.5 : 1;
+    w.mesh.material.opacity = Math.max(0, fade);
+    w.mesh.position.x += w.vx * dt;
+    w.mesh.position.y += w.vy * dt;
+    w.mesh.position.z += w.vz * dt;
+    w.mesh.rotation.z += w.spin * dt;
+    w.vy -= 0.12 * dt;
+  }
+}
+
+function hideStoryProps() {
+  const u = props.userData;
+  for (const key of [
+    'suitcase',
+    'lifebuoy',
+    'fox',
+    'road',
+    'hotel',
+    'fountain',
+    'metro',
+    'scrub',
+    'blackPhoto',
+    'hands',
+    'home',
+    'phone',
+    'clock',
+    'film',
+    'twin',
+    'joke',
+    'throat',
+    'tears',
+  ]) {
+    if (u[key]) u[key].visible = false;
+  }
+  u.fox.scale.setScalar(1);
+  u.metro.position.z = 0;
+  u.foxGlow.intensity = 0;
+  if (u.phone?.userData?.screenLight) u.phone.userData.screenLight.intensity = 0;
+  if (u.throat?.userData?.throatLight) u.throat.userData.throatLight.intensity = 0;
+  if (figure.userData.phones) {
+    figure.userData.phones.visible = false;
+    for (const g of figure.userData.phoneGlow || []) g.intensity = 0;
+  }
+  for (const l of u.lampLights) l.intensity = 0;
+  for (const l of party.userData.lights) l.intensity = 0;
+}
+
+function applyScene(name, t) {
+  sceneName = name;
+  sceneLabel.textContent = `scene · ${name}`;
+  const {
+    suitcase,
+    lifebuoy,
+    fox,
+    road,
+    hotel,
+    fountain,
+    metro,
+    scrub,
+    blackPhoto,
+    hands,
+    home,
+    foxGlow,
+    lampLights,
+    phone,
+    clock,
+    film,
+    twin,
+    joke,
+    throat,
+    tears,
+  } = props.userData;
+  const { armL, armR, legL, legR, phones, phoneGlow } = figure.userData;
+
+  hideStoryProps();
+  flash = Math.max(flash, 0.35);
+  beatKick = 1;
+  camMode = 'third';
+  wave.visible = true;
+  waveWire.visible = true;
+  wave.position.y = waveBaseY;
+  particles.material.opacity = 0.7;
+  particles.material.color.setHex(0x9ec7ff);
+  rim.color.setHex(0xff4d3a);
+  scene.fog.density = 0.042;
+  renderer.setClearColor(0x06101c, 1);
+
+  figure.visible = true;
+  figure.scale.setScalar(1);
+  figure.position.set(0, -1.15, -2.2);
+  figure.rotation.set(0, 0, 0);
+  armL.rotation.set(0, 0, 0.25);
+  armR.rotation.set(0, 0, -0.25);
+  legL.rotation.set(0, 0, 0);
+  legR.rotation.set(0, 0, 0);
+  if (figure.userData.ground) {
+    figure.userData.ground.position.set(0, -1.32, -2.2);
+    figure.userData.ground.visible = true;
+  }
+
+  switch (name) {
+    case 'horizon':
+      figure.position.set(0.2, -1.15, -4.5);
+      break;
+    case 'joke':
+      joke.visible = true;
+      figure.position.set(-1.2, -1.15, -3.0);
+      flash = 0.55;
+      break;
+    case 'clock':
+      clock.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'walk':
+      figure.position.set(-1.2, -1.15, -2.5);
+      if (figure.userData.ground) figure.userData.ground.position.copy(figure.position).setY(-1.32);
+      break;
+    case 'different':
+      twin.visible = true;
+      twin.position.set(1.5, -1.15, -3.0);
+      figure.position.set(-1.3, -1.15, -3.0);
+      flash = 0.4;
+      break;
+    case 'anxiety':
+      particles.material.opacity = 1;
+      particles.material.color.setHex(0xff4d3a);
+      figure.position.set(0, -1.15, -2.5);
+      flash = 0.6;
+      scene.fog.density = 0.06;
+      break;
+    case 'grow-up':
+      tears.visible = true;
+      figure.position.set(0, -1.15, -2.4);
+      figure.scale.setScalar(1.15);
+      break;
+    case 'film':
+      film.visible = true;
+      figure.position.set(0, -1.15, -4.5);
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'how-are-you':
+      camMode = 'close-face';
+      figure.position.set(0, -1.35, -1.8);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'throat':
+      throat.visible = true;
+      throat.userData.throatLight.intensity = 2.2;
+      camMode = 'close-face';
+      figure.position.set(0, -1.45, -1.7);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      flash = 0.7;
+      break;
+    case 'mute':
+      armL.rotation.z = 1.2;
+      armR.rotation.z = -1.2;
+      figure.position.set(0, -1.15, -2.4);
+      particles.material.opacity = 0.2;
+      flash = 0.3;
+      break;
+    case 'phone':
+      // «извини / я не напишу» — телефон с перепиской в руках
+      camMode = 'phone';
+      phone.visible = true;
+      phone.position.set(0.15, 0.15, -1.5);
+      phone.rotation.set(-0.35, 0, 0);
+      phone.userData.screenLight.intensity = 2.4;
+      figure.visible = true;
+      figure.position.set(0, -1.45, -2.0);
+      armL.rotation.set(-0.9, 0.2, 0.6);
+      armR.rotation.set(-1.1, -0.3, -0.5);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      particles.material.opacity = 0.2;
+      flash = 0.35;
+      break;
+    case 'void':
+      // «ничего не осталось» — чёрный фото-кадр
+      camMode = 'black';
+      blackPhoto.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      particles.material.opacity = 0.08;
+      scene.fog.density = 0.02;
+      renderer.setClearColor(0x000000, 1);
+      flash = 0.15;
+      break;
+    case 'chorus-pulse':
+      beatKick = 1.4;
+      figure.position.set(0, -1.15, -3.2);
+      break;
+    case 'home':
+      home.visible = true;
+      figure.position.set(0.8, -1.15, -3.2);
+      figure.rotation.y = 0.4;
+      break;
+    case 'party':
+      for (const l of party.userData.lights) l.intensity = 2.2;
+      figure.position.set(-0.6, -1.15, -2.8);
+      break;
+    case 'drown-party':
+      camMode = 'fp-under';
+      for (const l of party.userData.lights) l.intensity = 2.6;
+      figure.position.set(0, -1.7, -2.5);
+      wave.position.y = -0.4;
+      scene.fog.density = 0.085;
+      break;
+    case 'fountain':
+      fountain.visible = true;
+      fountain.userData.spray.intensity = 2.4;
+      figure.position.set(-1.6, -1.15, -2.2);
+      flash = 0.55;
+      break;
+    case 'hotel':
+      camMode = 'fp-hotel';
+      hotel.visible = true;
+      hotel.userData.neonLight.intensity = 2.4;
+      figure.visible = true;
+      figure.position.set(-0.8, -1.15, -3.6);
+      figure.rotation.y = 0.5;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      rim.color.setHex(0xff4d6a);
+      scene.fog.density = 0.055;
+      break;
+    case 'suitcase':
+      camMode = 'fp-hotel';
+      hotel.visible = true;
+      hotel.userData.neonLight.intensity = 1.6;
+      suitcase.visible = true;
+      suitcase.position.set(1.1, -1.0, -3.2);
+      figure.visible = true;
+      figure.position.set(-1.2, -1.15, -3.4);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'delirium':
+      flash = 0.7;
+      particles.material.opacity = 0.95;
+      scene.fog.density = 0.06;
+      figure.rotation.y = Math.PI;
+      break;
+    case 'potyomkin':
+      // «ща в ушах потемкин» — крупный план + наушники
+      camMode = 'close-face';
+      phones.visible = true;
+      for (const g of phoneGlow || []) g.intensity = 1.4;
+      figure.position.set(0, -1.35, -1.6);
+      flash = 0.85;
+      rim.color.setHex(0x4da6ff);
+      particles.material.color.setHex(0x9ec7ff);
+      wave.visible = false;
+      waveWire.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      break;
+    case 'scrub':
+      // «стуком пробела» — вид сверху на клавиатуру, палец жмёт пробел
+      camMode = 'top-keys';
+      scrub.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      particles.material.opacity = 0.15;
+      scene.fog.density = 0.015;
+      flash = 0.35;
+      break;
+    case 'melancholy':
+      particles.material.color.setHex(0x7a93b8);
+      figure.position.set(0, -1.15, -3.5);
+      break;
+    case 'hands':
+      camMode = 'fp-hands';
+      hands.visible = true;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.position.y = -0.6;
+      break;
+    case 'sink':
+      camMode = 'fp-under';
+      figure.position.y = -1.7;
+      wave.position.y = -0.35;
+      break;
+    case 'lifebuoy':
+      camMode = 'fp-under';
+      lifebuoy.visible = true;
+      lifebuoy.position.set(0.3, 0.4, -2.0);
+      flash = 1;
+      wave.position.y = -0.5;
+      figure.position.y = -1.85;
+      break;
+    case 'stamp-onda':
+      flash = 0.9;
+      beatKick = 1.5;
+      figure.position.set(0, -1.15, -2.8);
+      break;
+    case 'fox':
+      camMode = 'fp-road';
+      road.visible = true;
+      fox.visible = true;
+      fox.scale.setScalar(1.55);
+      fox.position.set(2.15, -1.15, -3.8);
+      fox.rotation.y = -0.85;
+      foxGlow.intensity = 3.4;
+      foxGlow.position.set(2.0, 0.55, -3.4);
+      for (const l of lampLights) l.intensity = 2.2;
+      figure.visible = false;
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      scene.fog.density = 0.028;
+      flash = 0.45;
+      break;
+    case 'chase':
+      camMode = 'fp-road';
+      road.visible = true;
+      fox.visible = true;
+      fox.scale.setScalar(1.35);
+      fox.position.set(1.8, -1.15, -3.5);
+      for (const l of lampLights) l.intensity = 1.2;
+      figure.visible = true;
+      figure.position.set(-0.4, -1.15, -6.5);
+      flash = 0.55;
+      wave.visible = false;
+      waveWire.visible = false;
+      break;
+    case 'run':
+      camMode = 'fp-road';
+      road.visible = true;
+      for (const l of lampLights) l.intensity = 2.2;
+      figure.visible = true;
+      figure.position.set(0.2, -1.15, -4.5);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      flash = 0.65;
+      break;
+    case 'metro':
+      camMode = 'fp-metro';
+      metro.visible = true;
+      figure.visible = true;
+      figure.position.set(0.5, -1.15, -3.5);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      scene.fog.density = 0.05;
+      flash = 0.4;
+      break;
+    case 'scream':
+      armL.rotation.z = 1.45;
+      armR.rotation.z = -1.45;
+      armL.rotation.x = -0.4;
+      armR.rotation.x = -0.4;
+      figure.position.set(0, -1.15, -2.2);
+      flash = 1.2;
+      particles.material.color.setHex(0xff4d3a);
+      break;
+    case 'apology':
+      // извини — тоже с телефоном, но чуть дальше
+      camMode = 'phone';
+      phone.visible = true;
+      phone.userData.screenLight.intensity = 1.6;
+      phone.position.set(0.2, 0.05, -1.7);
+      figure.position.set(0, -1.4, -2.2);
+      armR.rotation.set(-1.0, -0.2, -0.45);
+      if (figure.userData.ground) figure.userData.ground.visible = false;
+      wave.visible = false;
+      waveWire.visible = false;
+      particles.material.opacity = 0.3;
+      break;
+    case 'end':
+      figure.position.set(0, -1.15, -5);
+      particles.material.opacity = 0.4;
+      break;
+    default:
+      break;
+  }
+}
+
+function animateFigure(t, dt) {
+  const { legL, legR, armL, armR } = figure.userData;
+  const {
+    fox,
+    fountain,
+    scrub,
+    hands,
+    home,
+    suitcase,
+    lifebuoy,
+    hotel,
+    metro,
+  } = props.userData;
+
+  const walk = sceneName === 'walk' || sceneName === 'party' || sceneName === 'chase';
+  if (walk && figure.visible) {
+    const sp = sceneName === 'chase' ? 8 : 4.5;
+    legL.rotation.x = Math.sin(t * sp) * 0.55;
+    legR.rotation.x = Math.sin(t * sp + Math.PI) * 0.55;
+    armL.rotation.x = Math.sin(t * sp + Math.PI) * 0.35;
+    armR.rotation.x = Math.sin(t * sp) * 0.35;
+    if (sceneName !== 'chase') {
+      figure.position.x += 0.25 * dt;
+      if (figure.position.x > 3.5) figure.position.x = -3.2;
+    }
+    if (figure.userData.ground) {
+      figure.userData.ground.position.x = figure.position.x;
+      figure.userData.ground.position.z = figure.position.z;
+    }
+  }
+
+  if (sceneName === 'sink' || sceneName === 'drown-party') {
+    figure.position.y = THREE.MathUtils.lerp(figure.position.y, -2.05, dt * 0.55);
+    figure.rotation.z = Math.sin(t * 2) * 0.08;
+  }
+
+  if (sceneName === 'lifebuoy' && lifebuoy.visible) {
+    lifebuoy.rotation.z += dt * 2.5;
+    lifebuoy.scale.setScalar(1 + Math.sin(t * 8) * 0.08);
+    lifebuoy.position.x += dt * 0.35;
+    lifebuoy.position.y -= dt * 0.15;
+    lifebuoy.rotation.x += dt * 1.2;
+  }
+
+  if (sceneName === 'party' || sceneName === 'drown-party' || sceneName === 'chorus-pulse') {
+    party.userData.lights.forEach((l, i) => {
+      l.intensity = 1.2 + Math.sin(t * 8 + i) * 1.4 + beatKick * 0.8;
+    });
+  }
+
+  if ((sceneName === 'suitcase' || sceneName === 'hotel') && suitcase.visible) {
+    suitcase.rotation.y = Math.sin(t * 1.2) * 0.15;
+  }
+
+  if (hotel.visible) {
+    hotel.userData.neon.emissiveIntensity = 1.1 + Math.sin(t * 6) * 0.4;
+    hotel.userData.neonLight.intensity = 1.8 + Math.sin(t * 6) * 0.6;
+  }
+
+  if (fountain.visible) {
+    fountain.userData.jets.forEach((jet, i) => {
+      const h = 0.85 + Math.sin(t * 12 + i) * 0.55;
+      jet.scale.y = h;
+      jet.position.y = -0.85 + h * 0.7;
+    });
+    fountain.userData.spray.intensity = 1.8 + Math.sin(t * 9) * 0.8;
+  }
+
+  if (fox.visible) {
+    const { tail, legFL, legFR, legBL, legBR, head } = fox.userData;
+    tail.rotation.z = 0.85 + Math.sin(t * 5) * 0.25;
+    head.rotation.y = Math.sin(t * 2.2) * 0.15;
+    const gait = Math.sin(t * 9) * 0.35;
+    legFL.rotation.x = gait;
+    legBR.rotation.x = gait;
+    legFR.rotation.x = -gait;
+    legBL.rotation.x = -gait;
+    if (sceneName === 'fox' || sceneName === 'chase') {
+      fox.position.z += (sceneName === 'chase' ? -1.6 : -0.55) * dt;
+      if (fox.position.z < -14) fox.position.z = -3.5;
+    }
+  }
+
+  if (scrub.visible) {
+    // палец жмёт пробел сверху
+    const press = (Math.sin(t * 9) + 1) * 0.5;
+    scrub.userData.space.position.y = 0.1 - press * 0.08;
+    scrub.userData.finger.position.y = 0.45 - press * 0.22;
+    scrub.userData.finger.position.z = -0.55;
+    scrub.userData.space.material.emissiveIntensity = 0.5 + press * 1.1;
+    if (scrub.userData.keys) {
+      scrub.userData.keys.forEach((k, i) => {
+        k.position.y = 0.08 + Math.sin(t * 6 + i) * 0.004;
+      });
+    }
+  }
+
+  if (sceneName === 'potyomkin' && figure.userData.phoneGlow) {
+    for (const g of figure.userData.phoneGlow) {
+      g.intensity = 1.0 + Math.sin(t * 8) * 0.6;
+    }
+    figure.rotation.y = Math.sin(t * 1.4) * 0.12;
+  }
+
+  if (sceneName === 'void' && props.userData.blackPhoto.visible) {
+    props.userData.blackPhoto.rotation.y = Math.sin(t * 0.6) * 0.08;
+    props.userData.blackPhoto.position.y = 0.55 + Math.sin(t * 0.9) * 0.05;
+  }
+
+  if (sceneName === 'run' && figure.visible) {
+    const sp = 12;
+    legL.rotation.x = Math.sin(t * sp) * 0.7;
+    legR.rotation.x = Math.sin(t * sp + Math.PI) * 0.7;
+    figure.position.z = -4.5 - ((t * 3) % 2);
+  }
+
+  if (hands.visible) {
+    const { handL, handR } = hands.userData;
+    handL.position.y = 0.25 + Math.sin(t * 3) * 0.12;
+    handR.position.y = 0.2 + Math.sin(t * 3 + 1) * 0.12;
+    handL.rotation.z = Math.sin(t * 2) * 0.2;
+    handR.rotation.z = -Math.sin(t * 2.2) * 0.2;
+    handL.position.z = -1.4 - (t % 4) * 0.08;
+    handR.position.z = -1.5 - (t % 4) * 0.08;
+  }
+
+  if (home.visible) {
+    home.userData.win.material.opacity = 0.35 + Math.sin(t * 1.5) * 0.2;
+  }
+
+  if (metro.visible) {
+    metro.position.z = ((t * 4.5) % 4.4);
+  }
+
+  if (sceneName === 'run') {
+    // «сверкают пятки» — вспышки на дороге
+    flash = Math.max(flash, 0.25 + Math.abs(Math.sin(t * 14)) * 0.55);
+  }
+
+  if (sceneName === 'delirium') {
+    figure.rotation.y += dt * 0.8;
+    figure.position.x = Math.sin(t * 1.7) * 0.8;
+  }
+
+  if (props.userData.clock?.visible) {
+    const { handH, handM } = props.userData.clock.userData;
+    handM.rotation.z = -t * 4;
+    handH.rotation.z = -t * 0.35;
+    props.userData.clock.rotation.y = Math.sin(t * 0.8) * 0.15;
+  }
+
+  if (props.userData.phone?.visible) {
+    const p = props.userData.phone;
+    p.position.y = 0.1 + Math.sin(t * 2.2) * 0.03;
+    p.rotation.x = -0.35 + Math.sin(t * 1.5) * 0.05;
+    p.rotation.z = Math.sin(t * 1.8) * 0.04;
+    p.userData.screenLight.intensity = 1.8 + Math.sin(t * 5) * 0.5;
+  }
+
+  if (props.userData.film?.visible) {
+    props.userData.film.children.forEach((ch, i) => {
+      ch.position.x = ((-4 + (i % 6) * 1.6 + t * 0.6) % 10) - 5;
+    });
+  }
+
+  if (props.userData.throat?.visible) {
+    const { neckGlow, throatLight } = props.userData.throat.userData;
+    neckGlow.scale.setScalar(1 + Math.sin(t * 10) * 0.15);
+    throatLight.intensity = 1.6 + Math.sin(t * 12) * 0.8;
+  }
+
+  if (props.userData.twin?.visible) {
+    props.userData.twin.rotation.y = Math.sin(t * 1.5) * 0.3;
+    figure.rotation.y = -Math.sin(t * 1.5) * 0.3;
+  }
+
+  if (props.userData.joke?.visible) {
+    props.userData.joke.rotation.y = Math.sin(t * 2) * 0.4;
+    props.userData.joke.position.y = 0.9 + Math.sin(t * 3) * 0.08;
+  }
+
+  if (props.userData.tears?.visible) {
+    props.userData.tears.children.forEach((d, i) => {
+      d.position.y = 1.2 - ((t * 0.6 + i * 0.15) % 1.2);
+      d.material.opacity = 0.3 + (d.position.y - 0.2) * 0.4;
+    });
+  }
+
+  beatKick = Math.max(0, beatKick - dt * 2.2);
+  flash = Math.max(0, flash - dt * 1.4);
+}
+
+function updateCamera(now, t) {
+  const sway = Math.sin(now * 0.00018) * 0.35;
+  if (camMode === 'fp-road') {
+    // FP: глаз с асфальта / из машины. На «лиса» — смотрим на неё справа на обочине.
+    const bob = Math.sin(t * (sceneName === 'run' ? 14 : 6)) * (sceneName === 'run' ? 0.08 : 0.03);
+    if (sceneName === 'fox') {
+      camera.position.set(0.35 + sway * 0.12, 0.72 + bob, 0.6);
+      const fox = props.userData.fox;
+      camera.lookAt(fox.position.x, 0.45, fox.position.z);
+      camera.fov = 64;
+    } else if (sceneName === 'run') {
+      camera.position.set(0.2 + sway * 0.2, 0.6 + bob, 1.0);
+      camera.lookAt(0.4, 0.3, -10);
+      camera.fov = 70;
+    } else {
+      camera.position.set(0.4 + sway * 0.15, 0.65 + bob, 1.1);
+      camera.lookAt(1.6, 0.4, -7);
+      camera.fov = 62;
+    }
+  } else if (camMode === 'fp-hotel') {
+    camera.position.set(0.2 + sway * 0.1, 0.85, 0.4);
+    camera.lookAt(0.4, 0.7, -5.5);
+    camera.fov = 62;
+  } else if (camMode === 'fp-under') {
+    camera.position.set(sway * 0.2, -0.35 + Math.sin(t * 2) * 0.08, 2.2);
+    camera.lookAt(0, -0.6, -2);
+    camera.fov = 72;
+  } else if (camMode === 'fp-metro') {
+    camera.position.set(sway * 0.4, 1.0, 2.0 - (t % 3) * 0.15);
+    camera.lookAt(0, 1.0, -8);
+    camera.fov = 70;
+  } else if (camMode === 'fp-hands') {
+    camera.position.set(0, 0.55, 1.5);
+    camera.lookAt(0, 0.2, -1.6);
+    camera.fov = 65;
+  } else if (camMode === 'top-keys') {
+    // вид сверху на клавиатуру
+    camera.position.set(0.15 + sway * 0.05, 3.6, 0.35);
+    camera.lookAt(0, 0, -0.2);
+    camera.fov = 48;
+  } else if (camMode === 'close-face') {
+    // крупный план лица / наушников
+    camera.position.set(0.15 + sway * 0.08, 0.55, 1.35);
+    camera.lookAt(0, 0.45, -1.5);
+    camera.fov = 42;
+  } else if (camMode === 'black') {
+    camera.position.set(0, 0.6, 1.8);
+    camera.lookAt(0, 0.6, -3.5);
+    camera.fov = 50;
+  } else if (camMode === 'phone') {
+    // крупно на экран переписки в руке
+    camera.position.set(0.05 + sway * 0.06, 0.35, 0.55);
+    camera.lookAt(0.15, 0.2, -1.45);
+    camera.fov = 46;
+  } else {
+    camera.position.x = sway * 1.3 + flash * 0.15;
+    camera.position.y = 1.4 + Math.sin(now * 0.0003) * 0.12;
+    camera.position.z = 8.8;
+    camera.lookAt(0, 1.0, 0);
+    camera.fov = 55;
+  }
+  camera.updateProjectionMatrix();
+}
+
+function heardLatency() {
+  if (!audioCtx) return 0.12;
+  const out = Number(audioCtx.outputLatency) || 0;
+  const base = Number(audioCtx.baseLatency) || 0;
+  // Speakers always trail the sample clock a bit — keep lyrics on what you hear.
+  return Math.min(0.35, Math.max(0.05, out + base || 0.12));
+}
+
+function processTimeline(t) {
+  // Recompute every frame from wall clock — no drifting cueIndex.
+  const lag = LYRIC_LAG + heardLatency();
+  const sceneT = Math.max(0, t - lag * 0.35);
+  const lyricT = Math.max(0, t - lag);
+
+  const scene = findActiveScene(sceneT);
+  if (scene.scene !== lastScene) {
+    lastScene = scene.scene;
+    applyScene(scene.scene, t);
+  }
+
+  const cue = findActiveCue(lyricT);
+  if (cue) {
+    const key = `${cue.t}|${cue.text}`;
+    setHudLyric(cue.text, cue.mode);
+    shownCue = cue;
+    if (spawnedKey !== key) {
+      spawnedKey = key;
+      spawnWord(cue.text, cue.mode, t);
+    }
+  } else {
+    // In a gap (e.g. after «осталось» before «а-а-о»)
+    shownCue = null;
+    enterTextPause();
+  }
+}
+
+function syncFromPlayer() {
+  if (!audioReady) return elapsed;
+  if (!playing) {
+    elapsed = pausedAt;
+    return elapsed;
+  }
+  // Lyrics always follow performance.now() (true 1×). Audio buffer plays in parallel.
+  elapsed = offsetWhenStarted + (performance.now() - startedAtPerf) / 1000;
+  if (elapsed >= DURATION) {
+    elapsed = DURATION;
+    playing = false;
+    pausedAt = DURATION;
+    stopSource();
+    playBtn.textContent = 'Replay';
+  }
+  return elapsed;
+}
+
+function stopSource() {
+  if (sourceNode) {
+    try {
+      sourceNode.onended = null;
+      sourceNode.stop();
+    } catch {
+      /* already stopped */
+    }
+    sourceNode.disconnect();
+    sourceNode = null;
+  }
+}
+
+function startSource(offset) {
+  if (!audioCtx || !audioBuffer) return;
+  stopSource();
+  const start = Math.max(0, Math.min(offset, audioBuffer.duration - 0.05));
+  sourceNode = audioCtx.createBufferSource();
+  sourceNode.buffer = audioBuffer;
+  sourceNode.connect(audioCtx.destination);
+  offsetWhenStarted = start;
+  pausedAt = start;
+  startedAtPerf = performance.now();
+  sourceNode.onended = () => {
+    /* natural end handled by syncFromPlayer duration check */
+  };
+  sourceNode.start(0, start);
+  playing = true;
+}
+
+function rebuildTimelineIndex(t) {
+  shownCue = null;
+  spawnedKey = '';
+  lastScene = '';
+  prevLyric = '';
+  lyricPrev.textContent = '';
+  clearWords();
+  processTimeline(t);
+  if (!findActiveCue(Math.max(0, t - LYRIC_LAG - heardLatency())) && t < 9) {
+    lyricNow.textContent = 'ONDA ANDAR';
+    lyricNow.className = 'lyric-now';
+    lyricNow.style.opacity = '';
+  }
+}
+
+let lastFrame = performance.now();
+
+function frame(now) {
+  const dt = Math.min(0.05, (now - lastFrame) / 1000);
+  lastFrame = now;
+
+  syncFromPlayer();
+
+  const intensity =
+    (playing ? 1.05 : 0.45) +
+    Math.sin(elapsed * Math.PI * 2 * (168 / 60)) * (playing ? 0.35 : 0.08) +
+    beatKick * 0.25 +
+    flash * 0.4;
+
+  updateWave(now * 0.001, intensity);
+  updateWords(elapsed, dt);
+  // Keep lyrics locked to the audio clock whenever we have a position
+  if (audioReady && (playing || elapsed > 0.05)) processTimeline(elapsed);
+  animateFigure(elapsed, dt);
+  updateCamera(now, elapsed);
+
+  particles.rotation.y = now * 0.00005;
+  rim.intensity = 1.0 + Math.sin(now * 0.004) * 0.35 + flash * 1.5;
+  if (camMode === 'black') {
+    renderer.setClearColor(0x000000, 1);
+  } else if (camMode === 'phone') {
+    renderer.setClearColor(0x050810, 1);
+  } else if (camMode === 'top-keys') {
+    renderer.setClearColor(0x0c1016, 1);
+  } else if (camMode === 'close-face') {
+    renderer.setClearColor(0x081018, 1);
+  } else if (camMode === 'fp-under') {
+    renderer.setClearColor(0x041828, 1);
+  } else if (camMode === 'fp-hotel') {
+    renderer.setClearColor(0x1a0e12, 1);
+  } else if (camMode === 'fp-road') {
+    renderer.setClearColor(0x05070c, 1);
+  } else {
+    renderer.setClearColor(flash > 0.05 ? 0x1a3058 : 0x06101c, 1);
+  }
+
+  progressEl.style.width = `${(elapsed / DURATION) * 100}%`;
+  timeEl.textContent = `${formatTime(elapsed)} / 2:17`;
+  document.body.classList.toggle('is-playing', playing);
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+
+async function loadAudio() {
+  audioCtx = new AudioContext();
+  const res = await fetch(AUDIO_SRC);
+  if (!res.ok) throw new Error('audio fetch failed');
+  const arr = await res.arrayBuffer();
+  audioBuffer = await audioCtx.decodeAudioData(arr);
+  audioReady = true;
+}
+
+async function togglePlay() {
+  if (!audioReady) {
+    playBtn.textContent = 'Loading…';
+    try {
+      await loadAudio();
+    } catch {
+      playBtn.textContent = 'Play song';
+      return;
+    }
+  }
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+  if (playing) {
+    // pause
+    pausedAt = offsetWhenStarted + (performance.now() - startedAtPerf) / 1000;
+    elapsed = pausedAt;
+    playing = false;
+    stopSource();
+    playBtn.textContent = 'Play song';
+    return;
+  }
+
+  if (pausedAt >= DURATION - 0.35) {
+    pausedAt = 0;
+    elapsed = 0;
+    rebuildTimelineIndex(0);
+  }
+
+  try {
+    startSource(pausedAt);
+    elapsed = pausedAt;
+    playBtn.textContent = 'Pause';
+    if (lyricHint) lyricHint.textContent = '';
+  } catch {
+    playBtn.textContent = 'Play song';
+  }
+}
+
+playBtn.addEventListener('click', () => {
+  togglePlay();
+});
+
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    togglePlay();
+  }
+});
+
+seekEl.addEventListener('click', (e) => {
+  if (!audioReady) return;
+  const rect = seekEl.getBoundingClientRect();
+  const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+  const t = ratio * DURATION;
+  pausedAt = t;
+  elapsed = t;
+  rebuildTimelineIndex(t);
+  if (playing) startSource(t);
+});
+
+window.addEventListener('resize', resize);
+
+async function boot() {
+  await document.fonts.ready;
+  resize();
+  applyScene('horizon', 0);
+  requestAnimationFrame(frame);
+  try {
+    await loadAudio();
+    playBtn.textContent = 'Play song';
+    sceneLabel.textContent = 'credits · sync-v7';
+  } catch {
+    playBtn.textContent = 'Play song';
+    sceneLabel.textContent = 'audio missing';
+  }
+}
+
+boot();

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>ONDA ANDAR — credits song · 3D lyrics</title>
+    <meta
+      name="description"
+      content="3D lyric visual for credits song by ONDA ANDAR — KIDSCRY2DAY."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Serif:ital@0;1&family=Manrope:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <canvas id="stage"></canvas>
+
+    <div class="hud">
+      <header class="top">
+        <span class="mark">KC2D</span>
+        <span class="track" id="scene-label">credits song · 3D</span>
+      </header>
+
+      <div class="lyric-stage" aria-live="polite">
+        <p class="lyric-prev" id="lyric-prev"></p>
+        <h1 class="lyric-now" id="lyric-now">ONDA ANDAR</h1>
+        <p class="lyric-hint" id="lyric-hint">
+          play · sync-v7 · каждая строка — свой кадр
+        </p>
+      </div>
+
+      <div class="controls">
+        <button type="button" class="play" id="play-btn">Play song</button>
+        <div class="progress-wrap" id="seek" title="seek">
+          <div class="progress" id="progress"></div>
+        </div>
+        <span class="time" id="time">0:00 / 2:17</span>
+        <a
+          class="listen"
+          href="https://open.spotify.com/track/1mMmoJKhVtyJfCzUXhKA2h"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Spotify</a
+        >
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

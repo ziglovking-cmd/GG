@@ -106,11 +106,19 @@ def audit_message(
         issues.append("pets_global_deny")
 
     # неизвестное имя квартиры в «ёлочках»
+    # не трогаем эхо реплики гостя («По «Покажите»…») и бытовые слова
+    _skip_flat = re.compile(
+        r"(?i)^(покажите|покажи|вариант|варианты|да|нет|хорошо|ок|окей|спасибо|"
+        r"центр|даты|гости|район|можно|нужен|нужна)$"
+    )
     offer_set = {o.strip().lower() for o in (offers or []) if o}
     known = _known_titles()
     for name in _FLAT_QUOTE.findall(raw):
         low = name.strip().lower()
-        if not low:
+        if not low or _skip_flat.match(low):
+            continue
+        # «По «X» на …» — цитата гостя в ответе календаря, не название квартиры
+        if re.search(rf"(?i)по\s*«{re.escape(name)}»", raw):
             continue
         if offer_set and low not in offer_set and (not known or low not in known):
             issues.append(f"unknown_flat:{name}")

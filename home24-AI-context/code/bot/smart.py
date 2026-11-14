@@ -1626,20 +1626,19 @@ def _script_reply(
         # «Хотела бы забронировать…» — обычный подбор, без рекламы «одна услуга бесплатно»
         or re.search(r"(?i)заброниров|бронир|бронь|снять|сниму|нужна\s+квартир", raw)
     ):
-        # даты в сценарии Марии — просто подтверждаем и идём дальше по воронке
+        # даты в сценарии Марии — как эталон: подтвердили → условия (гости+район)
         shown = normalize_dates_phrase(dates) or dates
         heard["dates"] = dates
-        ask = _open_ask(heard)
-        q = (_next_question(ask, heard) or "").strip()
-        line = f"Поняла, {shown})" + (f" {q}" if q else "")
+        line, ask = _with_one_forward(f"Поняла, {shown})", heard, history)
         state = _craft_state(
             heard,
-            step=_ask_step(ask, "await_district"),
+            step=_ask_step(ask, "await_guests"),
             path="smart:rule/perk-dates",
             ctx_extra={"perk": "told", "offer_open": False},
         )
         state["dates"] = dates
-        return [line], BUTTONS.get(ask) if ask else None, state, False
+        btn_key = "guests" if ask in ("guests", "conditions") else ask
+        return [line], BUTTONS.get(btn_key) if btn_key else None, state, False
     if perk == "offered" and (
         services
         or re.search(r"(?i)напишу|как буду знать|точно знать|класс|интересно", raw)
@@ -2363,6 +2362,17 @@ def _craft_early_raw(
     if waited:
         return waited
 
+    # «Спасибо» — всегда короткое «Пожалуйста)», даже в середине comfort/docs (эталон)
+    if re.match(r"(?i)^\s*(спасибо|спс|пасиб\w*|благодар\w*)(\s*(большое|огромное|вам))*[.!)\s🙏🙂]*$", raw):
+        from bot import phrases as _P
+
+        return (
+            [_P.pick(_P.THANKS, dict(sess), "thanks")],
+            None,
+            _craft_state(sess, step=str(sess.get("step") or "await_intent"), path="smart:rule/thanks"),
+            False,
+        )
+
     # «да / позовите» после списка доп. услуг — раньше выбора квартиры по календарю
     colleague = _colleague_call_reply(sess, raw, history)
     if colleague:
@@ -2897,7 +2907,16 @@ def _craft_early_raw(
         side_fact = _side_fact(raw)
         if side_fact:
             stay = f"{stay}. {side_fact.rstrip('.')}"
-        if not district_known:
+        if not guests_known and not district_known:
+            from bot.phrases import CONDITIONS_ASK
+
+            # эталон: после дат — один вопрос про условия (гости + район + важное)
+            line, step, buttons = (
+                f"{shown}{stay}. {CONDITIONS_ASK}",
+                "await_guests",
+                BUTTONS.get("guests"),
+            )
+        elif not district_known:
             line, step, buttons = (
                 f"{shown}{stay}. Какой район удобнее — центр, ближе к центру, зелёный, спальный или Подмосковье?",
                 "await_district",
@@ -3132,6 +3151,12 @@ def _craft_early_raw(
         hits = [_EARLY_LATE_LINE]
     else:
         hits = [fact for rx, fact in _NAIVE_FACTS if rx.search(raw)]
+    # если в той же фразе гости/район (+даты уже есть) — не обрывать на «парковка», идём к слотам/карточкам
+    _filling = bool(parse_guests(raw) or parse_district(raw)) and (
+        _dates_ready(str(sess.get("dates") or "")) or bool(parse_dates(raw))
+    )
+    if _filling:
+        hits = []
     for fact in hits[:1]:
         heard = _overlay_heard(sess, raw)
         # «а есть парковка? и во сколько заезд?» — ответить на оба вопроса
@@ -3225,33 +3250,48 @@ def _craft_early_raw(
                 line += " Сколько вас будет?"
             step = "await_guests"
         else:
-            if said_district and not side:
-                # район уже есть + слоты заполнены — показать свободные, а не echo «Центр.»
-                dates_now = str(heard.get("dates") or "").strip()
-                if dates_now:
-                    from bot.travelline import free_offer_cards
+            # слоты заполнены — карточки (парковку/side не блокируем)
+            dates_now = str(heard.get("dates") or "").strip()
+            if dates_now and heard.get("guests") and heard.get("district"):
+                from bot.travelline import free_offer_cards
 
-                    cards, names = free_offer_cards(
-                        dates_now,
-                        _guest_need(heard.get("guests")),
-                        district=str(heard.get("district") or said_district),
+                cards, names = free_offer_cards(
+                    dates_now,
+                    _guest_need(heard.get("guests")),
+                    district=str(heard.get("district") or said_district),
+                )
+                if cards:
+                    lead = f"{side} " if side else ""
+                    # короткое подтверждение слотов перед карточками (эталон)
+                    ack = ""
+                    if said_guests or said_district:
+                        bits = []
+                        if dates_now:
+                            bits.append(dates_now)
+                        if heard.get("guests"):
+                            bits.append(_guest_phrase(str(heard.get("guests")), raw))
+                        if heard.get("district"):
+                            bits.append(str(heard.get("district")))
+                        if bits:
+                            ack = "Хорошо, " + ", ".join(bits) + ". "
+                    body = lead + ack + cards if (lead or ack) else cards
+                    # если side уже в lead — не дублировать
+                    return (
+                        [body.strip()],
+                        None,
+                        _craft_state(
+                            heard,
+                            step="await_returning",
+                            path="smart:rule/heard-cards",
+                            ctx_extra={
+                                "tl_offers": names,
+                                "offers": names,
+                                "tl_dates": dates_now,
+                                **({"parking": "уточнить"} if side and "парков" in side.lower() else {}),
+                            },
+                        ),
+                        False,
                     )
-                    if cards:
-                        return (
-                            [cards],
-                            None,
-                            _craft_state(
-                                heard,
-                                step="await_returning",
-                                path="smart:rule/heard-cards",
-                                ctx_extra={
-                                    "tl_offers": names,
-                                    "offers": names,
-                                    "tl_dates": dates_now,
-                                },
-                            ),
-                            False,
-                        )
                 return _DELEGATE
             step = str(sess.get("step") or "await_returning")
         return (

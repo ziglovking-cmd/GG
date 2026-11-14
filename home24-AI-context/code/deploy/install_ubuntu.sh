@@ -48,6 +48,14 @@ fi
 
 echo "== Проверка"
 PYTHONUTF8=1 python -c "from bot.version import BUILD; print('Сборка:', BUILD)"
+PYTHONUTF8=1 python -c "from bot.rag import index_stats; print('RAG:', index_stats())"
+PYTHONUTF8=1 python -c "from bot.ideal_manager import persona_for_llm; print('Ideal manager:', 'ON' if persona_for_llm() else 'OFF')"
+# лёгкий офлайн-прогон RAG (не валим установку, если pytest нет)
+if PYTHONUTF8=1 python -m pytest tests/test_rag.py tests/test_ideal_manager.py -q --tb=no 2>/tmp/home24_rag_test.txt; then
+  echo "RAG/ideal tests: OK"
+else
+  echo "RAG/ideal tests: см. /tmp/home24_rag_test.txt (установка продолжается)"
+fi
 PYTHONUTF8=1 python scripts/eval_home24_dialogs.py --offline --out /tmp/home24_dialogs.md | tail -1
 
 echo "== Служба systemd"
@@ -65,6 +73,9 @@ Environment=PYTHONIOENCODING=utf-8
 Environment=HOME24_NO_QR=1
 Environment=USE_PROXY=0
 Environment=TZ=Europe/Moscow
+Environment=SMART_BOT=1
+Environment=USE_AI=1
+# RAG + идеальный менеджер включены по умолчанию (выкл. в .env: RAG_OFF=1 / IDEAL_MANAGER_OFF=1)
 Restart=always
 RestartSec=5
 StandardOutput=append:$APP_DIR/logs/bot.log

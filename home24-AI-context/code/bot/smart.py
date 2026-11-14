@@ -3365,18 +3365,30 @@ async def smart_reply(
         examples = similar_examples(text)
     except Exception:
         examples = ""
+    try:
+        from bot.ideal_manager import persona_for_llm, similar_style
+
+        persona = persona_for_llm()
+        style = similar_style(text)
+    except Exception:
+        logger.exception("ideal manager context failed")
+        persona = ""
+        style = ""
     system = (
         f"{_prompt()}\n\n"
-        f"Сессия (слоты): {json.dumps(slots_now, ensure_ascii=False)}\n\n"
-        f"{rag_block}\n\n"
-        f"Каталог (релевантный срез, zone=center|calm|other):\n{catalog}\n\n"
+        + (f"{persona}\n\n" if persona else "")
+        + f"Сессия (слоты): {json.dumps(slots_now, ensure_ascii=False)}\n\n"
+        + f"{rag_block}\n\n"
+        + f"Каталог (релевантный срез, zone=center|calm|other):\n{catalog}\n\n"
         + (f"{examples}\n\n" if examples else "")
+        + (f"{style}\n\n" if style else "")
         + "Правила ответа: messages — ровно одна фраза без вопроса, если вопрос уже в ask_next. "
         "Без сводки слотов, без «записала», без хвоста «если что пишите». "
         "Карточки и следующий вопрос система добавит сама. "
         "Факты (цены, метро, адрес, залог, животные, парковка) — только из RAG и каталога. "
         "Нет факта — uncertain=true, не выдумывай. "
-        "Не пиши «центр» для zone!=center."
+        "Не пиши «центр» для zone!=center. "
+        "Пиши как идеальный живой менеджер: тепло, на «вы», без повторов."
     )
     hist: list[dict[str, str]] = []
     for h in history[-6:]:

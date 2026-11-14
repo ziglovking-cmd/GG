@@ -1,27 +1,49 @@
 # Home24 на сервере Ubuntu
 
 Сервер: Ubuntu, вход `root@<IP сервера>`. Бот ставится в `/opt/home24` и работает как служба `home24`.
+Сборка с **RAG grounding** и **идеальным менеджером** (эталонный диалог + тон).
 
-## 1. С компьютера (PowerShell, в папке бота)
+## 0. Собрать релизный ZIP (на машине с кодом)
+
+```bash
+cd home24-AI-context/code   # или /opt/home24 после первой установки
+bash scripts/pack_server_release.sh
+# → /tmp/home24-release-*.zip
+```
+
+В ZIP нет `.env`, `.venv`, сырых БД и Telegram-сессий — их копируете отдельно.
+
+## 1. С компьютера (PowerShell / bash, в папке бота)
 
 ```powershell
-scp .\home24-project-v10-2026-11-10.zip root@<IP>:/root/home24.zip
+scp .\home24-release-*.zip root@<IP>:/root/home24.zip
 scp -r .\data root@<IP>:/root/data
 scp .\.env root@<IP>:/root/home24.env
 ```
 
 `data` с компьютера несёт базу контактов, историю, `managers.json` и сохранённую сессию Telegram — без неё на сервере придётся входить в аккаунт заново.
 
+В `.env` на сервере оставьте (или добавьте):
+
+```
+USE_AI=1
+SMART_BOT=1
+# RAG_OFF=0
+# IDEAL_MANAGER_OFF=0
+```
+
 ## 2. На сервере
 
 ```bash
 ssh root@<IP>
 passwd                      # сразу сменить пароль root
-cd /root && unzip -o -q home24.zip deploy/install_ubuntu.sh
+cd /root
+unzip -o -q home24.zip deploy/install_ubuntu.sh
 bash deploy/install_ubuntu.sh /root/home24.zip
 ```
 
-Скрипт ставит Python, пакеты, проверяет сборку и 48 диалогов, создаёт службу. Сам бот не запускает.
+Скрипт ставит Python, пакеты, проверяет сборку, RAG и диалоги, создаёт службу. Сам бот не запускает.
+ZIP от `pack_server_release.sh` — плоский (корни `bot/`, `deploy/`, …), без вложенной папки.
 
 ## 3. Переезд
 

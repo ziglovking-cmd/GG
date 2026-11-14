@@ -172,8 +172,9 @@ def _key(name: str) -> str:
 def link_for(name: str) -> str:
     """Ссылка на страницу квартиры; «Матисс» найдёт и «матис», «Скандинавия» — «сканди»."""
     links = {_key(k): v for k, v in load_links().items()}
-    [REDACTED]
-    if not [REDACTED] ""
+    key = _key(name)
+    if not key:
+        return ""
     if key in links:
         return links[key]
     for k, v in links.items():
@@ -222,8 +223,9 @@ def load_pets(path: str = "") -> tuple[frozenset[str], frozenset[str], int, int]
             continue
         names = line.strip()[2:]
         for name in re.split(r",\s*", names):
-            [REDACTED]
-            if not [REDACTED]
+            key = _key(name)
+            if not key:
+                continue
             if section == "ok":
                 allowed.add(key)
             elif section == "fee1500":
@@ -233,8 +235,9 @@ def load_pets(path: str = "") -> tuple[frozenset[str], frozenset[str], int, int]
 
 
 def _pet_name_match(title: str, names: frozenset[str]) -> bool:
-    [REDACTED]
-    if not [REDACTED] False
+    key = _key(title)
+    if not key:
+        return False
     if key in names:
         return True
     for n in names:
@@ -297,7 +300,7 @@ def resolve_apartment_title(text: str, *, offers: list[str] | None = None) -> st
             best = title[:1].upper() + title[1:] if title.islower() else title
             # канонический регистр из адресов
             for key in load_addresses():
-                if [REDACTED] title:
+                if _key(key) == _key(title):
                     best = key[:1].upper() + key[1:]
                     break
             best_len = len(stem)
@@ -379,9 +382,9 @@ def areas_for_place(place: str) -> list[str]:
     return [area for score, area in scored if score == top]
 
 
-def _flat_in([REDACTED] flats: tuple[str, ...]) -> bool:
+def _flat_in(key: str, flats: tuple[str, ...]) -> bool:
     return any(
-        [REDACTED] f
+        key == f
         or key.startswith(f)
         or f.startswith(key)
         or re.search(rf"(?<![а-яa-z]){re.escape(f)}(?![а-яa-z])", key)
@@ -391,8 +394,9 @@ def _flat_in([REDACTED] flats: tuple[str, ...]) -> bool:
 
 def in_area(title: str, place: str) -> bool:
     """Квартира в районе, который назвал гость (сначала «Районы», иначе район из «Адреса»)."""
-    [REDACTED]
-    if not [REDACTED] False
+    key = _key(title)
+    if not key:
+        return False
     wanted = set(areas_for_place(place))
     listed_here = False
     for area, _aliases, flats in load_areas():
@@ -436,8 +440,9 @@ def load_guides(path: str = "") -> dict[str, str]:
             continue
         url = m.group(2).rstrip(".,)")
         for name in re.split(r",\s*", m.group(1)):
-            [REDACTED]
-            if [REDACTED] = url
+            key = _key(name)
+            if key:
+                out[key] = url
     return out
 
 
@@ -470,8 +475,9 @@ def load_guide_addresses(path: str = "") -> list[tuple[str, tuple[str, ...]]]:
 def guide_for_name(name: str) -> tuple[str, str]:
     """(отображаемое имя, url) или ('', '')."""
     guides = load_guides()
-    [REDACTED]
-    if not [REDACTED] "", ""
+    key = _key(name)
+    if not key:
+        return "", ""
     if key in guides:
         return name.strip(), guides[key]
     for k, url in guides.items():

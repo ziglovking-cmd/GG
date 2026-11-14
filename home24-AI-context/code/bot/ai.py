@@ -562,7 +562,7 @@ def _with_resume(
 ) -> tuple[list[str], list[tuple[str, str]] | None]:
     if not resume_step or resume_step not in _RESUME_Q:
         return msgs, None
-    q, b[REDACTED]
+    q, bkey = _RESUME_Q[resume_step]
     out = list(msgs)
     blob = " ".join(out).lower()
     # не дублировать тот же вопрос, если скрипт/AI уже спросили
@@ -690,21 +690,21 @@ async def ai_fallback(
         if val in (None, "", "null", "пусто"):
             continue
         val = str(val)
-        if [REDACTED] "step":
+        if key == "step":
             if val in _ALLOWED_STEPS:
                 updates[key] = val
             continue
-        if [REDACTED] "dates":
+        if key == "dates":
             parsed = parse_dates(val) or parse_dates(text)
             if parsed:
                 updates[key] = parsed
             continue
-        if [REDACTED] "guests":
+        if key == "guests":
             parsed = parse_guests(val) or parse_guests(text)
             if parsed:
                 updates[key] = parsed
             continue
-        if [REDACTED] "district":
+        if key == "district":
             parsed = parse_district(val) or parse_district(text)
             if parsed:
                 updates[key] = parsed
@@ -1088,7 +1088,7 @@ async def _reply_core(
             resume_pre if resume_pre in _FUNNEL_SOFT_FIRST else "await_dates",
             apt=name,
         )
-        b[REDACTED] "dates", "await_guests": "guests", "await_district": "district"}.get(
+        bkey = {"await_dates": "dates", "await_guests": "guests", "await_district": "district"}.get(
             resume_pre, "dates"
         )
         return (
@@ -1103,7 +1103,7 @@ async def _reply_core(
             resume_pre if resume_pre in _RESUME_Q or resume_pre in _FUNNEL_SOFT_FIRST else "await_intent",
             noise=True,
         )
-        b[REDACTED]
+        bkey = {
             "await_dates": "dates",
             "await_guests": "guests",
             "await_district": "district",
@@ -1147,7 +1147,7 @@ async def _reply_core(
     if _is_noise(text) and resume in _NO_LLM_STEPS:
         logger.info("script noise ack step=%s", resume)
         soft = _soft_ack(resume if resume in _RESUME_Q or resume in _FUNNEL_SOFT_FIRST else "await_intent", noise=True)
-        b[REDACTED]
+        bkey = {
             "await_dates": "dates",
             "await_guests": "guests",
             "await_district": "district",
@@ -1185,7 +1185,7 @@ async def _reply_core(
         if last_soft == resume and last_ask and ask_line.strip().lower() == last_ask.strip().lower():
             ask_line = _ask_for(resume, salt=last_ask + "x")
             soft = [soft[0].split("🙂")[0] + "🙂 " + ask_line] if soft else [ask_line]
-        b[REDACTED]
+        bkey = {
             "await_dates": "dates",
             "await_guests": "guests",
             "await_district": "district",
@@ -1333,7 +1333,7 @@ def _dedupe_msgs(msgs: list[str], *, history: list[dict[str, Any]] | None = None
                 t = " ".join(ask_parts).strip()
             else:
                 continue
-        [REDACTED]
+        key = _ask_key(t)
         # длинные карточки / сводка — не режем как «повторный ask»
         if key and key in seen_asks and len(t) < 200 and not _is_substantive_bundle([t]):
             parts = re.split(r"(?<=[.!?…])\s+|(?<=\))\s+(?=[А-ЯЁA-Z])", t)
@@ -1346,10 +1346,11 @@ def _dedupe_msgs(msgs: list[str], *, history: list[dict[str, Any]] | None = None
             if not kept_parts:
                 continue
             t = " ".join(kept_parts)
-            [REDACTED]
+            key = _ask_key(t)
             if key and key in seen_asks:
                 continue
-        if [REDACTED]
+        if key:
+            seen_asks.add(key)
         out.append(t)
     # вопрос сняли как повтор, а другого нет — ответ без продолжения (10.11 «С 3 по 6 декабря.»)
     from bot.reply_guard import is_closing

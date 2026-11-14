@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { AUDIO_SRC, CUES, DURATION, EVENTS, HOLD_PAD, LYRIC_LAG } from './lyrics.js';
+import { AUDIO_SRC, CUES, DURATION, EVENTS, LYRIC_LAG } from './lyrics.js';
 import { createFigure, createPartyLights, createProps } from './figure.js';
 
 const canvas = document.getElementById('stage');
@@ -15,19 +15,19 @@ const seekEl = document.getElementById('seek');
 const audio = new Audio(AUDIO_SRC);
 audio.preload = 'auto';
 audio.crossOrigin = 'anonymous';
+audio.playbackRate = 1;
+audio.defaultPlaybackRate = 1;
 let audioReady = false;
 let playing = false;
 let elapsed = 0;
-let cueIndex = 0;
-let eventIndex = 0;
 let prevLyric = '';
 let sceneName = 'horizon';
 let flash = 0;
 let beatKick = 0;
 /** @type {null | typeof CUES[number]} */
-let activeCue = null;
-let spawnedFor = -1;
-let inTextPause = false;
+let shownCue = null;
+let lastScene = '';
+let spawnedKey = '';
 
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -195,22 +195,41 @@ function clearWords() {
 }
 
 function setHudLyric(text, mode) {
+  if (shownCue && shownCue.text === text && shownCue.mode === mode) {
+    lyricNow.style.opacity = '';
+    lyricNow.classList.remove('is-pause');
+    return;
+  }
   lyricPrev.textContent = prevLyric;
   prevLyric = text;
   lyricNow.textContent = text;
   lyricNow.className = `lyric-now is-${mode}`;
   void lyricNow.offsetWidth;
   lyricNow.className = `lyric-now is-${mode}`;
-  inTextPause = false;
   lyricNow.style.opacity = '';
 }
 
 function enterTextPause() {
-  if (inTextPause) return;
-  inTextPause = true;
-  activeCue = null;
+  if (!lyricNow.textContent) return;
   lyricNow.classList.add('is-pause');
-  lyricNow.style.opacity = '0.25';
+  lyricNow.style.opacity = '0.22';
+}
+
+function findActiveCue(lyricT) {
+  // Prefer the latest cue whose window contains lyricT
+  let hit = null;
+  for (const c of CUES) {
+    if (lyricT >= c.t && lyricT < c.end) hit = c;
+  }
+  return hit;
+}
+
+function findActiveScene(sceneT) {
+  let hit = EVENTS[0];
+  for (const e of EVENTS) {
+    if (e.t <= sceneT) hit = e;
+  }
+  return hit;
 }
 
 function formatTime(sec) {
@@ -404,34 +423,28 @@ function animateFigure(t, dt) {
 }
 
 function processTimeline(t) {
-  // scenes lag a bit less than lyrics so the figure moves with the beat
-  const sceneT = Math.max(0, t - LYRIC_LAG * 0.55);
+  // Recompute every frame from audio clock — no drifting cueIndex.
+  const sceneT = Math.max(0, t - LYRIC_LAG * 0.4);
   const lyricT = Math.max(0, t - LYRIC_LAG);
 
-  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= sceneT) {
-    applyScene(EVENTS[eventIndex].scene, t);
-    eventIndex++;
+  const scene = findActiveScene(sceneT);
+  if (scene.scene !== lastScene) {
+    lastScene = scene.scene;
+    applyScene(scene.scene, t);
   }
 
-  // fire new cues at their start time (lagged)
-  while (cueIndex < CUES.length && CUES[cueIndex].t <= lyricT) {
-    const cue = CUES[cueIndex];
-    const idx = cueIndex;
-    cueIndex += 1;
-    activeCue = cue;
+  const cue = findActiveCue(lyricT);
+  if (cue) {
+    const key = `${cue.t}|${cue.text}`;
     setHudLyric(cue.text, cue.mode);
-    if (spawnedFor !== idx && cue.text) {
-      spawnedFor = idx;
+    shownCue = cue;
+    if (spawnedKey !== key) {
+      spawnedKey = key;
       spawnWord(cue.text, cue.mode, t);
     }
-  }
-
-  // hold until end (+ pad), then pause until next cue
-  if (activeCue) {
-    if (lyricT >= activeCue.end + HOLD_PAD) {
-      enterTextPause();
-    }
-  } else if (!inTextPause && cueIndex > 0) {
+  } else {
+    // In a gap (e.g. after «осталось» before «а-а-о»)
+    shownCue = null;
     enterTextPause();
   }
 }
@@ -448,44 +461,17 @@ function syncFromPlayer() {
 }
 
 function rebuildTimelineIndex(t) {
-  const sceneT = Math.max(0, t - LYRIC_LAG * 0.55);
-  const lyricT = Math.max(0, t - LYRIC_LAG);
-  cueIndex = 0;
-  eventIndex = 0;
-  spawnedFor = -1;
-  activeCue = null;
-  inTextPause = false;
-  while (cueIndex < CUES.length && CUES[cueIndex].t <= lyricT) cueIndex++;
-  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= sceneT) eventIndex++;
-
-  let last = EVENTS[0];
-  for (const e of EVENTS) {
-    if (e.t <= sceneT) last = e;
-  }
-  applyScene(last.scene, t);
-
-  let lastCue = null;
-  let lastIdx = -1;
-  for (let i = 0; i < CUES.length; i++) {
-    if (CUES[i].t <= lyricT) {
-      lastCue = CUES[i];
-      lastIdx = i;
-    }
-  }
-  if (lastCue) {
-    if (lyricT < lastCue.end + HOLD_PAD) {
-      activeCue = lastCue;
-      spawnedFor = lastIdx;
-      setHudLyric(lastCue.text, lastCue.mode);
-    } else {
-      prevLyric = lastCue.text;
-      lyricPrev.textContent = lastCue.text;
-      lyricNow.textContent = lastCue.text;
-      enterTextPause();
-    }
-  } else {
+  shownCue = null;
+  spawnedKey = '';
+  lastScene = '';
+  prevLyric = '';
+  lyricPrev.textContent = '';
+  clearWords();
+  processTimeline(t);
+  if (!findActiveCue(Math.max(0, t - LYRIC_LAG)) && t < 9) {
     lyricNow.textContent = 'ONDA ANDAR';
     lyricNow.className = 'lyric-now';
+    lyricNow.style.opacity = '';
   }
 }
 
@@ -505,7 +491,8 @@ function frame(now) {
 
   updateWave(now * 0.001, intensity);
   updateWords(elapsed, dt);
-  if (playing) processTimeline(elapsed);
+  // Keep lyrics locked to the audio clock whenever we have a position
+  if (audioReady && (playing || elapsed > 0.05)) processTimeline(elapsed);
   animateFigure(elapsed, dt);
 
   particles.rotation.y = now * 0.00005;
@@ -557,13 +544,11 @@ async function togglePlay() {
     return;
   }
   if (audio.ended || elapsed >= DURATION - 0.35) {
-    clearWords();
-    prevLyric = '';
-    lyricPrev.textContent = '';
     audio.currentTime = 0;
     elapsed = 0;
     rebuildTimelineIndex(0);
   }
+  audio.playbackRate = 1;
   try {
     await audio.play();
     playing = true;

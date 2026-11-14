@@ -6,10 +6,11 @@
 export const DURATION = 137.2;
 export const AUDIO_SRC = '/credits-song.mp3';
 /**
- * Extra delay so HUD sits on the heard vocal (not ahead of speakers /
- * AudioContext output latency). Tuned by listen + visual check.
+ * Small cushion on top of AudioContext outputLatency so HUD sits on the
+ * heard vocal. Clock is performance.now (true 1×); do not use a large lag
+ * or lines trail the voice.
  */
-export const LYRIC_LAG = 1.55;
+export const LYRIC_LAG = 0.28;
 
 /**
  * Inclusive window: visible while lagTime ∈ [t, end).

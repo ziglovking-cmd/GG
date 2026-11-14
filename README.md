@@ -1,10 +1,11 @@
-# ONDA ANDAR — credits song
+# ONDA ANDAR — credits song (3D lyrics)
 
-Fan visual landing for **credits song** by **ONDA ANDAR** (album *KIDSCRY2DAY*).
+3D lyric visual for **credits song** by **ONDA ANDAR** (*KIDSCRY2DAY*).
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173`.
+Press **Play lyrics** (or Space) — words fly in Three.js to a ~2:17 timeline.
+Listen on Spotify from the link in the UI.

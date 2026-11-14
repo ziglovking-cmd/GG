@@ -53,6 +53,7 @@ def _style_pairs(path_key: str) -> tuple[tuple[frozenset[str], str, str], ...]:
     sources = [
         ROOT / "data" / "ideal_dialog_1.md",
         ROOT / "data" / "style_dialogs.md",
+        ROOT / "data" / "style_external_tone.md",  # MultiWOZ/шаблоны: тон, не факты
         ROOT.parents[0] / "guest-dialogs" / "dialogs.md",  # AI-context пакет (если рядом)
         ROOT / "training" / "dialogs_home24_sample.md",
     ]
@@ -84,6 +85,8 @@ def _style_pairs(path_key: str) -> tuple[tuple[frozenset[str], str, str], ...]:
                 continue
             if m_b and guest:
                 bot = (m_b.group(1) or m_b.group(2) or "").strip()
+                guest = guest.strip().strip("*").strip()
+                bot = bot.strip().strip("*").strip()
                 if 4 <= len(guest) <= 220 and 4 <= len(bot) <= 280:
                     if "[КАРТОЧКИ" in bot or "1)" in bot[:8]:
                         guest = ""
@@ -113,16 +116,18 @@ def similar_style(text: str, k: int = 2, max_chars: int = 480) -> str:
     if not idx or not q:
         return ""
     scored: list[tuple[float, str, str]] = []
+    min_inter = 1 if len(q) <= 2 else 2
     for stems, guest, reply in idx:
         inter = q & stems
-        if len(inter) < 2:
+        if len(inter) < min_inter:
             continue
         score = len(inter) / (len(q | stems) ** 0.5)
         scored.append((score, guest, reply))
     scored.sort(key=lambda x: -x[0])
     lines: list[str] = []
+    min_score = 0.35 if len(q) <= 2 else 0.55
     for score, guest, reply in scored[:k]:
-        if score < 0.55:
+        if score < min_score:
             continue
         lines.append(f"Гость: «{guest}» → Менеджер: «{reply}»")
     if not lines:

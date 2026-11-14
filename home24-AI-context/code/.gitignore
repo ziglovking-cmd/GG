@@ -11,6 +11,7 @@ data/*
 !data/templates.json
 !data/ideal_dialog_1.md
 !data/style_dialogs.md
+!data/style_external_tone.md
 !data/travelline_rooms.json
 !data/home24-script.md
 !data/brand/

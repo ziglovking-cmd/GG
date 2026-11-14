@@ -446,8 +446,24 @@ body.is-pulsing .cta.primary {
   transition: height 0.12s linear;
 }
 
+.meters.in-view .meter {
+  animation: meter-idle 1.8s ease-in-out infinite;
+}
+
 body.is-pulsing .meter {
   animation: meter-bounce calc(var(--beat) * 2) ease-in-out infinite;
+}
+
+@keyframes meter-idle {
+  0%,
+  100% {
+    height: 22%;
+    opacity: 0.4;
+  }
+  50% {
+    height: 62%;
+    opacity: 0.75;
+  }
 }
 
 .meter:nth-child(1) {

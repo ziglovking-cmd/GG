@@ -4,8 +4,8 @@
  */
 export const DURATION = 137.2;
 export const AUDIO_SRC = '/credits-song.mp3';
-/** Slight delay so glyphs land on the ear, not ahead of it. */
-export const LYRIC_LAG = 0.55;
+/** Delay so on-screen lines sit on the vocal, not ahead of it. */
+export const LYRIC_LAG = 0.85;
 
 /**
  * Inclusive window: visible while lagTime ∈ [t, end).
@@ -18,9 +18,9 @@ export const CUES = [
   { t: 11.28, end: 13.64, text: 'Злая шутка', mode: 'line' },
   { t: 13.64, end: 16.16, text: 'время ушло', mode: 'line' },
   { t: 16.16, end: 19.06, text: 'И после меня', mode: 'line' },
-  // full line held through “осталось”; then intentional empty pause
-  { t: 19.06, end: 24.0, text: 'ничего не осталось', mode: 'impact' },
-  // PAUSE 24.0 → 29.0 (no cues)
+  // held to the end of the sung phrase, then empty pause before chorus
+  { t: 19.2, end: 23.6, text: 'ничего не осталось', mode: 'impact' },
+  // PAUSE 23.6 → 29.0 (no cues) — beat continues, text stays clear
 
   // припев 1
   { t: 29.0, end: 30.1, text: 'а-а-о', mode: 'chorus' },

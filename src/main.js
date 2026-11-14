@@ -480,18 +480,9 @@ function syncFromPlayer() {
     return elapsed;
   }
 
-  // Primary: wall clock from play start (stable 1×).
+  // Hard 1× rail from play/seek — never follow a racing media clock.
   const wall = railStartAudio + (performance.now() - railStartPerf) / 1000;
-  const media = audio.currentTime || 0;
-  // If media clock stays near wall, gently lock to it; if it races/stalls, trust wall.
-  if (Math.abs(media - wall) < 0.45) {
-    elapsed = media;
-    // re-anchor slowly to avoid drift
-    railStartPerf = performance.now();
-    railStartAudio = media;
-  } else {
-    elapsed = Math.min(DURATION, Math.max(0, wall));
-  }
+  elapsed = Math.min(DURATION, Math.max(0, wall));
   return elapsed;
 }
 

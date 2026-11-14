@@ -1,0 +1,60 @@
+:root {
+  --ink: #2a161c;
+  --ink-soft: #5c3a44;
+  --blush: #f7e6e9;
+  --blush-deep: #e8a0a8;
+  --rose: #c45c6a;
+  --wine: #3a1c24;
+  --cream-glow: #fff6f4;
+  --mist: rgba(255, 246, 244, 0.72);
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Sora', system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--ink);
+  background:
+    radial-gradient(120% 80% at 10% 0%, #ffe8eb 0%, transparent 55%),
+    radial-gradient(90% 70% at 100% 20%, #f3d5d8 0%, transparent 50%),
+    linear-gradient(180deg, #fff8f7 0%, #f7e6e9 45%, #f3dde1 100%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--blush-deep) 55%, white);
+  color: var(--wine);
+}

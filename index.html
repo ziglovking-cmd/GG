@@ -19,28 +19,33 @@
   <body>
     <div class="grain" aria-hidden="true"></div>
     <canvas id="stage"></canvas>
+    <div id="yt-wrap" class="yt-wrap" aria-hidden="true">
+      <div id="yt-player"></div>
+    </div>
 
     <div class="hud">
       <header class="top">
         <span class="mark">KC2D</span>
-        <span class="track">credits song · 3D</span>
+        <span class="track" id="scene-label">credits song · 3D</span>
       </header>
 
       <div class="lyric-stage" aria-live="polite">
         <p class="lyric-prev" id="lyric-prev"></p>
         <h1 class="lyric-now" id="lyric-now">ONDA ANDAR</h1>
-        <p class="lyric-hint" id="lyric-hint">нажми play — слова полетят в 3D</p>
+        <p class="lyric-hint" id="lyric-hint">
+          play — песня + слова + сцены на фоне
+        </p>
       </div>
 
       <div class="controls">
-        <button type="button" class="play" id="play-btn">Play lyrics</button>
-        <div class="progress-wrap">
+        <button type="button" class="play" id="play-btn">Play song</button>
+        <div class="progress-wrap" id="seek" title="seek">
           <div class="progress" id="progress"></div>
         </div>
         <span class="time" id="time">0:00 / 2:17</span>
         <a
           class="listen"
-          href="https://open.spotify.com/artist/2gGvBjb55mnnbQO2gNQSLo"
+          href="https://open.spotify.com/track/1mMmoJKhVtyJfCzUXhKA2h"
           target="_blank"
           rel="noopener noreferrer"
           >Spotify</a

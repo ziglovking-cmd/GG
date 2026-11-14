@@ -1,5 +1,6 @@
 import * as THREE from 'three';
-import { CUES, DURATION } from './lyrics.js';
+import { CUES, DURATION, EVENTS, YT_ID } from './lyrics.js';
+import { createFigure, createPartyLights, createProps } from './figure.js';
 
 const canvas = document.getElementById('stage');
 const lyricNow = document.getElementById('lyric-now');
@@ -8,15 +9,19 @@ const lyricHint = document.getElementById('lyric-hint');
 const playBtn = document.getElementById('play-btn');
 const progressEl = document.getElementById('progress');
 const timeEl = document.getElementById('time');
+const sceneLabel = document.getElementById('scene-label');
+const seekEl = document.getElementById('seek');
 
-const BPM = 168;
-const BEAT = 60 / BPM;
-
+let yt = null;
+let ytReady = false;
 let playing = false;
-let startMs = 0;
 let elapsed = 0;
 let cueIndex = 0;
+let eventIndex = 0;
 let prevLyric = '';
+let sceneName = 'horizon';
+let flash = 0;
+let beatKick = 0;
 
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -28,19 +33,18 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setClearColor(0x06101c, 1);
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.FogExp2(0x06101c, 0.045);
+scene.fog = new THREE.FogExp2(0x06101c, 0.042);
 
 const camera = new THREE.PerspectiveCamera(55, 1, 0.1, 120);
-camera.position.set(0, 1.4, 8.5);
+camera.position.set(0, 1.5, 8.8);
 
-const ambient = new THREE.AmbientLight(0x6ea0d8, 0.55);
-const key = new THREE.DirectionalLight(0xcfe4ff, 1.15);
+const ambient = new THREE.AmbientLight(0x6ea0d8, 0.5);
+const key = new THREE.DirectionalLight(0xcfe4ff, 1.1);
 key.position.set(4, 8, 6);
-const rim = new THREE.PointLight(0xff4d3a, 1.4, 30);
-rim.position.set(-4, 1, 2);
+const rim = new THREE.PointLight(0xff4d3a, 1.2, 30);
+rim.position.set(-4, 1.2, 2);
 scene.add(ambient, key, rim);
 
-// Wave floor
 const waveGeo = new THREE.PlaneGeometry(40, 40, 96, 96);
 const waveMat = new THREE.MeshStandardMaterial({
   color: 0x1d4f8c,
@@ -48,20 +52,18 @@ const waveMat = new THREE.MeshStandardMaterial({
   metalness: 0.45,
   roughness: 0.4,
   flatShading: true,
-  wireframe: false,
 });
 const wave = new THREE.Mesh(waveGeo, waveMat);
 wave.rotation.x = -Math.PI / 2;
 wave.position.y = -1.35;
 scene.add(wave);
-
 const waveWire = new THREE.Mesh(
   waveGeo,
   new THREE.MeshBasicMaterial({
     color: 0x9ec7ff,
     wireframe: true,
     transparent: true,
-    opacity: 0.12,
+    opacity: 0.1,
   })
 );
 waveWire.rotation.copy(wave.rotation);
@@ -70,8 +72,7 @@ waveWire.position.y += 0.02;
 scene.add(waveWire);
 const wavePos = waveGeo.attributes.position;
 
-// Particle field
-const COUNT = 500;
+const COUNT = 420;
 const pGeo = new THREE.BufferGeometry();
 const pPos = new Float32Array(COUNT * 3);
 for (let i = 0; i < COUNT; i++) {
@@ -86,15 +87,33 @@ const particles = new THREE.Points(
     color: 0x9ec7ff,
     size: 0.045,
     transparent: true,
-    opacity: 0.75,
+    opacity: 0.7,
     depthWrite: false,
   })
 );
 scene.add(particles);
 
+const figure = createFigure();
+const props = createProps();
+const party = createPartyLights();
+scene.add(figure, props, party);
+
+// Soft ground disc under figure so silhouette reads against the wave
+const ground = new THREE.Mesh(
+  new THREE.CircleGeometry(1.1, 32),
+  new THREE.MeshBasicMaterial({
+    color: 0x9ec7ff,
+    transparent: true,
+    opacity: 0.12,
+  })
+);
+ground.rotation.x = -Math.PI / 2;
+ground.position.set(0, -1.32, -2.2);
+scene.add(ground);
+figure.userData.ground = ground;
+
 const wordRoot = new THREE.Group();
 scene.add(wordRoot);
-
 /** @type {{ mesh: THREE.Mesh, born: number, life: number, vx: number, vy: number, vz: number, spin: number }[]} */
 const liveWords = [];
 
@@ -107,12 +126,10 @@ function makeWordTexture(text, mode) {
     mode === 'line' || mode === 'impact'
       ? '"Instrument Serif", Georgia, serif'
       : '"Bebas Neue", Impact, sans-serif';
-
   ctx.font = `${mode === 'line' ? 'italic ' : ''}700 ${fontSize}px ${family}`;
   const metrics = ctx.measureText(text);
   canvasEl.width = Math.ceil(metrics.width + pad * 2);
   canvasEl.height = Math.ceil(fontSize * 1.55 + pad);
-
   ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
   ctx.font = `${mode === 'line' ? 'italic ' : ''}700 ${fontSize}px ${family}`;
   ctx.textAlign = 'center';
@@ -122,7 +139,6 @@ function makeWordTexture(text, mode) {
   ctx.shadowColor = mode === 'glitch' ? '#ff4d3a' : '#9ec7ff';
   ctx.shadowBlur = mode === 'impact' || mode === 'stamp' ? 28 : 14;
   ctx.fillText(text, canvasEl.width / 2, canvasEl.height / 2);
-
   const tex = new THREE.CanvasTexture(canvasEl);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.needsUpdate = true;
@@ -130,86 +146,66 @@ function makeWordTexture(text, mode) {
 }
 
 function spawnWord(text, mode, t) {
+  if (!text) return;
   const { tex, aspect } = makeWordTexture(text, mode);
-  const h = mode === 'stamp' ? 2.1 : mode === 'impact' ? 1.75 : mode === 'chorus' ? 1.45 : 1.05;
-  const geo = new THREE.PlaneGeometry(h * aspect, h);
-  const mat = new THREE.MeshBasicMaterial({
-    map: tex,
-    transparent: true,
-    depthWrite: false,
-    side: THREE.DoubleSide,
-  });
-  const mesh = new THREE.Mesh(geo, mat);
-
+  const h = mode === 'stamp' ? 2.0 : mode === 'impact' ? 1.7 : mode === 'chorus' ? 1.4 : 1.0;
+  const mesh = new THREE.Mesh(
+    new THREE.PlaneGeometry(h * aspect, h),
+    new THREE.MeshBasicMaterial({
+      map: tex,
+      transparent: true,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+    })
+  );
   const angle = (Math.random() - 0.5) * Math.PI * 0.9;
-  const radius = mode === 'chorus' ? 1.2 + Math.random() * 2.2 : 0.4 + Math.random() * 1.6;
+  const radius = mode === 'chorus' ? 1.4 + Math.random() * 2.2 : 0.5 + Math.random() * 1.5;
   mesh.position.set(
     Math.sin(angle) * radius,
-    mode === 'stamp' ? 1.8 : 0.6 + Math.random() * 1.8,
-    -1.5 - Math.random() * 2.5
+    mode === 'stamp' ? 2.0 : 0.7 + Math.random() * 1.6,
+    -1.2 - Math.random() * 2.2
   );
   mesh.rotation.y = angle * 0.35;
-  mesh.rotation.x = (Math.random() - 0.5) * 0.25;
-
   wordRoot.add(mesh);
   liveWords.push({
     mesh,
     born: t,
-    life: mode === 'chorus' ? 2.2 : mode === 'stamp' ? 3.2 : 2.8,
-    vx: Math.sin(angle) * (mode === 'chorus' ? 1.8 : 0.55),
-    vy: mode === 'impact' ? 0.9 : 0.25 + Math.random() * 0.4,
-    vz: mode === 'chorus' ? -1.4 : -0.55,
-    spin: (Math.random() - 0.5) * 1.2,
+    life: mode === 'chorus' ? 2.6 : mode === 'stamp' ? 3.4 : 3.0,
+    vx: Math.sin(angle) * (mode === 'chorus' ? 1.5 : 0.4),
+    vy: mode === 'impact' ? 0.75 : 0.2 + Math.random() * 0.35,
+    vz: mode === 'chorus' ? -1.1 : -0.4,
+    spin: (Math.random() - 0.5) * 1.0,
   });
+}
 
-  // burst duplicates for chorus/impact
-  if (mode === 'chorus' || mode === 'impact') {
-    const parts = text.split(/\s+/).filter(Boolean);
-    for (const part of parts.slice(0, 4)) {
-      if (part === text && parts.length === 1) continue;
-      const burst = makeWordTexture(part, mode);
-      const bh = 0.55;
-      const bmesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(bh * burst.aspect, bh),
-        new THREE.MeshBasicMaterial({
-          map: burst.tex,
-          transparent: true,
-          depthWrite: false,
-          side: THREE.DoubleSide,
-          opacity: 0.9,
-        })
-      );
-      const a2 = Math.random() * Math.PI * 2;
-      bmesh.position.set(Math.cos(a2) * 0.3, 1.2, -1);
-      wordRoot.add(bmesh);
-      liveWords.push({
-        mesh: bmesh,
-        born: t,
-        life: 1.8,
-        vx: Math.cos(a2) * 2.4,
-        vy: 0.6 + Math.random(),
-        vz: Math.sin(a2) * 2.4 - 0.5,
-        spin: (Math.random() - 0.5) * 3,
-      });
-    }
+function clearWords() {
+  for (const w of liveWords) {
+    wordRoot.remove(w.mesh);
+    w.mesh.geometry.dispose();
+    w.mesh.material.map?.dispose();
+    w.mesh.material.dispose();
   }
+  liveWords.length = 0;
 }
 
 function setHudLyric(text, mode) {
+  if (mode === 'pause') {
+    lyricPrev.textContent = prevLyric;
+    lyricNow.textContent = '';
+    lyricNow.className = 'lyric-now is-pause';
+    return;
+  }
   lyricPrev.textContent = prevLyric;
   prevLyric = text;
   lyricNow.textContent = text;
   lyricNow.className = `lyric-now is-${mode}`;
-  // reflow animation
   void lyricNow.offsetWidth;
   lyricNow.className = `lyric-now is-${mode}`;
 }
 
 function formatTime(sec) {
-  const s = Math.max(0, Math.min(DURATION, sec));
-  const m = Math.floor(s / 60);
-  const r = Math.floor(s % 60);
-  return `${m}:${String(r).padStart(2, '0')}`;
+  const s = Math.max(0, Math.min(DURATION, sec | 0));
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
 
 function resize() {
@@ -246,31 +242,211 @@ function updateWords(t, dt) {
       liveWords.splice(i, 1);
       continue;
     }
-    const fade = age < 0.2 ? age / 0.2 : age > w.life - 0.45 ? (w.life - age) / 0.45 : 1;
+    const fade = age < 0.25 ? age / 0.25 : age > w.life - 0.5 ? (w.life - age) / 0.5 : 1;
     w.mesh.material.opacity = Math.max(0, fade);
     w.mesh.position.x += w.vx * dt;
     w.mesh.position.y += w.vy * dt;
     w.mesh.position.z += w.vz * dt;
     w.mesh.rotation.z += w.spin * dt;
-    w.mesh.rotation.y += w.spin * 0.35 * dt;
-    w.vy -= 0.15 * dt;
+    w.vy -= 0.12 * dt;
   }
 }
 
-function processCues(t) {
+function applyScene(name, t) {
+  sceneName = name;
+  sceneLabel.textContent = `scene · ${name}`;
+  const { suitcase, lifebuoy, foxGlow } = props.userData;
+  const { lights } = party.userData;
+  const { armL, armR, legL, legR } = figure.userData;
+
+  suitcase.visible = false;
+  lifebuoy.visible = false;
+  foxGlow.intensity = 0;
+  for (const l of lights) l.intensity = 0;
+  flash = Math.max(flash, 0.35);
+  beatKick = 1;
+
+  figure.visible = true;
+  figure.position.set(0, -1.15, -2.2);
+  figure.rotation.set(0, 0, 0);
+  armL.rotation.set(0, 0, 0.25);
+  armR.rotation.set(0, 0, -0.25);
+  if (figure.userData.ground) {
+    figure.userData.ground.position.set(0, -1.32, -2.2);
+    figure.userData.ground.visible = true;
+  }
+
+  switch (name) {
+    case 'horizon':
+      figure.position.set(0.2, -1.15, -4.5);
+      break;
+    case 'walk':
+      figure.position.set(-1.2, -1.15, -2.5);
+      if (figure.userData.ground) figure.userData.ground.position.copy(figure.position).setY(-1.32);
+      break;
+    case 'void':
+      flash = 0.8;
+      particles.material.opacity = 0.25;
+      break;
+    case 'chorus-pulse':
+      beatKick = 1.4;
+      break;
+    case 'party':
+    case 'drown-party':
+      for (const l of lights) l.intensity = 2.2;
+      break;
+    case 'hotel':
+      rim.color.setHex(0xffd27a);
+      break;
+    case 'suitcase':
+      suitcase.visible = true;
+      figure.position.set(-0.6, -1.15, -2.0);
+      break;
+    case 'scrub':
+      flash = 0.6;
+      break;
+    case 'melancholy':
+      particles.material.color.setHex(0x7a93b8);
+      break;
+    case 'hands':
+      armL.rotation.z = 1.1;
+      armR.rotation.z = -1.1;
+      armL.rotation.x = -0.6;
+      armR.rotation.x = -0.6;
+      break;
+    case 'sink':
+      figure.position.y = -1.55;
+      break;
+    case 'lifebuoy':
+      lifebuoy.visible = true;
+      flash = 1;
+      break;
+    case 'stamp-onda':
+      flash = 0.9;
+      break;
+    case 'fox':
+      foxGlow.intensity = 3.2;
+      break;
+    case 'run':
+      figure.position.set(1.5, -1.15, -2.0);
+      legL.rotation.x = 0.6;
+      legR.rotation.x = -0.55;
+      break;
+    case 'scream':
+      armL.rotation.z = 1.4;
+      armR.rotation.z = -1.4;
+      flash = 1;
+      break;
+    case 'end':
+      figure.position.set(0, -1.15, -5);
+      break;
+    default:
+      break;
+  }
+}
+
+function animateFigure(t, dt) {
+  const { legL, legR, armL, armR } = figure.userData;
+  const walk = sceneName === 'walk' || sceneName === 'run' || sceneName === 'party';
+  if (walk) {
+    const sp = sceneName === 'run' ? 10 : 4.5;
+    legL.rotation.x = Math.sin(t * sp) * 0.55;
+    legR.rotation.x = Math.sin(t * sp + Math.PI) * 0.55;
+    armL.rotation.x = Math.sin(t * sp + Math.PI) * 0.35;
+    armR.rotation.x = Math.sin(t * sp) * 0.35;
+    figure.position.x += (sceneName === 'run' ? 0.9 : 0.25) * dt;
+    if (figure.position.x > 3.5) figure.position.x = -3.2;
+    if (figure.userData.ground) {
+      figure.userData.ground.position.x = figure.position.x;
+      figure.userData.ground.position.z = figure.position.z;
+    }
+  }
+
+  if (sceneName === 'sink' || sceneName === 'drown-party') {
+    figure.position.y = THREE.MathUtils.lerp(figure.position.y, -2.05, dt * 0.6);
+    figure.rotation.z = Math.sin(t * 2) * 0.08;
+  }
+
+  if (sceneName === 'lifebuoy') {
+    const buoy = props.userData.lifebuoy;
+    buoy.rotation.z += dt * 2.5;
+    buoy.scale.setScalar(1 + Math.sin(t * 8) * 0.08);
+    if (elapsed > 102.8) {
+      buoy.position.x += dt * 1.4;
+      buoy.position.y -= dt * 0.6;
+      buoy.rotation.x += dt * 3;
+    }
+  }
+
+  if (sceneName === 'party' || sceneName === 'drown-party' || sceneName === 'chorus-pulse') {
+    const { lights } = party.userData;
+    lights.forEach((l, i) => {
+      l.intensity = 1.2 + Math.sin(t * 8 + i) * 1.4 + beatKick * 0.8;
+    });
+  }
+
+  if (sceneName === 'suitcase') {
+    props.userData.suitcase.rotation.y = Math.sin(t * 1.2) * 0.15;
+  }
+
+  beatKick = Math.max(0, beatKick - dt * 2.2);
+  flash = Math.max(0, flash - dt * 1.4);
+}
+
+function processTimeline(t) {
+  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= t) {
+    applyScene(EVENTS[eventIndex].scene, t);
+    eventIndex++;
+  }
   while (cueIndex < CUES.length && CUES[cueIndex].t <= t) {
     const cue = CUES[cueIndex++];
     setHudLyric(cue.text, cue.mode);
-    spawnWord(cue.text, cue.mode, t);
-    // extra floating words for longer lines
-    if (cue.mode === 'line') {
-      const bits = cue.text.split(/\s+/);
-      if (bits.length > 2) {
-        const pick = bits[Math.floor(Math.random() * bits.length)];
-        spawnWord(pick, 'chorus', t);
+    if (cue.mode !== 'pause' && cue.text) {
+      spawnWord(cue.text, cue.mode, t);
+      if (cue.mode === 'line') {
+        const bits = cue.text.split(/\s+/);
+        if (bits.length > 2) spawnWord(bits[Math.floor(bits.length / 2)], 'chorus', t);
       }
     }
   }
+}
+
+function syncFromPlayer() {
+  if (!ytReady || !yt || typeof yt.getCurrentTime !== 'function') return elapsed;
+  const state = yt.getPlayerState?.();
+  // 1 playing, 2 paused, 0 ended, 3 buffering
+  if (state === 1) {
+    playing = true;
+    elapsed = yt.getCurrentTime();
+  } else if (state === 2) {
+    playing = false;
+    elapsed = yt.getCurrentTime();
+  } else if (state === 0) {
+    playing = false;
+    elapsed = DURATION;
+    playBtn.textContent = 'Replay';
+    document.body.classList.remove('is-playing');
+  }
+  return elapsed;
+}
+
+function rebuildTimelineIndex(t) {
+  cueIndex = 0;
+  eventIndex = 0;
+  while (cueIndex < CUES.length && CUES[cueIndex].t <= t) cueIndex++;
+  while (eventIndex < EVENTS.length && EVENTS[eventIndex].t <= t) eventIndex++;
+  // apply last scene at/before t
+  let last = EVENTS[0];
+  for (const e of EVENTS) {
+    if (e.t <= t) last = e;
+  }
+  applyScene(last.scene, t);
+  // show last lyric
+  let lastCue = null;
+  for (const c of CUES) {
+    if (c.t <= t) lastCue = c;
+  }
+  if (lastCue) setHudLyric(lastCue.text, lastCue.mode);
 }
 
 let lastFrame = performance.now();
@@ -279,76 +455,136 @@ function frame(now) {
   const dt = Math.min(0.05, (now - lastFrame) / 1000);
   lastFrame = now;
 
-  if (playing) {
-    elapsed = (now - startMs) / 1000;
-    if (elapsed >= DURATION) {
-      playing = false;
-      elapsed = DURATION;
-      playBtn.textContent = 'Replay';
-      document.body.classList.remove('is-playing');
-    }
-  }
+  syncFromPlayer();
 
-  const intensity = playing ? 1.15 + Math.sin(elapsed * Math.PI * 2 * (BPM / 60)) * 0.35 : 0.55;
+  const intensity =
+    (playing ? 1.05 : 0.45) +
+    Math.sin(elapsed * Math.PI * 2 * (168 / 60)) * (playing ? 0.35 : 0.08) +
+    beatKick * 0.25 +
+    flash * 0.4;
+
   updateWave(now * 0.001, intensity);
   updateWords(elapsed, dt);
-  if (playing) processCues(elapsed);
+  if (playing) processTimeline(elapsed);
+  animateFigure(elapsed, dt);
 
   particles.rotation.y = now * 0.00005;
-  camera.position.x = Math.sin(now * 0.00018) * 0.55;
-  camera.position.y = 1.35 + Math.sin(now * 0.0003) * 0.15;
-  camera.lookAt(0, 1.1, 0);
-  rim.intensity = 1.1 + Math.sin(now * 0.004) * 0.4;
+  camera.position.x = Math.sin(now * 0.00018) * 0.45 + flash * 0.15;
+  camera.position.y = 1.4 + Math.sin(now * 0.0003) * 0.12;
+  camera.lookAt(0, 1.0, 0);
+  rim.intensity = 1.0 + Math.sin(now * 0.004) * 0.35 + flash * 1.5;
+  renderer.setClearColor(flash > 0.05 ? 0x1a3058 : 0x06101c, 1);
 
-  const pct = (elapsed / DURATION) * 100;
-  progressEl.style.width = `${pct}%`;
+  progressEl.style.width = `${(elapsed / DURATION) * 100}%`;
   timeEl.textContent = `${formatTime(elapsed)} / 2:17`;
+  document.body.classList.toggle('is-playing', playing);
 
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
 }
 
-async function boot() {
-  await document.fonts.ready;
-  resize();
-  requestAnimationFrame(frame);
+function loadYouTube() {
+  return new Promise((resolve) => {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+    window.onYouTubeIframeAPIReady = () => {
+      yt = new window.YT.Player('yt-player', {
+        videoId: YT_ID,
+        width: 200,
+        height: 113,
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          rel: 0,
+          modestbranding: 1,
+          playsinline: 1,
+          origin: window.location.origin,
+        },
+        events: {
+          onReady: () => {
+            ytReady = true;
+            resolve();
+          },
+          onStateChange: (e) => {
+            if (e.data === window.YT.PlayerState.PLAYING) {
+              playBtn.textContent = 'Pause';
+              if (lyricHint) lyricHint.textContent = '';
+            } else if (e.data === window.YT.PlayerState.PAUSED) {
+              playBtn.textContent = 'Play song';
+            } else if (e.data === window.YT.PlayerState.ENDED) {
+              playBtn.textContent = 'Replay';
+            }
+          },
+        },
+      });
+    };
+  });
 }
 
-function togglePlay() {
-  if (!playing) {
-    if (elapsed >= DURATION - 0.05) {
-      elapsed = 0;
-      cueIndex = 0;
+async function togglePlay() {
+  if (!ytReady) {
+    playBtn.textContent = 'Loading…';
+    return;
+  }
+  const state = yt.getPlayerState();
+  if (state === window.YT.PlayerState.PLAYING) {
+    yt.pauseVideo();
+    playing = false;
+    playBtn.textContent = 'Play song';
+  } else {
+    if (elapsed >= DURATION - 0.4 || state === window.YT.PlayerState.ENDED) {
+      clearWords();
       prevLyric = '';
       lyricPrev.textContent = '';
-      // clear leftover words
-      for (const w of liveWords) {
-        wordRoot.remove(w.mesh);
-        w.mesh.geometry.dispose();
-        w.mesh.material.map?.dispose();
-        w.mesh.material.dispose();
-      }
-      liveWords.length = 0;
+      yt.seekTo(0, true);
+      elapsed = 0;
+      rebuildTimelineIndex(0);
     }
+    yt.playVideo();
     playing = true;
-    startMs = performance.now() - elapsed * 1000;
     playBtn.textContent = 'Pause';
-    document.body.classList.add('is-playing');
-    if (lyricHint) lyricHint.textContent = '';
-  } else {
-    playing = false;
-    playBtn.textContent = 'Play lyrics';
-    document.body.classList.remove('is-playing');
   }
 }
 
-playBtn.addEventListener('click', togglePlay);
+playBtn.addEventListener('click', () => {
+  togglePlay().catch(() => {
+    playBtn.textContent = 'Play song';
+  });
+});
+
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {
     e.preventDefault();
     togglePlay();
   }
 });
+
+seekEl.addEventListener('click', (e) => {
+  if (!ytReady) return;
+  const rect = seekEl.getBoundingClientRect();
+  const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+  const t = ratio * DURATION;
+  clearWords();
+  yt.seekTo(t, true);
+  elapsed = t;
+  rebuildTimelineIndex(t);
+});
+
 window.addEventListener('resize', resize);
+
+async function boot() {
+  await document.fonts.ready;
+  resize();
+  applyScene('horizon', 0);
+  requestAnimationFrame(frame);
+  try {
+    await loadYouTube();
+    playBtn.textContent = 'Play song';
+  } catch {
+    playBtn.textContent = 'Play song';
+    sceneLabel.textContent = 'YT blocked · open Spotify';
+  }
+}
 
 boot();

@@ -12,31 +12,21 @@ const timeEl = document.getElementById('time');
 const sceneLabel = document.getElementById('scene-label');
 const seekEl = document.getElementById('seek');
 
-const audio = new Audio(AUDIO_SRC);
-audio.preload = 'auto';
-audio.crossOrigin = 'anonymous';
-audio.playbackRate = 1;
-audio.defaultPlaybackRate = 1;
-// Keep element in DOM — some environments race currentTime when detached.
-audio.setAttribute('playsinline', '');
-audio.controls = false;
-Object.assign(audio.style, {
-  position: 'fixed',
-  width: '1px',
-  height: '1px',
-  opacity: '0',
-  pointerEvents: 'none',
-  left: '0',
-  bottom: '0',
-});
-document.body.appendChild(audio);
-
+/** Web Audio — sample clock stays locked to real playback. */
+let audioCtx = null;
+/** @type {AudioBuffer | null} */
+let audioBuffer = null;
+/** @type {AudioBufferSourceNode | null} */
+let sourceNode = null;
 let audioReady = false;
 let playing = false;
 let elapsed = 0;
-/** Wall-clock anchor so lyrics never outrun real time if audio.currentTime jumps. */
-let railStartPerf = 0;
-let railStartAudio = 0;
+/** buffer offset (sec) when current source started */
+let offsetWhenStarted = 0;
+/** performance.now() when current source started — lyrics rail */
+let startedAtPerf = 0;
+/** position while paused */
+let pausedAt = 0;
 let prevLyric = '';
 let sceneName = 'horizon';
 let flash = 0;
@@ -468,30 +458,50 @@ function processTimeline(t) {
 
 function syncFromPlayer() {
   if (!audioReady) return elapsed;
-  playing = !audio.paused && !audio.ended;
-  if (audio.ended) {
-    elapsed = DURATION;
-    playBtn.textContent = 'Replay';
-    document.body.classList.remove('is-playing');
-    return elapsed;
-  }
   if (!playing) {
-    elapsed = audio.currentTime || 0;
+    elapsed = pausedAt;
     return elapsed;
   }
-
-  // Hard 1× rail from play/seek.
-  const wall = railStartAudio + (performance.now() - railStartPerf) / 1000;
-  elapsed = Math.min(DURATION, Math.max(0, wall));
-  // If media clock races ahead (headless / decode quirks), pull it back to the rail.
-  if (audio.currentTime > elapsed + 0.3) {
-    try {
-      audio.currentTime = elapsed;
-    } catch {
-      /* ignore seek errors mid-buffer */
-    }
+  // Lyrics always follow performance.now() (true 1×). Audio buffer plays in parallel.
+  elapsed = offsetWhenStarted + (performance.now() - startedAtPerf) / 1000;
+  if (elapsed >= DURATION) {
+    elapsed = DURATION;
+    playing = false;
+    pausedAt = DURATION;
+    stopSource();
+    playBtn.textContent = 'Replay';
   }
   return elapsed;
+}
+
+function stopSource() {
+  if (sourceNode) {
+    try {
+      sourceNode.onended = null;
+      sourceNode.stop();
+    } catch {
+      /* already stopped */
+    }
+    sourceNode.disconnect();
+    sourceNode = null;
+  }
+}
+
+function startSource(offset) {
+  if (!audioCtx || !audioBuffer) return;
+  stopSource();
+  const start = Math.max(0, Math.min(offset, audioBuffer.duration - 0.05));
+  sourceNode = audioCtx.createBufferSource();
+  sourceNode.buffer = audioBuffer;
+  sourceNode.connect(audioCtx.destination);
+  offsetWhenStarted = start;
+  pausedAt = start;
+  startedAtPerf = performance.now();
+  sourceNode.onended = () => {
+    /* natural end handled by syncFromPlayer duration check */
+  };
+  sourceNode.start(0, start);
+  playing = true;
 }
 
 function rebuildTimelineIndex(t) {
@@ -544,21 +554,13 @@ function frame(now) {
   requestAnimationFrame(frame);
 }
 
-function loadAudio() {
-  return new Promise((resolve, reject) => {
-    const ok = () => {
-      audioReady = true;
-      resolve();
-    };
-    if (audio.readyState >= 2) ok();
-    else {
-      audio.addEventListener('canplaythrough', ok, { once: true });
-      audio.addEventListener('error', () => reject(new Error('audio load failed')), {
-        once: true,
-      });
-      audio.load();
-    }
-  });
+async function loadAudio() {
+  audioCtx = new AudioContext();
+  const res = await fetch(AUDIO_SRC);
+  if (!res.ok) throw new Error('audio fetch failed');
+  const arr = await res.arrayBuffer();
+  audioBuffer = await audioCtx.decodeAudioData(arr);
+  audioReady = true;
 }
 
 async function togglePlay() {
@@ -571,33 +573,27 @@ async function togglePlay() {
       return;
     }
   }
-  if (!audio.paused && !audio.ended) {
-    audio.pause();
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+  if (playing) {
+    // pause
+    pausedAt = offsetWhenStarted + (performance.now() - startedAtPerf) / 1000;
+    elapsed = pausedAt;
     playing = false;
+    stopSource();
     playBtn.textContent = 'Play song';
     return;
   }
-  if (audio.ended || elapsed >= DURATION - 0.35) {
-    audio.currentTime = 0;
+
+  if (pausedAt >= DURATION - 0.35) {
+    pausedAt = 0;
     elapsed = 0;
     rebuildTimelineIndex(0);
   }
-  audio.playbackRate = 1;
-  // Anchor BEFORE play() — media time can jump during the play() promise.
-  const anchor = audio.currentTime || 0;
-  railStartAudio = anchor;
-  railStartPerf = performance.now();
-  elapsed = anchor;
+
   try {
-    await audio.play();
-    // Re-assert rail after play starts; clamp runaway media.
-    railStartPerf = performance.now();
-    railStartAudio = anchor;
-    if (audio.currentTime > anchor + 0.35) {
-      audio.currentTime = anchor;
-    }
-    elapsed = anchor;
-    playing = true;
+    startSource(pausedAt);
+    elapsed = pausedAt;
     playBtn.textContent = 'Pause';
     if (lyricHint) lyricHint.textContent = '';
   } catch {
@@ -621,24 +617,10 @@ seekEl.addEventListener('click', (e) => {
   const rect = seekEl.getBoundingClientRect();
   const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
   const t = ratio * DURATION;
-  audio.currentTime = t;
+  pausedAt = t;
   elapsed = t;
-  railStartPerf = performance.now();
-  railStartAudio = t;
   rebuildTimelineIndex(t);
-});
-
-audio.addEventListener('play', () => {
-  playBtn.textContent = 'Pause';
-  playing = true;
-});
-audio.addEventListener('pause', () => {
-  if (!audio.ended) playBtn.textContent = 'Play song';
-  playing = false;
-});
-audio.addEventListener('ended', () => {
-  playBtn.textContent = 'Replay';
-  playing = false;
+  if (playing) startSource(t);
 });
 
 window.addEventListener('resize', resize);

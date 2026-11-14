@@ -381,7 +381,14 @@ def _guest_safe(msgs: list[str] | None) -> list[str]:
             safe = (prefer or safe)[:1]
     from bot.reply_guard import finished_next_line
 
-    return safe or [finished_next_line(None)]
+    safe = safe or [finished_next_line(None)]
+    try:
+        from bot.fact_guard import guard_outbound
+
+        safe = guard_outbound(safe) or safe
+    except Exception:
+        logger.exception("fact_guard")
+    return safe
 
 
 async def run_manager(
@@ -1300,6 +1307,12 @@ async def run_manager(
         safe = strip_repeated_outbound(safe, previous_bot)
         safe = collapse_repeat_asks(safe, previous_bot)
         safe = dedupe_slot_questions(safe)
+        try:
+            from bot.fact_guard import guard_outbound
+
+            safe = guard_outbound(safe, sess=sess) or safe
+        except Exception:
+            logger.exception("fact_guard")
         if not safe and from_hold and escalate:
             # гость ждал менеджера 15 минут — не молчим и не повторяем «сейчас подключу»
             from bot.handoff_hold import HOLD_SORRY_LINE

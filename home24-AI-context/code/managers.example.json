@@ -1,0 +1,80 @@
+{
+  "default_manager_id": "anna",
+  "managers": [
+    {
+      "id": "anna",
+      "name": "Анна",
+      "phone": "",
+      "session": "",
+      "report_chat": "me",
+      "admin_ids": [],
+      "daily_send_limit": 172,
+      "weekly_send_limit": 1200,
+      "work_hours_start": 10,
+      "work_hours_end": 20,
+      "work_timezone": "Europe/Moscow",
+      "enabled": true,
+      "share_weight": 1
+    },
+    {
+      "id": "ivan",
+      "name": "Иван",
+      "phone": "",
+      "session": "",
+      "report_chat": "me",
+      "admin_ids": [],
+      "daily_send_limit": 172,
+      "weekly_send_limit": 1200,
+      "work_hours_start": 10,
+      "work_hours_end": 20,
+      "work_timezone": "Europe/Moscow",
+      "enabled": true,
+      "share_weight": 1
+    },
+    {
+      "id": "maria",
+      "name": "Мария",
+      "phone": "",
+      "session": "",
+      "report_chat": "me",
+      "admin_ids": [],
+      "daily_send_limit": 172,
+      "weekly_send_limit": 1200,
+      "work_hours_start": 10,
+      "work_hours_end": 20,
+      "work_timezone": "Europe/Moscow",
+      "enabled": true,
+      "share_weight": 1
+    },
+    {
+      "id": "oleg",
+      "name": "Олег",
+      "phone": "",
+      "session": "",
+      "report_chat": "me",
+      "admin_ids": [],
+      "daily_send_limit": 172,
+      "weekly_send_limit": 1200,
+      "work_hours_start": 10,
+      "work_hours_end": 20,
+      "work_timezone": "Europe/Moscow",
+      "enabled": true,
+      "share_weight": 1
+    },
+    {
+      "id": "elena",
+      "name": "Елена",
+      "phone": "",
+      "session": "",
+      "report_chat": "me",
+      "admin_ids": [],
+      "daily_send_limit": 172,
+      "weekly_send_limit": 1200,
+      "work_hours_start": 10,
+      "work_hours_end": 20,
+      "work_timezone": "Europe/Moscow",
+      "enabled": true,
+      "share_weight": 1
+    }
+  ]
+}

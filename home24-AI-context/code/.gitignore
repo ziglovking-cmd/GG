@@ -1,0 +1,27 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+data/*.db
+data/*.session
+data/qr.png
+data/*.session-journal
+data/*
+!data/.gitkeep
+!data/templates.json
+!data/ideal_dialog_1.md
+!data/style_dialogs.md
+!data/style_external_tone.md
+!data/travelline_rooms.json
+!data/home24-script.md
+!data/brand/
+# сессии менеджеров / пароли панели не в git
+data/managers.json
+data/dashboard_users.json
+!data/brand/avatar.jpg
+!data/brand/favicon.svg
+!data/brand/home24-logo.svg
+data/brand/catalog-hero.jpg
+data/locks/
+logs/
+uploads/

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home24 v10.14 — скачать сборку</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card: #1a222c;
+      --text: #e8eef4;
+      --muted: #9aa8b5;
+      --accent: #2f6fed;
+      --accent-2: #1f4fb8;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(900px 500px at 10% -10%, #1c3a66 0%, transparent 55%),
+        radial-gradient(700px 400px at 100% 0%, #243049 0%, transparent 50%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    main {
+      width: min(560px, 100%);
+      background: color-mix(in srgb, var(--card) 92%, black);
+      border: 1px solid #2a3644;
+      border-radius: 18px;
+      padding: 28px 26px 24px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.35);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+    }
+    p { margin: 0 0 14px; color: var(--muted); line-height: 1.45; }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 22px;
+    }
+    .chip {
+      font-size: .82rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #243041;
+      color: #c9d6e3;
+    }
+    a.btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-weight: 650;
+      font-size: 1rem;
+    }
+    a.btn:hover { filter: brightness(1.06); }
+    .note { margin-top: 14px; font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Home24 — сборка v10.14</h1>
+    <p>Личная страница скачивания: архив только для вас после входа в Cursor. Новый текст районов без кнопок и мягкий ответ на «подумаем».</p>
+    <div class="meta">
+      <span class="chip">11.11.2026</span>
+      <span class="chip">~1.8 MB</span>
+      <span class="chip">ZIP</span>
+    </div>
+    <a class="btn" href="./home24-project-v10.14-2026-11-11.zip" download="home24-project-v10.14-2026-11-11.zip">
+      Скачать ZIP
+    </a>
+    <p class="note">Прямая ссылка на файл тоже работает из этой же папки сайта.</p>
+  </main>
+</body>
+</html>

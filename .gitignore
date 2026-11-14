@@ -1,0 +1,4 @@
+home24-AI-context/code/.venv/
+**/__pycache__/
+*.pyc
+.env

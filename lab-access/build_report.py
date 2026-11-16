@@ -156,6 +156,8 @@ add_img(SHOTS / "t_stud_ctor.png", 15)
 add_caption("Рисунок 9. Конструктор «Студенты» и подстановка поля «Группа»")
 add_img(SHOTS / "t_stud.png", 15)
 add_caption("Рисунок 10. Таблица «Студенты»")
+add_img(SHOTS / "t_stud_rel.png", 15)
+add_caption("Рисунок 10а. Связи Студенты / Успеваемость в схеме")
 
 add_heading_custom("1.7. Таблица «Успеваемость» (подчиненная)", 2)
 add_p(
@@ -168,6 +170,8 @@ add_img(SHOTS / "t_perf_ctor.png", 15)
 add_caption("Рисунок 11. Конструктор «Успеваемость»")
 add_img(SHOTS / "t_perf.png", 15)
 add_caption("Рисунок 12. Данные «Успеваемость»")
+add_img(SHOTS / "t_perf_view.png", 12)
+add_caption("Рисунок 12а. Успеваемость (скрин из Access)")
 
 add_heading_custom("1.8. Сортировка и фильтрация", 2)
 add_p("Сортировка Студенты по Фамилия → Имя → Отчество (А–Я). Фильтр по №Зачетки с буквой «э».", align="justify")
@@ -206,8 +210,10 @@ add_p(
 )
 add_img(SHOTS / "schema.png", 15)
 add_caption("Рисунок 14. Схема данных")
-add_img(SHOTS / "rel_edit.png", 10)
-add_caption("Рисунок 15. Изменение / восстановление связи Группы ↔ Студенты")
+add_img(SHOTS / "rel_delete.png", 12)
+add_caption("Рисунок 15. Удаление связи Группы ↔ Студенты")
+add_img(SHOTS / "rel_restore.png", 10)
+add_caption("Рисунок 15а. Восстановление связи")
 
 add_heading_custom("Вопросы по теме «Схема данных»", 2)
 qa("1. Что такое схема данных?",
@@ -223,9 +229,9 @@ qa("4. Главная и подчиненная? Очередность запо
 doc.add_page_break()
 add_heading_custom("3. Целостность данных")
 add_p("Для связей включено обеспечение целостности. Дополнительно проверены каскадное обновление и каскадное удаление.", align="justify")
-add_img(SHOTS / "rel_edit.png", 10)
+add_img(SHOTS / "rel_edit.png", 14)
 add_caption("Рисунок 16. Обеспечение целостности данных")
-add_img(SHOTS / "schema.png", 15)
+add_img(SHOTS / "schema_after.png", 10)
 add_caption("Рисунок 17. Схема после включения целостности (знаки 1 и ∞)")
 add_img(SHOTS / "rel_cascade_upd.png", 10)
 add_caption("Рисунок 18. Каскадное обновление связанных полей")
@@ -250,12 +256,12 @@ add_heading_custom("4. Запросы (лабораторная работа №
 add_heading_custom("4.1. Запрос на выборку «Список студентов»", 2)
 add_p("Мастер / Конструктор. Таблицы Группы + Студенты. Поля: Группа, №Зачетки, Фамилия, Имя.", align="justify")
 add_img(SHOTS / "q_select.png", 15)
-add_caption("Рисунок 20. Запрос на выборку «Список студентов»")
+add_caption("Рисунок 20. Запрос на выборку / результат")
 
 add_heading_custom("4.2. Запрос с параметром", 2)
 add_p("В условии отбора по Группа: [Введите группу]. При запуске Access запрашивает код группы.", align="justify")
-add_img(SHOTS / "q_param.png", 15)
-add_caption("Рисунок 21. Запрос с параметром в Конструкторе")
+add_img(SHOTS / "q_param.png", 12)
+add_caption("Рисунок 21. Запрос с параметром")
 add_img(SHOTS / "q_param_dialog.png", 9)
 add_caption("Рисунок 22. Диалог ввода параметра")
 
@@ -284,9 +290,7 @@ add_p(
     align="justify",
 )
 add_img(SHOTS / "q_multi.png", 15)
-add_caption("Рисунок 25. Многотабличный запрос — конструктор")
-add_img(SHOTS / "q_multi_res.png", 15)
-add_caption("Рисунок 26. Результат «Успеваемость студентов»")
+add_caption("Рисунок 25–26. Запрос «Успеваемость студентов»")
 
 add_heading_custom("4.6. Перекрестный запрос", 2)
 add_p(
@@ -294,9 +298,7 @@ add_p(
     align="justify",
 )
 add_img(SHOTS / "q_xtab.png", 15)
-add_caption("Рисунок 27. Перекрестный запрос в Конструкторе")
-add_img(SHOTS / "q_xtab_res.png", 15)
-add_caption("Рисунок 28. Результат перекрестного запроса")
+add_caption("Рисунок 27–28. Перекрестный запрос")
 
 add_heading_custom("Вопросы по теме «Запросы»", 2)
 qa("1. Запрос на выборку? Способы создания?",

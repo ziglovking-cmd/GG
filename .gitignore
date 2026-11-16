@@ -1,0 +1,9 @@
+node_modules
+.next
+.env
+.env.local
+data/runtime/*
+!data/runtime/.gitkeep
+*.log
+.cursor
+.DS_Store

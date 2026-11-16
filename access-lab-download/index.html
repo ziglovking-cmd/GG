@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Access лаб3 — скачать</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #102018;
+      --muted: #3d5246;
+      --paper: #f2f6f1;
+      --panel: rgba(255, 255, 255, 0.72);
+      --line: rgba(16, 32, 24, 0.12);
+      --accent: #0f7a4a;
+      --accent-2: #c9f07d;
+      --shadow: 0 18px 50px rgba(16, 32, 24, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "IBM Plex Sans", sans-serif;
+      background:
+        radial-gradient(1000px 500px at 10% -10%, #d9f5c8 0%, transparent 55%),
+        radial-gradient(900px 480px at 110% 10%, #b7e4d0 0%, transparent 50%),
+        linear-gradient(160deg, #eef5ec 0%, #f7faf6 45%, #e7f0ea 100%);
+    }
+    .wrap {
+      width: min(880px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 4.5rem 0 3rem;
+    }
+    .brand {
+      font-family: Manrope, sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin: 0 0 0.85rem;
+      animation: rise 0.7s ease both;
+    }
+    .lead {
+      max-width: 34rem;
+      margin: 0 0 2rem;
+      color: var(--muted);
+      font-size: 1.05rem;
+      line-height: 1.55;
+      animation: rise 0.7s ease 0.08s both;
+    }
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.9rem 1.25rem;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(15, 122, 74, 0.28);
+      transition: transform 0.2s ease, background 0.2s ease;
+      animation: rise 0.7s ease 0.14s both;
+    }
+    .cta:hover { transform: translateY(-2px); background: #0c663e; }
+    .list {
+      margin-top: 2.4rem;
+      display: grid;
+      gap: 0.75rem;
+      animation: rise 0.7s ease 0.2s both;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.18s ease, border-color 0.18s ease;
+    }
+    .item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(15, 122, 74, 0.35);
+    }
+    .item strong {
+      display: block;
+      font-family: Manrope, sans-serif;
+      font-size: 1.02rem;
+      margin-bottom: 0.2rem;
+    }
+    .item span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .pill {
+      flex-shrink: 0;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: var(--accent-2);
+      color: var(--ink);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .note {
+      margin-top: 1.6rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+      animation: rise 0.7s ease 0.28s both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 640px) {
+      .item { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1 class="brand">Access лаб3</h1>
+    <p class="lead">
+      Скачай отчёт, базу Access и SQL по практикуму. Полный пакет для сдачи лабораторной.
+    </p>
+    <a class="cta" href="files/tablicy_lab3.xlsx" download>Скачать таблицы (.xlsx)</a>
+
+    <section class="list" aria-label="Файлы">
+      <a class="item" href="files/tablicy_lab3.xlsx" download>
+        <div>
+          <strong>tablicy_lab3.xlsx</strong>
+          <span>Все таблицы из лаб3: Группы, Студенты, Успеваемость и др.</span>
+        </div>
+        <div class="pill">XLSX</div>
+      </a>
+      <a class="item" href="files/tablicy_lab3_csv.zip" download>
+        <div>
+          <strong>tablicy_lab3_csv.zip</strong>
+          <span>Те же таблицы отдельными CSV</span>
+        </div>
+        <div class="pill">ZIP</div>
+      </a>
+      <a class="item" href="files/screenshots.zip" download>
+        <div>
+          <strong>screenshots.zip</strong>
+          <span>Все скриншоты Access одним архивом (~2 МБ)</span>
+        </div>
+        <div class="pill">ZIP</div>
+      </a>
+      <a class="item" href="files/otchet-access-polnyy.docx" download>
+        <div>
+          <strong>Отчет_БД_Access_полный.docx</strong>
+          <span>Полный отчёт со скринами и ответами</span>
+        </div>
+        <div class="pill">DOCX</div>
+      </a>
+      <a class="item" href="files/otchet-bd1-dopolnennyy.docx" download>
+        <div>
+          <strong>Отчет_БД1_дополненный.docx</strong>
+          <span>Твой исходный отчёт + недостающие ответы (~0.3 МБ)</span>
+        </div>
+        <div class="pill">DOCX</div>
+      </a>
+      <a class="item" href="files/lab3.accdb" download>
+        <div>
+          <strong>лаб3.accdb</strong>
+          <span>База Microsoft Access (~1.5 МБ)</span>
+        </div>
+        <div class="pill">ACCDB</div>
+      </a>
+      <a class="item" href="files/queries.sql" download>
+        <div>
+          <strong>queries.sql</strong>
+          <span>SQL всех запросов практикума</span>
+        </div>
+        <div class="pill">SQL</div>
+      </a>
+      <a class="item" href="files/instrukciya.md" download>
+        <div>
+          <strong>ИНСТРУКЦИЯ.md</strong>
+          <span>Чек-лист: что докликать в Access на Windows</span>
+        </div>
+        <div class="pill">MD</div>
+      </a>
+    </section>
+
+    <p class="note">Если преподаватель требует скрины только с твоего ПК — открой объекты в Access и замени рисунки в Word.</p>
+  </main>
+</body>
+</html>

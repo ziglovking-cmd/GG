@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1b26"/>
+      <stop offset="50%" stop-color="#123044"/>
+      <stop offset="100%" stop-color="#1a1020"/>
+    </linearGradient>
+    <radialGradient id="r" cx="70%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#c8f542" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#c8f542" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#g)"/>
+  <rect width="1600" height="900" fill="url(#r)"/>
+  <g opacity="0.55" stroke="#c8f542" stroke-width="3">
+    <path d="M980 180 L1180 320 L1100 560 L860 620 L740 380 Z"/>
+    <path d="M1040 250 L1140 340 L1085 500 L920 530 L860 370 Z" fill="#ff5a3c" fill-opacity="0.18"/>
+  </g>
+  <g opacity="0.4" stroke="#3ee0c5" stroke-width="2">
+    <circle cx="1180" cy="220" r="70"/>
+    <circle cx="1240" cy="480" r="110"/>
+    <path d="M700 700 C900 620, 1100 760, 1350 680"/>
+  </g>
+  <text x="980" y="760" fill="#e8f2f7" fill-opacity="0.25" font-family="Arial Black, sans-serif" font-size="120">BS</text>
+</svg>

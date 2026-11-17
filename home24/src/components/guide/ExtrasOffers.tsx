@@ -8,7 +8,7 @@ import {
   type ExtraService,
 } from "@/lib/extras";
 import {
-  MANAGER_HOURS,
+  MANAGER_HOURS_SITE,
   PHONE_LABEL,
   PHONE_TEL,
   TELEGRAM_USERNAME,
@@ -119,7 +119,7 @@ export function ExtrasOffers({ aptName }: { aptName: string }) {
       })}
 
       <p className="text-[13px] leading-relaxed text-[#1a1612]/50">
-        Не нашли нужное? Позвоните или напишите менеджеру с {MANAGER_HOURS} — постараемся помочь.
+        Не нашли нужное? Позвоните или напишите менеджеру {MANAGER_HOURS_SITE} — постараемся помочь.
       </p>
       <div className="grid grid-cols-2 gap-2.5">
         <a
@@ -317,7 +317,7 @@ function OrderSheet({
               </button>
             </div>
             <p className="mt-3 text-[12px] leading-relaxed text-[#1a1612]/45">
-              {PHONE_LABEL} · {MANAGER_HOURS}
+              {PHONE_LABEL} · {MANAGER_HOURS_SITE}
             </p>
           </div>
         )}

@@ -1,10 +1,13 @@
 import type { SectionId } from "@/lib/sections";
 
+/** Contacts from https://home24.msk.ru/contacts — phone kept as live manager line. */
 export const PHONE_TEL = "+79777176097";
 export const PHONE_LABEL = "+7 977 717-60-97";
-export const TELEGRAM_USERNAME = "home24msk";
+export const TELEGRAM_USERNAME = "home24_msk";
+export const SITE_URL = "https://home24.msk.ru";
 export const MANAGER_LABEL = "Ваш персональный менеджер";
 export const MANAGER_HOURS = "09:00–00:00";
+export const MANAGER_HOURS_SITE = "с 9:00 до 00:00";
 
 export const SECTION_CARD: Record<
   SectionId,

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Apartment } from "@/lib/catalog";
 import { mapsUrl, navUrl, reviewUrl, videosForSection, type SectionId } from "@/lib/sections";
+import { ExtrasOffers } from "@/components/guide/ExtrasOffers";
 import { PartnerOffers } from "@/components/guide/PartnerOffers";
 import { VideoBlock } from "@/components/guide/VideoBlock";
 import { CopyField } from "@/components/guide/CopyField";
@@ -41,6 +42,7 @@ export function KaitenDoc({
           )}
         </div>
       ) : null}
+      {section === "uslugi" ? <ExtrasOffers aptName={apt.name} /> : null}
       {section === "partnery" ? <PartnerOffers /> : null}
       {section === "kak-dobratsya" && (
         <div className="mb-8 border border-[#1a1612]/10 bg-[#faf6ef] p-6">

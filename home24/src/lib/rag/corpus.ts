@@ -1,4 +1,5 @@
 import { apartments, type Apartment } from "@/lib/catalog";
+import { extrasCorpusText } from "@/lib/extras";
 import { FOR_TWO_KIT, NINJA_DOM24, isProkshino } from "@/lib/partners";
 import type { RagChunk } from "@/lib/rag/types";
 
@@ -59,6 +60,23 @@ export function buildCorpus(filterSlug?: string | null): RagChunk[] {
       );
     }
 
+    push(out, apt, "uslugi", "Дополнительные услуги", extrasCorpusText());
+    push(
+      out,
+      apt,
+      "uslugi",
+      "Набор Для двоих (18+)",
+      [
+        `${FOR_TWO_KIT.title} — ${FOR_TWO_KIT.badge}`,
+        FOR_TWO_KIT.subtitle,
+        FOR_TWO_KIT.body,
+        `В наборе: ${FOR_TWO_KIT.contents.join(", ")}`,
+        "Как получить:",
+        ...FOR_TWO_KIT.how.map((s, i) => `${i + 1}. ${s}`),
+        "Набор в квартире не искать — доп. услуга через менеджера (WhatsApp, Telegram или звонок).",
+      ].join("\n"),
+    );
+
     if (isProkshino(apt)) {
       push(
         out,
@@ -72,21 +90,6 @@ export function buildCorpus(filterSlug?: string | null): RagChunk[] {
           ...NINJA_DOM24.terms,
           `Заказ: ${NINJA_DOM24.orderUrl}`,
           `Телефон: ${NINJA_DOM24.phone}`,
-        ].join("\n"),
-      );
-      push(
-        out,
-        apt,
-        "partnery",
-        "Партнёры: набор Для двоих (18+)",
-        [
-          `${FOR_TWO_KIT.title} — ${FOR_TWO_KIT.badge}`,
-          FOR_TWO_KIT.subtitle,
-          FOR_TWO_KIT.body,
-          `В наборе: ${FOR_TWO_KIT.contents.join(", ")}`,
-          "Как получить:",
-          ...FOR_TWO_KIT.how.map((s, i) => `${i + 1}. ${s}`),
-          "Набор в квартире не искать — доп. услуга через менеджера.",
         ].join("\n"),
       );
     }

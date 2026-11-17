@@ -2,6 +2,7 @@ import type { SectionId } from "@/lib/sections";
 
 export const PHONE_TEL = "+79777176097";
 export const PHONE_LABEL = "+7 977 717-60-97";
+export const TELEGRAM_USERNAME = "home24msk";
 export const MANAGER_LABEL = "Ваш персональный менеджер";
 export const MANAGER_HOURS = "09:00–00:00";
 
@@ -17,7 +18,8 @@ export const SECTION_CARD: Record<
   video: { hint: "Обзор квартиры и техника — ролики на этой вкладке", emoji: "▶" },
   faq: { hint: "Коротко про депозит, питомцев, продление", emoji: "?" },
   rayon: { hint: "Магазины, метро, чем заняться рядом", emoji: "☕" },
-  partnery: { hint: "Пицца и набор «Для двоих» (18+) — только Прокшино", emoji: "✦" },
+  uslugi: { hint: "Заказ через менеджера — WhatsApp, Telegram или звонок", emoji: "✦" },
+  partnery: { hint: "Пицца «Дом24» — только Прокшино", emoji: "🍕" },
   vyselenie: { hint: "Ключи, мусор, до скорой встречи", emoji: "🚪" },
   otzyv: { hint: "Два слова о нас после выезда", emoji: "♡" },
   kontakty: { hint: "Персональный менеджер, 09:00–00:00", emoji: "☎" },

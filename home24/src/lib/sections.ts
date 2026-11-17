@@ -11,6 +11,7 @@ export type SectionId =
   | "faq"
   | "video"
   | "rayon"
+  | "uslugi"
   | "vyselenie"
   | "otzyv"
   | "kontakty"
@@ -38,6 +39,7 @@ export const SECTIONS: Section[] = [
   { id: "video", title: "Видео пользования техникой и не только", kind: "text" },
   { id: "faq", title: "FAQ часто задаваемые вопросы", kind: "faq" },
   { id: "rayon", title: "Справочник района", kind: "text" },
+  { id: "uslugi", title: "Дополнительные услуги", kind: "text" },
   { id: "partnery", title: "Предложения от партнёров", kind: "text" },
   { id: "vyselenie", title: "Как выселиться самостоятельно?", kind: "text" },
   { id: "otzyv", title: "Оставить отзыв", kind: "text" },

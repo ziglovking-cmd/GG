@@ -2169,6 +2169,14 @@
       "diskFolder": "/Видео материал /мята",
       "videos": [
         {
+          "title": "Инструкция вход на этаже",
+          "name": "a04e5b5efc81.mp4",
+          "url": "/shared/a04e5b5efc81.mp4",
+          "path": "/a04e5b5efc81.mp4",
+          "disk": "local",
+          "folderUrl": ""
+        },
+        {
           "title": "Как выглядит квартира",
           "name": "Олимп видео.mp4",
           "url": "https://home24.msk.ru/api/media/1784807601453-95cd265b2d-media.mp4",

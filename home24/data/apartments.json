@@ -2083,6 +2083,14 @@
       "diskFolder": "/Видео материал /мята/олимп",
       "videos": [
         {
+          "title": "Инструкция вход на этаже",
+          "name": "a04e5b5efc81.mp4",
+          "url": "/shared/a04e5b5efc81.mp4",
+          "path": "/a04e5b5efc81.mp4",
+          "disk": "local",
+          "folderUrl": ""
+        },
+        {
           "title": "Как выглядит квартира",
           "name": "Олимп видео.mp4",
           "url": "https://home24.msk.ru/api/media/1784807601453-95cd265b2d-media.mp4",
@@ -3547,6 +3555,14 @@
       "diskFolder": "/Видео материал /эверест",
       "videos": [
         {
+          "title": "Инструкция вход на этаже",
+          "name": "a04e5b5efc81.mp4",
+          "url": "/shared/a04e5b5efc81.mp4",
+          "path": "/a04e5b5efc81.mp4",
+          "disk": "local",
+          "folderUrl": ""
+        },
+        {
           "title": "Как работают шторы",
           "name": "шторы.mp4",
           "url": "https://disk.yandex.ru/i/9JtyX2-Yl-sc2g",
@@ -3749,7 +3765,16 @@
       "contacts": "Ваш персональный менеджер: +7 977 717-60-97\nНа связи с 09:00 до 00:00. Напишите в Telegram или позвоните.\nСайт: https://home24.msk.ru\nКомпания Home24.",
       "diskUrl": "https://disk.yandex.ru/d/ZLKt8eDXJYKdnQ",
       "diskFolder": "",
-      "videos": [],
+      "videos": [
+        {
+          "title": "Инструкция вход на этаже",
+          "name": "a04e5b5efc81.mp4",
+          "url": "/shared/a04e5b5efc81.mp4",
+          "path": "/a04e5b5efc81.mp4",
+          "disk": "local",
+          "folderUrl": ""
+        }
+      ],
       "faq": [
         {
           "q": "Платная ли парковка?",
@@ -3812,7 +3837,16 @@
       "contacts": "Ваш персональный менеджер: +7 977 717-60-97\nНа связи с 09:00 до 00:00. Напишите в Telegram или позвоните.\nСайт: https://home24.msk.ru\nКомпания Home24.",
       "diskUrl": "https://disk.yandex.ru/d/ZLKt8eDXJYKdnQ",
       "diskFolder": "",
-      "videos": [],
+      "videos": [
+        {
+          "title": "Инструкция вход на этаже",
+          "name": "a04e5b5efc81.mp4",
+          "url": "/shared/a04e5b5efc81.mp4",
+          "path": "/a04e5b5efc81.mp4",
+          "disk": "local",
+          "folderUrl": ""
+        }
+      ],
       "faq": [
         {
           "q": "Платная ли парковка?",
@@ -5956,6 +5990,14 @@
       "diskUrl": "https://disk.yandex.ru/d/ZLKt8eDXJYKdnQ",
       "diskFolder": "",
       "videos": [
+        {
+          "title": "Инструкция вход на этаже",
+          "name": "a04e5b5efc81.mp4",
+          "url": "/shared/a04e5b5efc81.mp4",
+          "path": "/a04e5b5efc81.mp4",
+          "disk": "local",
+          "folderUrl": ""
+        },
         {
           "title": "Как выглядит квартира",
           "name": "Видео Индиго.mp4",

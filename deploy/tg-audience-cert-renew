@@ -1,0 +1,1 @@
+17 3 * * * root /usr/bin/docker run --rm -v /opt/battle-master/infra/docker/nginx/letsencrypt:/etc/letsencrypt -v /opt/battle-master/infra/docker/nginx/certbot:/var/www/certbot certbot/certbot renew --webroot --webroot-path /var/www/certbot --quiet && /usr/bin/docker exec docker-nginx-1 nginx -s reload

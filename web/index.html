@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TG Audience — парсер и инвайтер</title>
+<link rel="stylesheet" href="/static/style.css?v=20260928-1">
+</head>
+<body>
+
+<header>
+  <div class="brand">TG&nbsp;Audience</div>
+  <nav id="tabs">
+    <button class="tab active" data-tab="accounts">Аккаунты</button>
+    <button class="tab" data-tab="parse">Парсинг</button>
+    <button class="tab" data-tab="base">База</button>
+    <button class="tab" data-tab="invite">Инвайтинг</button>
+    <button class="tab" data-tab="invited">Приглашённые</button>
+    <button class="tab" data-tab="notifications">Уведомления</button>
+    <button class="tab" data-tab="log">Лог</button>
+    <button class="tab" data-tab="settings">Настройки</button>
+  </nav>
+</header>
+
+<main>
+
+<!-- ─────────────────────────────── АККАУНТЫ -->
+<section id="tab-accounts" class="pane active">
+  <div class="card">
+    <h2>Добавить аккаунт</h2>
+    <p class="hint">Каждому аккаунту — свой прокси. Десять аккаунтов с одного IP Telegram
+      связывает между собой, и блокировка прилетает всему пулу разом.</p>
+    <div class="grid">
+      <label>Название<input id="acc-label" placeholder="Аккаунт 1"></label>
+      <label>Телефон<input id="acc-phone" placeholder="+79001234567"></label>
+      <label>Прокси<input id="acc-proxy" placeholder="socks5://user:pass@host:1080"></label>
+      <label>Лимит попыток в сутки<input id="acc-limit" type="number" value="25"></label>
+    </div>
+    <button class="primary" id="acc-add">Добавить</button>
+  </div>
+
+  <div class="card">
+    <h2>Пул аккаунтов</h2>
+    <div id="accounts-list" class="list"></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── ПАРСИНГ -->
+<section id="tab-parse" class="pane">
+  <div class="card">
+    <h2>Собрать аудиторию</h2>
+    <div class="grid">
+      <label>Аккаунт-парсер
+        <select id="parse-account"></select>
+      </label>
+      <label>Чат
+        <select id="parse-dialog"><option value="">— загрузите диалоги —</option></select>
+      </label>
+      <label>Или вручную (@username / id / ссылка)
+        <input id="parse-manual" placeholder="@mychat">
+      </label>
+    </div>
+    <button id="parse-load-dialogs">Загрузить список чатов</button>
+
+    <h3>Источники</h3>
+    <div class="checks">
+      <label><input type="checkbox" id="src-participants" checked> Участники — весь список</label>
+      <label><input type="checkbox" id="src-history" checked> Авторы сообщений — активное ядро</label>
+      <label><input type="checkbox" id="src-reactions"> Реакции под постами</label>
+      <label><input type="checkbox" id="src-deep"> Глубокий обход (обойти лимит ~10 000, дольше)</label>
+    </div>
+    <div class="grid">
+      <label>Сообщений сканировать<input id="parse-messages" type="number" value="5000"></label>
+      <label>Постов для реакций<input id="parse-posts" type="number" value="100"></label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="parse-messages-all"> Вся история сообщений (без лимита)</label>
+    </div>
+    <div class="row">
+      <button class="primary" id="parse-start">Спарсить одним аккаунтом</button>
+      <button class="primary" id="parse-start-all">Спарсить всеми аккаунтами</button>
+    </div>
+    <p class="hint">В супергруппе список участников доступен обычному участнику — если владелец
+      не включил «Скрывать участников». В канале-вещалке подписчиков видит только админ; при
+      отсутствии прав парсер сам переключится на историю сообщений.</p>
+    <p class="hint"><b>Перед инвайтингом парсите всеми аккаунтами.</b> Каждый получит свои
+      <code>access_hash</code>, без которых он сможет приглашать только юзеров с @username.
+      Аккаунты идут по очереди с паузой, все должны состоять в чате.</p>
+    <p class="hint"><b>Длинные чаты.</b> На паузы Telegram (FloodWait) и обрывы связи парсер
+      ждёт и продолжает с того же сообщения. Если Telegram просит ждать дольше 15 минут или задачу
+      остановили — место сохраняется: запустите тот же чат тем же аккаунтом, и проход продолжится.</p>
+    <p class="hint"><b>Единая база чата.</b> Каждый проход дополняет накопленную таблицу.
+      Пользователи с уже известным Telegram ID не добавляются повторно и не увеличивают
+      счётчик «новых за проход». Общий размер базы показывается отдельно. Для продолжения
+      парсинга не удаляйте чат из вкладки «База».</p>
+  </div>
+
+  <div class="card">
+    <h2>Задачи</h2>
+    <div id="jobs-list" class="list"></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── БАЗА -->
+<section id="tab-base" class="pane">
+  <div class="card">
+    <h2>Загрузить свою CSV-базу</h2>
+    <p class="hint">Поддерживаются CSV с разделителем <code>;</code>, <code>,</code> или табуляцией.
+      Нужен столбец <code>user_id</code> или <code>username</code>. Максимум 10 МБ и 100 000 строк.</p>
+    <div class="grid">
+      <label>Название базы<input id="csv-import-name" placeholder="Например, клиенты сентября"></label>
+      <label>CSV-файл<input id="csv-import-file" type="file" accept=".csv,text/csv,text/plain"></label>
+    </div>
+    <div class="row">
+      <button class="primary" id="csv-import-btn">Загрузить CSV</button>
+      <span id="csv-import-status" class="hint-inline">Файл не выбран</span>
+    </div>
+    <p class="hint">CSV не переносит <code>access_hash</code>: пользователей без @username можно
+      хранить в базе, но для приглашения аккаунт должен самостоятельно увидеть их в Telegram.
+      Загружайте только данные, которые вы вправе обрабатывать.</p>
+  </div>
+  <div class="card">
+    <h2>Спарсенные чаты</h2>
+    <div id="chats-list" class="list"></div>
+  </div>
+  <div class="card" id="members-card" hidden>
+    <h2 id="members-title">Участники</h2>
+    <div class="row">
+      <input id="members-search" placeholder="Поиск по имени или @username">
+      <button id="members-export">Скачать CSV</button>
+    </div>
+    <div class="table-wrap"><table id="members-table"></table></div>
+    <div class="row"><button id="members-more">Показать ещё</button><span id="members-count"></span></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── ИНВАЙТИНГ -->
+<section id="tab-invite" class="pane">
+  <div class="card">
+    <h2>Новая кампания</h2>
+    <div class="warn">
+      Инвайтеры должны <b>уже состоять в целевом чате</b> и иметь право добавлять участников.
+      Пользователей без @username сможет пригласить только тот аккаунт, который сам спарсил
+      чат-донор — <code>access_hash</code> между аккаунтами не переносится.
+    </div>
+    <div class="grid">
+      <label>Название<input id="camp-name" placeholder="Перенос в новый чат"></label>
+      <label>Целевой чат (@username / id)<input id="camp-target" placeholder="@newchat"></label>
+    </div>
+    <div class="row">
+      <button id="camp-sync-target">Исключить дубли</button>
+      <span id="camp-sync-status" class="hint-inline">Сначала укажите целевой чат</span>
+    </div>
+
+    <h3>Аккаунты-инвайтеры</h3>
+    <div id="camp-accounts" class="checks"></div>
+
+    <h3>Чаты-доноры</h3>
+    <div id="camp-sources" class="checks"></div>
+
+    <h3>Фильтры</h3>
+    <div class="checks">
+      <label><input type="checkbox" id="f-bots" checked> Без ботов</label>
+      <label><input type="checkbox" id="f-deleted" checked> Без удалённых</label>
+      <label><input type="checkbox" id="f-username"> Только с @username <span class="hint-inline">(доступны любому аккаунту)</span></label>
+      <label><input type="checkbox" id="f-active"> Только писавшие в чат</label>
+      <label><input type="checkbox" id="f-dormant" checked> Без «был давно»</label>
+      <label><input type="checkbox" id="f-premium"> Только Premium</label>
+      <label><input type="checkbox" id="f-order" checked> Сначала самые активные</label>
+    </div>
+    <div class="grid">
+      <label>Минимум сообщений<input id="f-min-msg" type="number" value="1"></label>
+      <label>Ограничить список<input id="f-limit" type="number" value="5000"></label>
+    </div>
+    <button class="primary" id="camp-create">Создать кампанию</button>
+  </div>
+
+  <div class="card">
+    <h2>Кампании</h2>
+    <div id="campaigns-list" class="list"></div>
+  </div>
+
+  <div class="card" id="campaign-detail" hidden>
+    <h2 id="cd-title"></h2>
+    <div id="cd-stats" class="stats"></div>
+    <div class="row">
+      <button class="primary" id="cd-start">Запустить</button>
+      <button id="cd-stop">Остановить</button>
+      <button class="preflight-action" id="cd-preflight">Проверить перед запуском</button>
+      <button id="cd-export">Выгрузить результат</button>
+    </div>
+    <div id="cd-preflight-panel" class="preflight-panel" hidden></div>
+    <h3>Аккаунты в работе</h3>
+    <div id="cd-worker-summary" class="hint"></div>
+    <div id="cd-workers" class="list"></div>
+    <h3>Последние попытки</h3>
+    <div class="table-wrap"><table id="cd-recent"></table></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── ПРИГЛАШЁННЫЕ -->
+<section id="tab-invited" class="pane">
+  <div class="card">
+    <h2>Участники @skyptop_new_delivery</h2>
+    <p class="hint">Здесь объединены текущий состав чата и подтверждённые приглашения
+      из всех кампаний. Статус «вышел» обновляется после полного сравнения состава.</p>
+    <div class="grid">
+      <label>Аккаунт для проверки состава
+        <select id="invited-account"></select>
+      </label>
+      <label>Поиск
+        <input id="invited-search" placeholder="Имя, @username или user_id">
+      </label>
+      <label>Показывать
+        <select id="invited-filter">
+          <option value="all">Всех</option>
+          <option value="current">Сейчас в чате</option>
+          <option value="invited">Приглашённых программой</option>
+          <option value="left">Вышедших</option>
+        </select>
+      </label>
+    </div>
+    <div class="row">
+      <button class="primary" id="invited-sync">Обновить состав</button>
+      <button id="invited-export">Скачать CSV</button>
+      <span id="invited-sync-status" class="hint-inline">Состав ещё не проверен</span>
+    </div>
+    <p class="hint">Проверка читает полный список участников через выбранный аккаунт.
+      Если Telegram скрывает состав или у аккаунта нет прав, данные не будут заменены.</p>
+  </div>
+  <div class="card">
+    <h2>Сводка</h2>
+    <div id="invited-stats" class="stats"></div>
+  </div>
+  <div class="card">
+    <div class="calendar-head">
+      <div>
+        <h2>Календарь приглашений</h2>
+        <p class="hint">Даты и время считаются по Москве — Europe/Moscow (UTC+3).</p>
+      </div>
+      <div class="row calendar-actions">
+        <button id="invited-cal-prev" aria-label="Предыдущий месяц">←</button>
+        <button id="invited-cal-today">Сегодня</button>
+        <button id="invited-cal-next" aria-label="Следующий месяц">→</button>
+      </div>
+    </div>
+    <div id="invited-cal-title" class="calendar-title"></div>
+    <div id="invited-cal-summary" class="hint"></div>
+    <div class="calendar-scroll">
+      <div id="invited-calendar" class="invite-calendar"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Список</h2>
+    <div class="table-wrap"><table id="invited-table"></table></div>
+    <div id="invited-count" class="hint"></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── УВЕДОМЛЕНИЯ -->
+<section id="tab-notifications" class="pane">
+  <div class="card">
+    <h2>Telegram-бот уведомлений</h2>
+    <p class="hint">Токен выдаёт официальный <a href="https://t.me/BotFather" target="_blank"
+      rel="noopener">@BotFather</a>. Он хранится только на сервере и никогда не возвращается
+      обратно в браузер.</p>
+    <div class="grid">
+      <label>Токен бота
+        <input id="notif-token" type="password" autocomplete="new-password" spellcheck="false"
+          placeholder="1234567890:AA…">
+      </label>
+    </div>
+    <div class="row">
+      <button class="primary" id="notif-save">Проверить и сохранить</button>
+      <span id="notif-status" class="hint-inline">Токен ещё не сохранён</span>
+    </div>
+    <p class="hint">После сохранения поле очистится. Для замены токена просто вставьте новый.
+      Не отправляйте токен в сообщениях и не показывайте его на скриншотах.</p>
+  </div>
+  <div class="card">
+    <h2>Получатель уведомлений</h2>
+    <p class="hint">Откройте подключённого бота в Telegram, нажмите <b>Start</b>, затем
+      нажмите «Найти получателя». Сайт сохранит только идентификатор вашего личного чата.</p>
+    <div class="row">
+      <button class="primary" id="notif-connect">Найти получателя</button>
+      <button id="notif-test" disabled>Отправить тест</button>
+      <span id="notif-recipient-status" class="hint-inline">Получатель ещё не подключён</span>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Режим уведомлений</h2>
+    <p class="hint">Бот отправляет подробный статус после каждой фактической попытки
+      приглашения, которая запускает интервал аккаунта. Фиксированного расписания по часам нет.
+      Настройки приватности пропускаются сразу и отдельное уведомление не создают.</p>
+    <div class="row">
+      <button id="notif-report" disabled>Отправить отчёт сейчас</button>
+      <span id="notif-schedule-status" class="hint-inline">Событийные уведомления ещё не активны</span>
+    </div>
+    <p class="hint">В самом Telegram используйте кнопку <b>🔄 Обновить отчёт</b>
+      или команду <code>/status</code>.</p>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── ЛОГ -->
+<section id="tab-log" class="pane">
+  <div class="card">
+    <h2>Журнал</h2>
+    <div id="log-list" class="log"></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────── НАСТРОЙКИ -->
+<section id="tab-settings" class="pane">
+  <div class="card">
+    <h2>API Telegram</h2>
+    <p class="hint">Получите на <a href="https://my.telegram.org" target="_blank" rel="noopener">my.telegram.org</a>
+      → API development tools. Одна пара api_id/api_hash используется всеми аккаунтами.
+      Хранится локально в <code>data/config.json</code>.</p>
+    <div class="grid">
+      <label>api_id<input id="set-api-id" type="number"></label>
+      <label>api_hash<input id="set-api-hash" type="password"></label>
+    </div>
+    <button class="primary" id="set-save">Сохранить</button>
+    <div id="set-status" class="hint"></div>
+  </div>
+  <div class="card">
+    <h2>Как это работает</h2>
+    <ul class="doc">
+      <li><b>Парсинг</b> идёт с обычного аккаунта через MTProto: список участников, авторы сообщений и те, кто ставил реакции.</li>
+      <li><b>access_hash</b> у каждого пользователя свой для каждого вашего аккаунта. Поэтому заведите все инвайтеры в чат-донор и спарсите его каждым из них — иначе доступны будут только юзеры с @username.</li>
+      <li><b>Интервал</b> задаётся отдельно для каждого аккаунта в секундах. Можно указать диапазон, например 90–240, или точное значение 14400–14400.</li>
+      <li><b>Приватность</b>: пользователь сразу пропускается, не учитывается в суточном лимите и не запускает ожидание до следующей цели.</li>
+      <li><b>PEER_FLOOD</b> выводит аккаунт из ротации на сутки автоматически. Если он повторяется — аккаунт в спамблоке, лимиты надо снижать.</li>
+      <li><b>USER_PRIVACY_RESTRICTED</b> — у пользователя стоит «добавлять меня могут только контакты». Это не ошибка и не лечится, таких примерно 70%.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<div id="toast"></div>
+<script src="/static/app.js?v=20261113-accumulation"></script>
+</body>
+</html>

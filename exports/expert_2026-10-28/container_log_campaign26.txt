@@ -1,0 +1,45 @@
+# Сырые строки контейнера tg-audience (stderr Telethon) в окна инвайтов кампании 26.
+# Время UTC (МСК = UTC+3). HTTP-запросы веб-интерфейса убраны. Сырые объекты Updates в лог не пишутся.
+# Инвайты: 21.10 12:41:17–12:41:49 UTC (акк. 45), 13:06:14–13:06:16 UTC (акк. 3); 22.10 12:34:34–12:35:09 UTC (акк. 45), 13:02:22–13:02:32 UTC (акк. 3).
+
+2026-10-21T12:40:50.448049838Z Attempt 1 at connecting failed: ConnectionError: Proxy connection timed out: 10
+2026-10-21T12:41:01.449827399Z Attempt 2 at connecting failed: ConnectionError: Proxy connection timed out: 10
+2026-10-21T12:41:07.787072783Z Fatal error handling updates (this is a bug in Telethon v1.37.0, please report it)
+2026-10-21T12:41:07.787113791Z Traceback (most recent call last):
+2026-10-21T12:41:07.787122141Z   File "/usr/local/lib/python3.12/site-packages/telethon/client/updates.py", line 342, in _update_loop
+2026-10-21T12:41:07.787148906Z     updates, users, chats = self._message_box.apply_difference(diff, self._mb_entity_cache)
+2026-10-21T12:41:07.787157013Z                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-21T12:41:07.787162827Z   File "/usr/local/lib/python3.12/site-packages/telethon/_updates/messagebox.py", line 667, in apply_difference
+2026-10-21T12:41:07.787168701Z     raise RuntimeError('Should not be applying the difference when neither account or secret was diff was active')
+2026-10-21T12:41:07.787174313Z RuntimeError: Should not be applying the difference when neither account or secret was diff was active
+2026-10-21T12:41:15.382238071Z Fatal error handling updates (this is a bug in Telethon v1.37.0, please report it)
+2026-10-21T12:41:15.382294831Z Traceback (most recent call last):
+2026-10-21T12:41:15.382310638Z   File "/usr/local/lib/python3.12/site-packages/telethon/client/updates.py", line 342, in _update_loop
+2026-10-21T12:41:15.382320113Z     updates, users, chats = self._message_box.apply_difference(diff, self._mb_entity_cache)
+2026-10-21T12:41:15.382327493Z                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2026-10-21T12:41:15.382334183Z   File "/usr/local/lib/python3.12/site-packages/telethon/_updates/messagebox.py", line 667, in apply_difference
+2026-10-21T12:41:15.382342064Z     raise RuntimeError('Should not be applying the difference when neither account or secret was diff was active')
+2026-10-21T12:41:15.382349505Z RuntimeError: Should not be applying the difference when neither account or secret was diff was active
+2026-10-21T12:41:41.171711193Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:41:41.171753813Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:41:41.206515497Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:41:41.207302247Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:41:41.208162230Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:41:41.208870731Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:41:41.226707343Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:41:41.227397381Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:41:41.472022306Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:41:41.472713051Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:41:41.637324304Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:41:41.638319469Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:41:41.639239224Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:41:41.639972464Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:42:05.516154839Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:42:05.517089654Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:42:42.592692102Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:42:42.593822519Z Automatic reconnection failed 0 time(s)
+2026-10-21T12:43:43.132237309Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-21T12:43:43.132284814Z Automatic reconnection failed 0 time(s)
+2026-10-22T12:34:23.995618641Z Attempt 1 at connecting failed: ConnectionError: Proxy connection timed out: 10
+2026-10-22T12:36:27.189412291Z Server closed the connection: 0 bytes read on a total of 8 expected bytes
+2026-10-22T12:36:27.209593512Z Automatic reconnection failed 0 time(s)

@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
-from bot.fact_guard import SAFE_DEPOSIT, SAFE_PETS, audit_message, guard_outbound, repair_message
+from bot.fact_guard import (
+    SAFE_DEPOSIT,
+    SAFE_PARKING,
+    SAFE_PETS,
+    SAFE_PRICE,
+    audit_message,
+    guard_outbound,
+    repair_message,
+)
 
 
 def test_wrong_deposit_caught_and_fixed():
@@ -37,3 +45,39 @@ def test_guard_outbound_list():
     assert len(out) == 1
     assert "2 000" in out[0]
     assert SAFE_DEPOSIT.split(",")[0] in out[0] or "2 000" in out[0]
+
+
+def test_free_parking_rewritten():
+    bad = "Да, бесплатная парковка у всех квартир."
+    issues = audit_message(bad)
+    assert "free_parking" in issues
+    fixed = repair_message(bad, issues)
+    assert "бесплатн" not in fixed.lower()
+    assert "уточню" in fixed.lower() or SAFE_PARKING[:20] in fixed
+
+
+def test_invented_price_rewritten():
+    bad = "Квартира стоит примерно 8 000 ₽ за ночь."
+    issues = audit_message(bad)
+    assert "invented_price" in issues
+    fixed = repair_message(bad, issues)
+    assert "8 000" not in fixed
+    assert "зависит" in fixed.lower() or SAFE_PRICE[:15] in fixed
+
+
+def test_loyalty_points_not_price_hallucination():
+    ok = "При прямой брони баллы: 500 за регистрацию, 1 балл = 1 ₽."
+    assert "invented_price" not in audit_message(ok)
+
+
+def test_guaranteed_free_rewritten():
+    bad = "Все квартиры всегда свободны на любые даты."
+    issues = audit_message(bad)
+    assert "guaranteed_free" in issues
+    fixed = repair_message(bad, issues)
+    assert "календар" in fixed.lower()
+
+
+def test_guest_echo_show_not_flat():
+    text = "По «Покажите» на 20–25 ноября в календаре свободных квартир нет."
+    assert not any(i.startswith("unknown_flat:") for i in audit_message(text))

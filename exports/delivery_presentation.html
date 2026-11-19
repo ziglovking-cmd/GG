@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>TG Audience — сдача по ТЗ инвайтинга</title>
+<style>
+  :root {
+    --bg: #0f1419;
+    --panel: #1a2332;
+    --text: #e7ecf3;
+    --muted: #9aa8bc;
+    --accent: #3d9cf0;
+    --ok: #3ecf8e;
+    --warn: #f0b429;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", "Helvetica Neue", sans-serif; }
+  .deck { height: 100%; overflow: hidden; }
+  .slide {
+    min-height: 100vh; padding: 64px 80px; display: none; flex-direction: column; justify-content: center;
+    background: radial-gradient(1200px 600px at 10% -10%, #1b3a5a 0%, transparent 55%), var(--bg);
+  }
+  .slide.active { display: flex; }
+  h1 { font-size: 48px; margin: 0 0 16px; letter-spacing: -0.02em; }
+  h2 { font-size: 36px; margin: 0 0 24px; color: var(--accent); }
+  p, li { font-size: 22px; line-height: 1.45; color: var(--text); }
+  .muted { color: var(--muted); font-size: 18px; }
+  ul { margin: 0; padding-left: 28px; }
+  li { margin: 10px 0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .card { background: var(--panel); border: 1px solid #2a384c; border-radius: 14px; padding: 22px 24px; }
+  .tag { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #243247; color: var(--accent); font-size: 14px; margin-bottom: 12px; }
+  .ok { color: var(--ok); }
+  .warn { color: var(--warn); }
+  table { width: 100%; border-collapse: collapse; font-size: 18px; }
+  th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid #2a384c; vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .price { font-size: 42px; font-weight: 700; margin: 8px 0; }
+  .footer { position: fixed; bottom: 20px; right: 28px; color: var(--muted); font-size: 14px; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: #9ed0ff; font-size: 0.92em; }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<section class="slide active" data-title="title">
+  <div class="tag">Сдача работ · ТЗ инвайтинга</div>
+  <h1>Очередь инвайтов: ревью и внедрение</h1>
+  <p class="muted">Telethon · FastAPI · asyncio · SQLite · мультиаккаунты</p>
+  <p style="margin-top:28px">Письменное заключение · правки в коде · критерии приёмки · смета</p>
+</section>
+
+<section class="slide" data-title="problem">
+  <h2>Проблемы из ТЗ</h2>
+  <ul>
+    <li>Старый аккаунт доставляет, новые — часто нет</li>
+    <li><code>missing_invitees</code> и «тихие потери» после принятого RPC</li>
+    <li>После неподтверждённого инвайта — ощущение суточной паузы</li>
+    <li>Параллельно: <code>database is locked</code></li>
+  </ul>
+</section>
+
+<section class="slide" data-title="root-cause">
+  <h2>Корневые причины</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag">access_hash</div>
+      <p>Хэш пользователя действует <b>только для своего аккаунта</b>. У старого ~16k, у новых 30–100.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Telegram API</div>
+      <p>RPC может пройти без ошибки и без <code>missing_invitees</code>, а человека в чате не будет.</p>
+    </div>
+    <div class="card">
+      <div class="tag">Квота</div>
+      <p>Суточный лимит должен расти только от <span class="ok">confirmed presence</span>, не от факта отправки RPC.</p>
+    </div>
+    <div class="card">
+      <div class="tag">SQLite</div>
+      <p>Writer (reporter) и invite-воркеры конфликтовали: не было <code>busy_timeout</code> на core.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" data-title="queue">
+  <h2>Корректная очередь</h2>
+  <table>
+    <tr><th>Ситуация</th><th>Статус</th><th>Квота</th></tr>
+    <tr><td>Присутствие подтверждено</td><td class="ok">invited</td><td class="ok">+1</td></tr>
+    <tr><td>RPC OK, в чате нет</td><td class="warn">failed / unconfirmed</td><td>нет</td></tr>
+    <tr><td>missing_invitees</td><td>failed</td><td>нет</td></tr>
+    <tr><td>privacy</td><td>privacy</td><td>нет</td></tr>
+    <tr><td>tech до маркера</td><td>pending снова</td><td>нет, без паузы</td></tr>
+    <tr><td>PEER_FLOOD</td><td>failed + restrict</td><td>нет</td></tr>
+  </table>
+  <p class="muted" style="margin-top:18px">После реального Invite защитный интервал сохраняется — лимиты Telegram не обходим.</p>
+</section>
+
+<section class="slide" data-title="changes">
+  <h2>Что изменено в коде</h2>
+  <ul>
+    <li><code>app/db.py</code> — busy_timeout, IMMEDIATE claim/arm</li>
+    <li><code>repository.py</code> — атомарный <code>claim_invite_target</code></li>
+    <li><code>telegram.py</code> — locked SQLite = technical, не лимит</li>
+    <li>Тесты: квота/unconfirmed, claim, busy_timeout</li>
+  </ul>
+  <p style="margin-top:24px" class="ok">pytest: 136 passed</p>
+</section>
+
+<section class="slide" data-title="pricing">
+  <h2>Стоимость</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="tag">Пакет A</div>
+      <p>Консультация и ревью</p>
+      <div class="price">35 000 ₽</div>
+    </div>
+    <div class="card">
+      <div class="tag">Пакет B</div>
+      <p>Внедрение по ТЗ</p>
+      <div class="price">140 000 ₽</div>
+    </div>
+  </div>
+  <p style="margin-top:28px">Итого A+B: <b>175 000 ₽</b>. Пакет C (warmup/метрики) — 180 000 ₽ отдельно.</p>
+</section>
+
+<section class="slide" data-title="acceptance">
+  <h2>Приёмка</h2>
+  <ul>
+    <li>Квота только после confirmed presence</li>
+    <li>Unconfirmed / privacy / tech не жгут дневной лимит</li>
+    <li>Нет стабильных <code>database is locked</code></li>
+    <li>pytest зелёный</li>
+  </ul>
+  <p class="muted" style="margin-top:24px">Замечания — 5 рабочих дней. Детали в ACCEPTANCE.md</p>
+</section>
+
+<section class="slide" data-title="end">
+  <h2>Материалы</h2>
+  <ul>
+    <li><code>TZ_CONCLUSION.md</code> — заключение</li>
+    <li><code>CHANGELOG_TZ.md</code> — что поменял</li>
+    <li><code>CLIENT_LETTER.md</code> — письмо</li>
+    <li><code>ACCEPTANCE.md</code> — чеклист</li>
+    <li>PR: ветка <code>cursor/assemble-tg-audience-d1ea</code></li>
+  </ul>
+  <p style="margin-top:32px">Готово к созвону и приёмке.</p>
+</section>
+
+</div>
+<div class="footer" id="footer">1 / 8</div>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+    document.getElementById('footer').textContent = (i + 1) + ' / ' + slides.length;
+  }
+  window.nextSlide = () => show(i + 1);
+  window.prevSlide = () => show(i - 1);
+  window.gotoSlide = (n) => show(n);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+    if (e.key === 'ArrowLeft') prevSlide();
+  });
+  // auto-advance for recording (~8s per slide)
+  const AUTO = new URLSearchParams(location.search).get('auto');
+  if (AUTO !== null) {
+    const ms = Math.max(4000, parseInt(AUTO || '7500', 10) || 7500);
+    setInterval(() => { if (i < slides.length - 1) nextSlide(); }, ms);
+  }
+</script>
+</body>
+</html>

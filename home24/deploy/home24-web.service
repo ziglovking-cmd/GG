@@ -1,0 +1,18 @@
+[Unit]
+Description=Home24 guest instructions (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/home24/app/.next/standalone
+EnvironmentFile=-/opt/home24/app/.env
+Environment=NODE_ENV=production
+Environment=PORT=43147
+Environment=HOSTNAME=127.0.0.1
+ExecStart=/usr/bin/node /opt/home24/app/.next/standalone/server.js
+Restart=always
+RestartSec=5
+MemoryMax=450M
+
+[Install]
+WantedBy=multi-user.target

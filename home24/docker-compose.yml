@@ -1,0 +1,13 @@
+services:
+  guides:
+    build: .
+    ports:
+      - "43147:43147"
+    env_file:
+      - .env
+    restart: unless-stopped
+    environment:
+      PORT: "43147"
+      HOSTNAME: "0.0.0.0"
+      PUBLIC_URL: "${PUBLIC_URL}"
+      MAX_BOT_TOKEN: "${MAX_BOT_TOKEN}"

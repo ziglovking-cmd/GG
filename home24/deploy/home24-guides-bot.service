@@ -1,0 +1,16 @@
+[Unit]
+Description=Home24 guest-link Telegram bot (@GostSill_bot)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/home24-guides
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=-/opt/home24-guides/.env
+ExecStart=/opt/home24-guides/venv/bin/python bot/main.py
+Restart=always
+RestartSec=5
+MemoryMax=200M
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,2 @@
+# Telegram API from this VPS: default DNS A-record times out; pin a working edge.
+149.154.167.220 api.telegram.org

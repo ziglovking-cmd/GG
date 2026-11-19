@@ -198,7 +198,11 @@ class TelethonInvitationGateway:
             return False
         if isinstance(error, (asyncio.TimeoutError, TimeoutError, ConnectionError, OSError)):
             return True
+        # SQLite writer contention is local infrastructure, not a Telegram limit.
+        # Treating it as transient avoids unjustified cooldowns / daily pauses.
         text = (str(error).strip() or error.__class__.__name__).lower()
+        if "database is locked" in text or "database table is locked" in text:
+            return True
         markers = (
             "connectionerror() takes no keyword arguments",
             "timed out",

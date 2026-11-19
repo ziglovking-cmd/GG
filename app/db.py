@@ -200,9 +200,14 @@ def connect() -> sqlite3.Connection:
     global _conn
     with _lock:
         if _conn is None:
-            _conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+            # timeout + busy_timeout: writer (reporter) and invite workers can
+            # contend across processes; wait instead of failing with
+            # "database is locked" on the first conflict.
+            _conn = sqlite3.connect(DB_PATH, check_same_thread=False, timeout=30.0)
             _conn.row_factory = sqlite3.Row
             _conn.execute("PRAGMA journal_mode=WAL")
+            _conn.execute("PRAGMA busy_timeout=30000")
+            _conn.execute("PRAGMA synchronous=NORMAL")
             _conn.executescript(SCHEMA)
             # Миграция существующих баз: старый invites_today хранит число
             # попыток. Отдельно считаем только подтверждённые приглашения.
@@ -461,6 +466,54 @@ def delete_campaign(campaign_id: int) -> bool:
             raise
 
 
+def claim_invite_target(
+    campaign_id: int,
+    account_id: int,
+) -> Optional[Dict[str, Any]]:
+    """Atomically selects and claims the next pending target for an account.
+
+    Selection and the ``pending`` → ``in_progress`` update happen in one
+    ``BEGIN IMMEDIATE`` transaction so parallel workers cannot both observe
+    the same pending row before either claim commits.
+    """
+    with _lock:
+        conn = connect()
+        try:
+            conn.execute("BEGIN IMMEDIATE")
+            row = conn.execute(
+                """
+                SELECT t.* FROM targets t
+                WHERE t.campaign_id = ? AND t.status = 'pending'
+                  AND ( (t.username IS NOT NULL AND t.username != '')
+                        OR EXISTS (
+                            SELECT 1 FROM hashes h
+                            WHERE h.account_id = ? AND h.user_id = t.user_id
+                        ) )
+                ORDER BY t.id LIMIT 1
+                """,
+                (int(campaign_id), int(account_id)),
+            ).fetchone()
+            if row is None:
+                conn.rollback()
+                return None
+            changed = conn.execute(
+                """
+                UPDATE targets
+                SET status='in_progress', account_id=?, error=?
+                WHERE id=? AND status='pending'
+                """,
+                (int(account_id), INVITE_CLAIM_MARKER, int(row["id"])),
+            ).rowcount
+            if changed != 1:
+                conn.rollback()
+                return None
+            conn.commit()
+            return dict(row)
+        except Exception:
+            conn.rollback()
+            raise
+
+
 def mark_invite_rpc_started(
     target_id: int,
     account_id: int,
@@ -470,22 +523,30 @@ def mark_invite_rpc_started(
     """Durably arms at-most-once protection immediately before Invite RPC."""
     with _lock:
         conn = connect()
-        changed = conn.execute(
-            """
-            UPDATE targets
-            SET status='verifying', account_id=?, error=?, attempted_at=?
-            WHERE id=? AND status='in_progress' AND account_id=?
-            """,
-            (
-                int(account_id),
-                str(marker)[:300],
-                int(attempted_at if attempted_at is not None else time.time()),
-                int(target_id),
-                int(account_id),
-            ),
-        ).rowcount
-        conn.commit()
-        return changed == 1
+        try:
+            conn.execute("BEGIN IMMEDIATE")
+            changed = conn.execute(
+                """
+                UPDATE targets
+                SET status='verifying', account_id=?, error=?, attempted_at=?
+                WHERE id=? AND status='in_progress' AND account_id=?
+                """,
+                (
+                    int(account_id),
+                    str(marker)[:300],
+                    int(attempted_at if attempted_at is not None else time.time()),
+                    int(target_id),
+                    int(account_id),
+                ),
+            ).rowcount
+            if changed != 1:
+                conn.rollback()
+                return False
+            conn.commit()
+            return True
+        except Exception:
+            conn.rollback()
+            raise
 
 
 def finalize_invite_confirmation(

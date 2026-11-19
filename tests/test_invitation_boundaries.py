@@ -1,4 +1,7 @@
+import sqlite3
+import tempfile
 import unittest
+from pathlib import Path
 from unittest.mock import AsyncMock, Mock
 
 from telethon import errors as telegram_errors
@@ -6,6 +9,7 @@ from telethon import errors as telegram_errors
 from app.application.invitations.targets import CampaignTargetBuilder
 from app.domain import invitations as domain
 from app.infrastructure.invitations.telegram import TelethonInvitationGateway
+from app import db
 
 
 class TelegramBoundaryTests(unittest.IsolatedAsyncioTestCase):
@@ -33,6 +37,57 @@ class TelegramBoundaryTests(unittest.IsolatedAsyncioTestCase):
             await gateway.invite_one(AsyncMock(side_effect=error), object(), object())
         self.assertIs(raised.exception, error)
         self.assertTrue(gateway.is_transient_connection_error(error))
+
+    def test_sqlite_lock_is_transient_not_telegram_limit(self):
+        gateway = TelethonInvitationGateway(Mock())
+        locked = sqlite3.OperationalError("database is locked")
+        self.assertTrue(gateway.is_transient_connection_error(locked))
+        self.assertFalse(
+            gateway.is_transient_connection_error(domain.PeerFloodError())
+        )
+
+
+class SqliteHardeningTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        if db._conn is not None:
+            db._conn.close()
+        db._conn = None
+        db.DB_PATH = Path(self.tmp.name) / "test.db"
+        db.connect()
+
+    def tearDown(self):
+        if db._conn is not None:
+            db._conn.close()
+        db._conn = None
+        self.tmp.cleanup()
+
+    def test_main_connection_enables_busy_timeout(self):
+        connection = db.connect()
+        timeout = connection.execute("PRAGMA busy_timeout").fetchone()[0]
+        self.assertGreaterEqual(int(timeout), 30000)
+
+    def test_parallel_claim_only_one_worker_wins(self):
+        account_id = db.ex(
+            "INSERT INTO accounts (label,phone,session_name,status,can_invite,created_at) "
+            "VALUES ('a','1','s1','authorized',1,0)"
+        )
+        campaign_id = db.ex(
+            "INSERT INTO campaigns (name,target_chat_id,status,created_at) "
+            "VALUES ('c',1,'running',0)"
+        )
+        db.ex(
+            "INSERT INTO targets (campaign_id,user_id,username,status) "
+            "VALUES (?,?,?,'pending')",
+            (campaign_id, 100, "user100"),
+        )
+        first = db.claim_invite_target(campaign_id, account_id)
+        second = db.claim_invite_target(campaign_id, account_id)
+        self.assertIsNotNone(first)
+        self.assertIsNone(second)
+        row = db.q1("SELECT status,account_id FROM targets WHERE campaign_id=?", (campaign_id,))
+        self.assertEqual(row["status"], "in_progress")
+        self.assertEqual(row["account_id"], account_id)
 
 
 class TargetSelectionTests(unittest.TestCase):

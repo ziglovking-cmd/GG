@@ -72,28 +72,7 @@ class SqliteInvitationRepository:
 
     def claim_target(self, campaign_id: int, account_id: int) -> Optional[Dict[str, Any]]:
         """Берёт следующую цель, которую именно этот аккаунт способен пригласить."""
-        row = db.q1(
-            """
-            SELECT t.* FROM targets t
-            WHERE t.campaign_id = ? AND t.status = 'pending'
-              AND ( (t.username IS NOT NULL AND t.username != '')
-                    OR EXISTS (SELECT 1 FROM hashes h WHERE h.account_id = ? AND h.user_id = t.user_id) )
-            ORDER BY t.id LIMIT 1
-            """,
-            (campaign_id, account_id),
-        )
-        if not row:
-            return None
-        # помечаем сразу, чтобы параллельные воркеры не взяли ту же цель
-        db.ex(
-            "UPDATE targets SET status='in_progress', account_id=?, error=? "
-            "WHERE id=? AND status='pending'",
-            (account_id, db.INVITE_CLAIM_MARKER, row["id"]),
-        )
-        check = db.q1("SELECT status, account_id FROM targets WHERE id=?", (row["id"],))
-        if check["status"] != "in_progress" or check["account_id"] != account_id:
-            return None
-        return db.row_to_dict(row)
+        return db.claim_invite_target(campaign_id, account_id)
 
     def mark_unreachable(self, campaign_id: int, account_ids: List[int]) -> int:
         """Цели без @username, для которых ни у одного аккаунта в ротации нет access_hash,

@@ -958,6 +958,13 @@ class AccountSlotTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(account["successful_today"], 0)
             self.assertEqual(confirmation["result"], "not_present")
             self.assertEqual(received[0]["outcome"], "unconfirmed")
+            # Protective spacing after a real Invite RPC stays; daily quota does not.
+            kept = db.q1(
+                "SELECT next_attempt_at,cooldown_until FROM accounts WHERE id=?",
+                (self.account_ids[0],),
+            )
+            self.assertEqual(kept["next_attempt_at"], next_at)
+            self.assertEqual(kept["cooldown_until"], 0)
         finally:
             inviting.STATE.pop(campaign_id, None)
 

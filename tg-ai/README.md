@@ -10,54 +10,77 @@ pinned: false
 
 # Автоответчик Telegram Business
 
-Бот читает переписку и отвечает **твоим** голосом. На чат — свой режим (подкат / работа / друг / как_я).
+Бот читает переписку и отвечает **твоим** голосом. Режимы на чат: подкат / работа / друг / как_я.
 
-## Бесплатный сервер БЕЗ карты → Hugging Face Spaces
+## 24/7 БЕЗ карты (реально)
 
-Render / Fly / Railway почти всегда просят карту. **HF Spaces — нет.**
+Render/Fly = карта. Hugging Face free ≈ час и спать. Для постоянной работы:
 
-1. Аккаунт на [huggingface.co](https://huggingface.co) (бесплатно).
-2. **New Space** → имя любое → SDK: **Docker** → Hardware: **CPU basic** (free) → Create.
-3. В Space → **Files** → залей из папки `tg-ai`: `Dockerfile`, `requirements.txt`, `bot.py`, этот `README.md` (с шапкой `---` сверху — не трогай).
-4. **Settings → Variables and secrets** (секреты!):
-
-| Ключ | Значение |
-|------|----------|
-| `BOT_TOKEN` | токен бота |
-| `OWNER_ID` | твой числовой ID |
-| `AI_API_KEY` | ключ Gemini с [aistudio.google.com/apikey](https://aistudio.google.com/apikey) |
-| `AI_BASE_URL` | `https://generativelanguage.googleapis.com/v1beta/openai/` |
-| `AI_MODEL` | `gemini-2.0-flash` |
-| `WEBHOOK_SECRET` | любой пароль латиницей, типа `sekret_93821` |
-| `WEBHOOK_URL` | `https://ИМЯ_ЮЗЕРА-ИМЯ_СПЕЙСА.hf.space` (без `/` в конце; точный URL смотри на странице Space) |
-| `DATA_DIR` | `/tmp/data` |
-| `PORT` | `8080` |
-
-5. Save → дождись билдa (App running).
-6. Открой `https://...hf.space/health` → должно быть `ok`.
-7. Чтобы не засыпал: [cron-job.org](https://cron-job.org) (без карты) → каждые 5 мин GET на `/health`.
-
-`WEBHOOK_SECRET` — просто пароль в URL вебхука, не ключ ИИ и не токен бота.
-
-### Если лень облако
-
-На своём ПК / ноуте (без карты, без вебхука):
+### Вариант A — свой ПК / ноут (самый простой)
 
 ```bash
 cd tg-ai
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env   # заполни; WEBHOOK_URL оставь пустым
+cp .env.example .env
+```
+
+В `.env` заполни `BOT_TOKEN`, `OWNER_ID`, `AI_API_KEY` (Gemini).  
+**`WEBHOOK_URL` не трогай — пустой.** Дальше:
+
+```bash
 python bot.py
 ```
 
-Пока открыт терминал / ПК не спит — бот живой.
+Пока комп включён и не спит — бот живой. Чтобы не гас экран: в питании отключи сон, либо запусти на старом телефоне.
 
-### Где просят карту (не надо)
+### Вариант B — Android (Termux), тоже без карты
 
-Render, Fly.io, Railway — для этого бота не обязательны.
+1. Поставь **Termux** из F-Droid.  
+2. В Termux:
+```bash
+pkg install python git
+git clone https://github.com/ziglovking-cmd/GG.git
+cd GG/tg-ai
+pip install -r requirements.txt
+nano .env   # те же ключи, WEBHOOK_URL пустой
+python bot.py
+```
+3. Чтобы не убило: `pkg install termux-services` + держи зарядку / отключи оптимизацию батареи для Termux.  
+   Или `ssh` на телефон и `nohup python bot.py &`.
 
-## Режимы
+### Вариант C — Serv00 (бесплатный хост с SSH, без карты)
+
+1. Рега на [serv00.com](https://www.serv00.com) → ждут активации (иногда очередь).  
+2. SSH на сервер, залей `tg-ai`, поставь python/venv, `.env` с **пустым** `WEBHOOK_URL`.  
+3. Запуск:
+```bash
+cd ~/tg-ai
+nohup python3 bot.py >> bot.log 2>&1 &
+```
+4. В панели Serv00 добавь **cron** раз в 10 минут (перезапуск если упал):
+```bash
+pgrep -f 'python3 bot.py' >/dev/null || (cd ~/tg-ai && nohup python3 bot.py >> bot.log 2>&1 &)
+```
+
+### Где НЕ ждать чуда
+
+| Площадка | Почему |
+|----------|--------|
+| Hugging Face free | Режут по времени / засыпает |
+| Render / Fly / Railway | Почти всегда карта |
+| GitHub Actions | Минуты, не 24/7 |
+
+ИИ без карты: [Google AI Studio](https://aistudio.google.com/apikey) → в `.env`:
+```
+AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+AI_MODEL=gemini-2.0-flash
+AI_API_KEY=AIza...
+```
+
+`WEBHOOK_SECRET` нужен **только** если юзаешь webhook на облаке. На ПК/Termux/Serv00 с polling — не нужен.
+
+## Режимы бота
 
 | Команда | Смысл |
 |--------|--------|
@@ -66,9 +89,7 @@ Render, Fly.io, Railway — для этого бота не обязательн
 | `/mode ID подкат` | флирт |
 | `/mode ID работа` | деловой |
 | `/mode ID друг` / `холод` / `как_я` | пресеты |
-| `/mode ID свой текст` | свой бриф |
-| `/default подкат` | режим для новых чатов |
+| `/default подкат` | режим для новых |
 
-Старый чат → как ты по истории. Новый + режим → по режиму твоим голосом.
-
-Business Mode в BotFather + подключение бота в Telegram Business. Экспорт JSON/ZIP + ID в подписи — натаскать стиль.
+Старый чат → как ты по истории. Новый → по режиму.  
+Business Mode в BotFather + чат-бот в Telegram Business.

@@ -59,7 +59,7 @@ def create_invitation_application(
     scheduler = InvitationScheduler(repository, account_port, runtime)
     retry = ConnectionRetry(repository, account_port, gateway)
     context = InviteContextResolver(repository, account_port, gateway, runtime)
-    verification = MembershipVerification(repository, gateway, context)
+    verification = MembershipVerification(repository, gateway, context, account_port)
     preparation = CampaignAccountPreparation(repository, account_port, gateway, retry, runtime, notifier)
     technical = TechnicalFailureHandler(repository, account_port)
     failures = InvitationFailureHandler(repository, account_port, runtime, technical)

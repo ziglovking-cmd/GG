@@ -5,13 +5,12 @@ from dataclasses import dataclass
 import time
 from typing import Any, Dict
 
-from app import accounts as accounts_service
 from app.domain import invitations as policy
 from app.domain.invitations import friendly_error, invite_verification_note
 
 from .context import InviteContextResolver
 from .models import Attempt
-from .ports import InvitationRepository, TelegramGateway
+from .ports import AccountPort, InvitationRepository, TelegramGateway
 
 
 @dataclass
@@ -19,6 +18,7 @@ class MembershipVerification:
     repo: InvitationRepository
     gateway: TelegramGateway
     context: InviteContextResolver
+    accounts: AccountPort
 
     async def verify(self, client: Any, target_entity: Any, peer: Any) -> tuple[str, str, str]:
         """Ограниченно опрашивает членство ровно одного пользователя."""
@@ -90,7 +90,7 @@ class MembershipVerification:
 
         if membership == "present":
             self.repo.finalize_invite_confirmation(int(target["id"]), True)
-            accounts_service.register_delivery_outcome(account_id, "invited")
+            self.accounts.register_delivery_outcome(account_id, "invited")
             info.pop("verification_retry_at", None)
             info["state"] = "присутствие подтверждено повторной проверкой"
         elif membership == "not_member":
@@ -100,7 +100,7 @@ class MembershipVerification:
                 error=detail,
                 result=result,
             )
-            restricted = accounts_service.register_delivery_outcome(
+            restricted = self.accounts.register_delivery_outcome(
                 account_id, "unconfirmed"
             )
             info.pop("verification_retry_at", None)
@@ -134,7 +134,7 @@ class MembershipVerification:
             if final_status == "invited":
                 attempt.outcome = "invited"
                 attempt.info["state"] = "присутствие подтверждено"
-                accounts_service.register_delivery_outcome(
+                self.accounts.register_delivery_outcome(
                     attempt.account_id, "invited"
                 )
             else:
@@ -152,7 +152,7 @@ class MembershipVerification:
                 result=confirmation_result,
             )
             attempt.outcome = "unconfirmed"
-            restricted = accounts_service.register_delivery_outcome(
+            restricted = self.accounts.register_delivery_outcome(
                 attempt.account_id, "unconfirmed"
             )
             if restricted:

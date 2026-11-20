@@ -1,0 +1,445 @@
+{
+  "meta": {
+    "status": "PARTIAL_STOPPED_BY_REQUEST",
+    "model": "qwen/qwen3.8-27b",
+    "deployed_changed": false,
+    "repo_changed": false,
+    "original_attachment_changed": false,
+    "pipeline_note": "Только ответ модели Groq. Постфильтр/Telegram/keyword-движок/карточки системы НЕ проверены.",
+    "round2_planned": 25,
+    "round2_executed": 20,
+    "round2_remaining": [
+      "N21",
+      "N22",
+      "N23",
+      "N24",
+      "N25"
+    ],
+    "addon_retest_executed": 0,
+    "addon_retest_note": "Не успел начаться или не записан до остановки",
+    "generated_at_msk": "2026-11-09 18:49 Europe/Moscow",
+    "stop_reason": "Parent asked to finish after ~15min; process killed during TPM waits. Free TPM~8000 forces ~35-40s between full-prompt calls."
+  },
+  "static_conflicts": [
+    {
+      "id": "S1",
+      "issue": "Keyword любое «менеджер…» → handoff vs промпт: «ответьте мне» не передача",
+      "risk": "ложный escalate"
+    },
+    {
+      "id": "S2",
+      "issue": "Пример склейки слотов vs запрет пересказа/повторов",
+      "risk": "повторы на ок/да"
+    },
+    {
+      "id": "S3",
+      "issue": "Keyword цена → менеджер vs промпт без суммы/не любой escalate",
+      "risk": "лишние handoff"
+    },
+    {
+      "id": "S4",
+      "issue": "Keyword свободно → менеджер vs модель «уточню»",
+      "risk": "расхождение слоёв"
+    },
+    {
+      "id": "S5",
+      "issue": "Две JSON-схемы (основная vs fallback)",
+      "risk": "поломка парсера"
+    },
+    {
+      "id": "S6",
+      "issue": "Готовые фразы с ? vs ask_next без ?",
+      "risk": "двойной вопрос"
+    },
+    {
+      "id": "S7",
+      "issue": "Рассылки про услуги есть, в промпте нет правила «Да→рассказать»",
+      "risk": "Да→даты"
+    },
+    {
+      "id": "S8",
+      "issue": "Кнопка returning «Да, были» vs «да» на услуги",
+      "risk": "путаница intent"
+    },
+    {
+      "id": "S9",
+      "issue": "Много бытовых «передам менеджеру» vs точечный escalate в промпте",
+      "risk": "over-escalate"
+    },
+    {
+      "id": "S10",
+      "issue": "Факт «Да, я тут» vs широкий keyword менеджер",
+      "risk": "перебивание контекста"
+    },
+    {
+      "id": "S11",
+      "issue": "Скрипт «скинуть варианты» vs запрет слов в messages",
+      "risk": "нарушение формата"
+    },
+    {
+      "id": "S12",
+      "issue": "Две фразы handoff (с минутами / без)",
+      "risk": "нестабильный текст"
+    },
+    {
+      "id": "S13",
+      "issue": "Снятие pets в промпте vs keyword без отрицания",
+      "risk": "залипший pets"
+    },
+    {
+      "id": "S14",
+      "issue": "stop «не пишите» vs «подумаю/позже»",
+      "risk": "stop vs soft later"
+    },
+    {
+      "id": "S15",
+      "issue": "Карта «ответь целиком» vs лимит 12–180 знаков",
+      "risk": "усечение фактов"
+    }
+  ],
+  "round1_preserved": {
+    "path": "/workspace/home24_groq_new_prompt_synth.json",
+    "summary": {
+      "FAIL": 4,
+      "PASS": 11
+    },
+    "rescored": {
+      "pass_or_acceptable": 13,
+      "real_fail": 2,
+      "soft_issues_among_pass": 3,
+      "note": "15 кейсов; 2 false-fail оценки; 2 реальных провала на «Да»→услуги; baseline бота не сравнивался"
+    },
+    "real_fails": [
+      {
+        "id": 1,
+        "name": "Да после предложения услуг",
+        "user": "Да",
+        "http": 200,
+        "verdict": "FAIL",
+        "fails": [
+          "asked_dates_again",
+          "no_services_context"
+        ],
+        "warns": [
+          "question_mark_while_ask_next"
+        ],
+        "reply": "Расскажу, если интересно, но сначала про квартиру: на какие даты ищите?",
+        "slots": {
+          "dates": null,
+          "guests": null,
+          "district": null,
+          "budget": null,
+          "returning": null,
+          "pets": null,
+          "kids": null,
+          "parking": null,
+          "favorite": null,
+          "prefs": null
+        },
+        "ask_next": "dates",
+        "escalate": false,
+        "intent": "chitchat",
+        "offer_names": [],
+        "attach_offers": false,
+        "rate_remaining_tokens": "3454",
+        "rate_limit_tokens": "8000",
+        "rate_limit_rpd": "1000",
+        "manual_note": "REAL_FAIL: после «Да» на услуги ушёл в даты, услуги не рассказал"
+      },
+      {
+        "id": 13,
+        "name": "Да услуги при известных датах",
+        "user": "Да",
+        "http": 200,
+        "verdict": "FAIL",
+        "fails": [
+          "no_services_context"
+        ],
+        "warns": [],
+        "reply": "Хорошо, тогда про квартиры.",
+        "slots": {
+          "dates": "5–7 февраля",
+          "guests": "2",
+          "district": null,
+          "budget": null,
+          "returning": null,
+          "pets": null,
+          "kids": null,
+          "parking": null,
+          "favorite": null,
+          "prefs": null
+        },
+        "ask_next": "district",
+        "escalate": false,
+        "intent": "looking",
+        "offer_names": [],
+        "attach_offers": false,
+        "rate_remaining_tokens": "3332",
+        "rate_limit_tokens": "8000",
+        "rate_limit_rpd": "1000",
+        "manual_note": "REAL_FAIL: «Да» на услуги при известных датах → 'про квартиры', без услуг/баллов"
+      }
+    ]
+  },
+  "round2_partial": {
+    "summary": {
+      "FAIL": 4,
+      "PASS": 15,
+      "WARN": 1
+    },
+    "results": [
+      {
+        "id": "N01",
+        "branch": "да после услуг",
+        "verdict": "FAIL",
+        "reply": "Расскажу, когда выберем квартиру, а пока давайте с дат начнем.",
+        "fails": [
+          "no_services_context",
+          "asked_dates"
+        ],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N02",
+        "branch": "ага после бонусов",
+        "verdict": "FAIL",
+        "reply": "Хорошо, тогда к делу.",
+        "fails": [
+          "no_services_context",
+          "asked_dates"
+        ],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N03",
+        "branch": "ок после услуг",
+        "verdict": "FAIL",
+        "reply": "Хорошо, тогда к делу.",
+        "fails": [
+          "no_services_context"
+        ],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N04",
+        "branch": "нет на услуги",
+        "verdict": "PASS",
+        "reply": "Хорошо, тогда к делу.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N05",
+        "branch": "не знаю на услуги",
+        "verdict": "PASS",
+        "reply": "Хорошо, тогда к делу.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N06",
+        "branch": "? на услуги",
+        "verdict": "PASS",
+        "reply": "Слушаю вас, что уточнить?",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N07",
+        "branch": "да без оффера услуг",
+        "verdict": "PASS",
+        "reply": "Хорошо, тогда назовите даты.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N08",
+        "branch": "ок при полных слотах",
+        "verdict": "WARN",
+        "reply": "Хорошо, тогда смотрим варианты.",
+        "fails": [],
+        "warns": [
+          "forbidden_variants_word"
+        ],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N09",
+        "branch": "хз при вопросе района",
+        "verdict": "PASS",
+        "reply": "Тогда район на ваш выбор, посмотрим по всему списку.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N10",
+        "branch": "повторный привет",
+        "verdict": "PASS",
+        "reply": "Я тут, слушаю вас.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N11",
+        "branch": "спасибо",
+        "verdict": "PASS",
+        "reply": "Пожалуйста, а какой район вам ближе?",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N12",
+        "branch": "не трое а двое",
+        "verdict": "PASS",
+        "reply": "Поняла, вас двое.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N13",
+        "branch": "смена района",
+        "verdict": "PASS",
+        "reply": "Поняла, потише, переключу район.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N14",
+        "branch": "без собаки",
+        "verdict": "PASS",
+        "reply": "Извините, ошиблась, без питомца.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N15",
+        "branch": "opt-out",
+        "verdict": "PASS",
+        "reply": "Поняла, больше не пишу. Хорошего дня!",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N16",
+        "branch": "позже",
+        "verdict": "FAIL",
+        "reply": "Хорошо, будете готовы, напишите.",
+        "fails": [
+          "stop_instead_of_later"
+        ],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N17",
+        "branch": "жалоба",
+        "verdict": "PASS",
+        "reply": "Сейчас подключу менеджера, он напишет вам здесь минут через 10–15.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N18",
+        "branch": "ответьте vs handoff",
+        "verdict": "PASS",
+        "reply": "Да, я тут, слушаю вас.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N19",
+        "branch": "отказ от передачи",
+        "verdict": "PASS",
+        "reply": "Хорошо, тогда продолжим.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      },
+      {
+        "id": "N20",
+        "branch": "согласие на передачу",
+        "verdict": "PASS",
+        "reply": "Сейчас подключу менеджера, он напишет вам здесь минут через 10–15.",
+        "fails": [],
+        "warns": [],
+        "source": "partial_terminal_log"
+      }
+    ],
+    "remaining_not_run": [
+      "N21",
+      "N22",
+      "N23",
+      "N24",
+      "N25"
+    ]
+  },
+  "addon": {
+    "file": "/workspace/home24_prompt_addon_services_da.md",
+    "retest_results": [],
+    "retest_ran": false
+  },
+  "confirmed_model_defects_so_far": [
+    {
+      "id": "N01",
+      "branch": "да после услуг",
+      "verdict": "FAIL",
+      "reply": "Расскажу, когда выберем квартиру, а пока давайте с дат начнем.",
+      "fails": [
+        "no_services_context",
+        "asked_dates"
+      ],
+      "warns": [],
+      "source": "partial_terminal_log"
+    },
+    {
+      "id": "N02",
+      "branch": "ага после бонусов",
+      "verdict": "FAIL",
+      "reply": "Хорошо, тогда к делу.",
+      "fails": [
+        "no_services_context",
+        "asked_dates"
+      ],
+      "warns": [],
+      "source": "partial_terminal_log"
+    },
+    {
+      "id": "N03",
+      "branch": "ок после услуг",
+      "verdict": "FAIL",
+      "reply": "Хорошо, тогда к делу.",
+      "fails": [
+        "no_services_context"
+      ],
+      "warns": [],
+      "source": "partial_terminal_log"
+    },
+    {
+      "id": "N16",
+      "branch": "позже",
+      "verdict": "FAIL",
+      "reply": "Хорошо, будете готовы, напишите.",
+      "fails": [
+        "stop_instead_of_later"
+      ],
+      "warns": [],
+      "source": "partial_terminal_log"
+    }
+  ]
+}

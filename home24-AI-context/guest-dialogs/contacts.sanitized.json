@@ -1,0 +1,44 @@
+[
+  {
+    "guest": "Guest-04",
+    "status": "sent",
+    "tg_account_id": "srv-1",
+    "has_optout_like": false
+  },
+  {
+    "guest": "Guest-04",
+    "status": "sent",
+    "tg_account_id": "buy-2",
+    "has_optout_like": false
+  },
+  {
+    "guest": "Guest-02",
+    "status": "failed",
+    "tg_account_id": "buy-2",
+    "has_optout_like": false
+  },
+  {
+    "guest": "Guest-16",
+    "status": "pending",
+    "tg_account_id": "buy-2",
+    "has_optout_like": false
+  },
+  {
+    "guest": "Guest-17",
+    "status": "failed",
+    "tg_account_id": "srv-1",
+    "has_optout_like": false
+  },
+  {
+    "guest": "Guest-06",
+    "status": "sent",
+    "tg_account_id": "srv-1",
+    "has_optout_like": false
+  },
+  {
+    "guest": "Guest-01",
+    "status": "sent",
+    "tg_account_id": "srv-1",
+    "has_optout_like": false
+  }
+]

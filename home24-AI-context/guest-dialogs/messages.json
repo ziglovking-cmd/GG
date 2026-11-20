@@ -1,0 +1,2618 @@
+[
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы у нас останавливались. Теперь у нас можно устроить романтический вечер с кино на проекторе или отметить праздник в украшенной квартире. Интересно?",
+    "created_at": 1794260881.9953794,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794260913.1426995,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Рада, что вам интересно) Будете планировать поездку, у вас уже есть ориентир по датам или смотрите на ближайшее будущее?",
+    "created_at": 1794260913.9789941,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, на какие даты планируете поездку?",
+    "created_at": 1794260913.9834845,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пока не знаем какие даты,а может с собакой?",
+    "created_at": 1794260963.381077,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С питомцами можно не во всех квартирах. По вашей скажет менеджер. Сколько вас будет?",
+    "created_at": 1794260964.2338417,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794260974.8767593,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Трое.",
+    "created_at": 1794260975.7181146,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Да",
+    "created_at": 1794260994.623171,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Романтический вечер с кино на проекторе подготовим, а на праздник можем украсить квартиру. Шумные вечеринки нельзя, тихо отметить можно)",
+    "created_at": 1794260995.4433022,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, на какие даты планируете поездку?",
+    "created_at": 1794260995.4468133,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_histwipe_20261110_200327"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы жили у нас. Если понадобится квартира на пару дней, для отдыха, родных или на время ремонта, пишите мне. Может, скоро понадобится?",
+    "created_at": 1794330390.6031806,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_220136"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да,скоро приезжают родители",
+    "created_at": 1794330917.8978767,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_220136"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Двое. На какие даты смотрите?",
+    "created_at": 1794330918.8382566,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_220136"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Нет,не двое",
+    "created_at": 1794330940.1603513,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_220136"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы у нас останавливались. У нас появилось кое-что новое для гостей, рассказать?",
+    "created_at": 1794337390.9574654,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да,расскажите",
+    "created_at": 1794337415.0141864,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию)",
+    "created_at": 1794337415.8679268,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, на какие даты планируете поездку?",
+    "created_at": 1794337415.8731077,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пока не знаем",
+    "created_at": 1794337438.297447,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, как определитесь с датами, напишите.",
+    "created_at": 1794337439.2093863,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А можно с собакой?",
+    "created_at": 1794337460.5831392,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С питомцами можно не во всех квартирах. По вашей скажет менеджер. Сколько вас будет?",
+    "created_at": 1794337461.4648893,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Нас будет 3",
+    "created_at": 1794337474.601538,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Трое с собакой, поняла. На какие даты примерно?",
+    "created_at": 1794337478.6825523,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3.12 по 6.12",
+    "created_at": 1794337497.9173377,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла) При бронировании любой нашей квартиры можно выбрать одну дополнительную услугу: обычно она оплачивается отдельно, а вам она достанется бесплатно. Интересно?",
+    "created_at": 1794337498.7337499,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Да",
+    "created_at": 1794337510.8868928,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию)",
+    "created_at": 1794337511.7578702,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "С услугами определимся на месте",
+    "created_at": 1794337550.047043,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Список услуг открывается за день до заезда. Как будут точные дни, напишите, и поделюсь предложением.",
+    "created_at": 1794337550.9183228,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, на какие даты планируете поездку?",
+    "created_at": 1794337550.9263415,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Я уже написала даты выше",
+    "created_at": 1794337621.6866598,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 12 по 6. А сколько вас будет?",
+    "created_at": 1794337625.0946302,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Нет с 3 по 6 декабря",
+    "created_at": 1794337644.2324271,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С 3 по 6 декабря.",
+    "created_at": 1794337645.0458865,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пришлите свободные квартиры на эти даты",
+    "created_at": 1794337664.0655305,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "На 3–6 декабря по календарю свободно: Юниверсал, 2976–3162 ₽/ночь, 9300 ₽ за 3 ночи, Малевич, 3069–3255 ₽/ночь, 9579 ₽ за 3 ночи, Меркурий, 3255–3441 ₽/ночь, 10137 ₽ за 3 ночи. Ещё свободно: 40.",
+    "created_at": 1794337665.5303369,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пришлите центр",
+    "created_at": 1794337694.3986037,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Центр. Сколько вас будет?",
+    "created_at": 1794337695.233237,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794337701.9099092,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Трое. Центр или спокойный район у метро?",
+    "created_at": 1794337702.683839,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Центр",
+    "created_at": 1794337711.1534345,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Сейчас подключу менеджера, он напишет вам здесь минут через 10–15.",
+    "created_at": 1794337711.9646463,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_232950"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Пишу из Home24, вы жили у нас. Если снова понадобится квартира, можно бронировать напрямую у меня, так выходит выгоднее. Рассказать, как это работает?",
+    "created_at": 1794342660.899907,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794342722.6916702,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Пишете мне напрямую, без комиссии агрегаторов, так уже выгоднее. Плюс баллы: 500 за регистрацию и потом с каждого проживания, 1 балл = 1 ₽.",
+    "created_at": 1794342723.5584228,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, на какие даты планируете поездку?",
+    "created_at": 1794342723.5618472,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пока не знаю",
+    "created_at": 1794342749.421655,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "А сколько вас будет?",
+    "created_at": 1794342750.3001633,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Тоже не знаю",
+    "created_at": 1794342781.5837018,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, как только определитесь с датами и количеством гостей, сразу подберу варианты. Сколько человек поедет?",
+    "created_at": 1794342786.610729,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794342991.8193212,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Трое. Какой район вам удобнее?",
+    "created_at": 1794342992.6534672,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Коммунарка",
+    "created_at": 1794343006.8821828,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Сейчас подключу менеджера, он напишет вам здесь минут через 10–15.",
+    "created_at": 1794343007.6842115,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261110_234748"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24) Вы у нас уже бывали. Хотела рассказать про новые услуги, можно?",
+    "created_at": 1794343827.8683085,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794343846.6875987,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794343847.508634,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794343892.9641798,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, будете готовы, напишите. Когда заезд и на сколько ночей?",
+    "created_at": 1794343896.7969532,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хз",
+    "created_at": 1794343925.904579,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо. Сколько вас будет?",
+    "created_at": 1794343926.774793,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хз",
+    "created_at": 1794343935.7236784,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо. А по датам уже понятно, когда заезд?",
+    "created_at": 1794343936.6025896,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Нет",
+    "created_at": 1794343945.5235567,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла. Захотите посмотреть варианты, напишите. Сайт: https://home24.msk.ru/\nКанал: https://t.me/home24_msk\nVK: https://vk.ru/club172662058\n\nХорошего дня, Ия!",
+    "created_at": 1794343946.3710577,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_iya_chatreset_20261111_002229"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы останавливались у нас. Теперь при прямой брони начисляем баллы, 500 сразу за регистрацию. Рассказать подробнее?",
+    "created_at": 1794346402.8388274,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте,да",
+    "created_at": 1794346424.9453285,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Если бронировать напрямую, начисляем баллы: 500 за регистрацию и потом с каждого проживания. 1 балл = 1 ₽. Подробнее тут: https://home24.msk.ru/loyalty\n\nЕсли что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794346425.8268802,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794346448.563729,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Будем ждать!",
+    "created_at": 1794346449.4330924,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А есть ли свободные квартиры на 5.12 - 07.12?",
+    "created_at": 1794346477.3886347,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "На 5–7 декабря по календарю свободны: «Юниверсал», 6 138 ₽ за 2 ночи; «Малевич», 6 324 ₽ за 2 ночи; «Меркурий», 6 696 ₽ за 2 ночи. И ещё 40 квартир. Сколько вас будет?",
+    "created_at": 1794346478.4225936,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "2",
+    "created_at": 1794346495.031616,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Двое. Центр или спокойный район у метро?",
+    "created_at": 1794346495.8268256,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Спокойный район",
+    "created_at": 1794346510.8909955,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Сейчас подключу менеджера, он напишет вам здесь минут через 10–15.",
+    "created_at": 1794346511.7203557,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794346522.6872053,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Скажите пожалуйста а с собакой можно?",
+    "created_at": 1794346550.8819096,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_20261111_010140"
+  },
+  {
+    "guest": "Guest-16",
+    "role": "bot",
+    "text": "Добрый вечер! Это Home24, вы у нас останавливались. Теперь у нас можно устроить романтический вечер с кино на проекторе или отметить праздник в украшенной квартире. Интересно?",
+    "created_at": 1794347132.325684,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С питомцами можно не во всех квартирах, подберу такие, где можно.",
+    "created_at": 1794348120.1281762,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_iwipe_20261111_010340"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794348137.097739,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_iwipe_20261111_010340"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "По «Хорошо» на 5–7 декабря в календаре свободных квартир нет.",
+    "created_at": 1794348138.2325594,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v104_iwipe_20261111_010340"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы жили у нас. Если понадобится квартира на пару дней, для отдыха, родных или на время ремонта, пишите мне. Может, скоро понадобится?",
+    "created_at": 1794348562.8313122,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v106_iwipe_20261111_075713"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да,пришлите пожалуйста варианты",
+    "created_at": 1794348617.7117763,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v106_iwipe_20261111_075713"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, подберу варианты. На какие даты и сколько человек?",
+    "created_at": 1794348621.5852666,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v106_iwipe_20261111_075713"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "С 20 по 24 декабря 2 человек",
+    "created_at": 1794348656.65528,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v106_iwipe_20261111_075713"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С 20 по 24 декабря, двое. Какой район вам удобнее?",
+    "created_at": 1794348657.4942517,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v106_iwipe_20261111_075713"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Прокшино",
+    "created_at": 1794348674.2234797,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v106_iwipe_20261111_075713"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "По «Прокшино» на 20–24 декабря по календарю свободны: «Карма», 17 484 ₽ за 4 ночи. Какая ближе? Напишите название, передам менеджеру.",
+    "created_at": 1794348675.3555365,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v106_iwipe_20261111_075713"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Доброе утро, Ия! Это Home24, вы у нас останавливались. У нас появилось кое-что новое для гостей, рассказать?",
+    "created_at": 1794373164.2614846,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте,да",
+    "created_at": 1794373717.2979755,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794373718.1918895,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Ок",
+    "created_at": 1794373741.5178058,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Будем ждать!",
+    "created_at": 1794373742.372646,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хотела бы забронировать на 15.11  - 17.11",
+    "created_at": 1794390387.0806062,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 15 по 17 ноября) При бронировании любой нашей квартиры можно выбрать одну дополнительную услугу: обычно она оплачивается отдельно, а вам достанется бесплатно. Интересно?",
+    "created_at": 1794390387.978724,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Да",
+    "created_at": 1794390414.4271295,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Отлично) Список услуг откроется за день до заезда, выберете одну, и она будет бесплатно. Сколько вас будет?",
+    "created_at": 1794390415.2331026,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "2",
+    "created_at": 1794390443.9709415,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Двое. Какой район вам удобнее?",
+    "created_at": 1794390444.7789557,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Центр",
+    "created_at": 1794390458.4334738,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла: с 15 по 17 ноября, 2 человека, центр.",
+    "created_at": 1794390466.8949802,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Свободны по календарю на 15–17 ноября:\n\n1) «Малевич», 6 848 ₽ за 2 ночи\n2) «Фрейя», 7 062 ₽ за 2 ночи\n3) «Юниверсал», 7 276 ₽ за 2 ночи\n\nЕсли подходит, напишите номер (1–3) или название.",
+    "created_at": 1794390466.8997505,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Скажите а с собакой можно?",
+    "created_at": 1794390679.7398756,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С питомцами можно не во всех квартирах, подберу такие, где можно.",
+    "created_at": 1794390680.5403028,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А ранний заезд и поздний выезд возможен?",
+    "created_at": 1794390718.1935358,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Заезд после 15:00, точное время зависит от квартиры. Выезд до 12:00. Позже иногда можно, зависит от квартиры.",
+    "created_at": 1794390718.987788,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794390735.4161327,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "😊",
+    "created_at": 1794390736.2704477,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А залог у вас сколько?",
+    "created_at": 1794390749.0455503,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Залог не везде. По вашей квартире скажет менеджер.",
+    "created_at": 1794390749.858774,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "В квартирах где есть залог,как он возвращается?",
+    "created_at": 1794390792.6721702,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v108_iwipe_20261111_163144"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый день, Ия! Пишу из Home24, вы жили у нас. Если снова понадобится квартира, можно бронировать напрямую у меня, так выходит выгоднее. Рассказать, как это работает?",
+    "created_at": 1794404321.2335453,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте да",
+    "created_at": 1794404338.8847792,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Пишете мне напрямую, без комиссии агрегаторов, так уже выгоднее. Плюс баллы: 500 за регистрацию и потом с каждого проживания, 1 балл = 1 ₽. Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794404339.776733,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794404362.5384903,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Будем ждать!",
+    "created_at": 1794404363.4114106,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794404371.5441337,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "😊",
+    "created_at": 1794404372.4172046,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Скажите пожалуйста какой у вас залог",
+    "created_at": 1794404386.2134922,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Залог 2 000 ₽, во всех квартирах. Возвращаем после выезда, как только пройдёт клининг. Подскажите даты?",
+    "created_at": 1794404387.065487,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пока не знаю",
+    "created_at": 1794404404.5211048,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, как надумаете, пишите) Подберу квартиру.",
+    "created_at": 1794404405.3488832,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Какие акции у вас есть для гостей?",
+    "created_at": 1794404427.929996,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Прямая бронь без комиссий агрегаторов, баллы: 500 за регистрацию, потом 1 балл = 1 ₽ с проживания. Рассказать подробнее? Сколько вас будет?",
+    "created_at": 1794404432.7918227,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А дополнительные услуги для гостей какие есть?",
+    "created_at": 1794404459.0054264,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию)",
+    "created_at": 1794404459.7949646,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пришлите свободные квартиры в Прокшино с 12.12 - 15.12",
+    "created_at": 1794404510.195904,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Прокшино, 12–15 декабря: по календарю свободна «Карма», 13 299 ₽ за 3 ночи. А сколько вас будет?",
+    "created_at": 1794404511.9630477,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794404533.7647388,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Трое. Вам ближе к центру или где потише?",
+    "created_at": 1794404534.6392348,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Прокшино",
+    "created_at": 1794404547.0655618,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Прокшино, 12–15 декабря: по календарю свободна «Карма», 15 699 ₽ за 3 ночи. Фото и описание: https://home24.msk.ru/apartments/карма-313501\nПередать менеджеру на бронь? Могу показать варианты и в других районах.",
+    "created_at": 1794404555.888045,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1010_iwipe_20261111_175111"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый день, Ия! Это Home24) Вы у нас уже бывали. Хотела рассказать про новые услуги, можно?",
+    "created_at": 1794408810.1645837,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794408828.1958594,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794408829.0870562,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794408847.3920512,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Будем ждать!",
+    "created_at": 1794408848.2287543,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "С кошкой можно ?",
+    "created_at": 1794408869.7616856,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С питомцами можно не во всех квартирах, подберу такие, где можно.",
+    "created_at": 1794408870.7346807,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, на какие даты планируете поездку?",
+    "created_at": 1794408870.7412937,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "С 12 - по 15 декабря",
+    "created_at": 1794408892.45992,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, на 12) При бронировании любой нашей квартиры можно выбрать одну дополнительную услугу: обычно она оплачивается отдельно, а вам достанется бесплатно. Интересно?",
+    "created_at": 1794408893.360987,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "С 12 по 15 декабря",
+    "created_at": 1794408937.7412164,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С 12 по 15 декабря. Сколько вас будет?",
+    "created_at": 1794408938.5926242,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794408947.1726081,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Трое. Центр или спокойный район у метро?",
+    "created_at": 1794408947.9958212,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Прокшино",
+    "created_at": 1794408957.4928937,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Прокшино, 12–15 декабря, по календарю свободны:\n\n1) «Снежные пики», 14 025 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/снежные-пики-313482\n2) «Хомлин», 14 397 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/хомлин-313498\n3) «Карма», 15 699 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/карма-313501\n4) «Нуар», 16 536 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/нуар-357464\n5) «Вояж», 18 321 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/вояж-351690\n\nКакая нравится? Напишите номер или название, передам менеджеру.",
+    "created_at": 1794408958.8072257,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Подумаем",
+    "created_at": 1794408989.6569731,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Давайте нуар",
+    "created_at": 1794409025.5868406,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Отлично, «Нуар» на 12–15 декабря, передаю менеджеру на бронь 🙂 Он напишет вам здесь минут через 10–15.",
+    "created_at": 1794409026.396283,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-06",
+    "role": "bot",
+    "text": "Добрый вечер! Это Home24, вы останавливались у нас. Теперь при прямой брони начисляем баллы, 500 сразу за регистрацию. Рассказать подробнее?",
+    "created_at": 1794409717.6653242,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-01",
+    "role": "bot",
+    "text": "Добрый вечер! Это Home24, вы у нас останавливались. Теперь у нас можно устроить романтический вечер с кино на проекторе или отметить праздник в украшенной квартире. Интересно?",
+    "created_at": 1794410311.7514973,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-01",
+    "role": "guest",
+    "text": "Да",
+    "created_at": 1794410342.2732866,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-01",
+    "role": "bot",
+    "text": "Романтический вечер с кино на проекторе подготовим, а на праздник можем украсить квартиру. Шумные вечеринки нельзя, тихо отметить можно) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794410343.092626,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-06",
+    "role": "guest",
+    "text": "Здравствуйте, да",
+    "created_at": 1794410560.788065,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-06",
+    "role": "bot",
+    "text": "Если бронировать напрямую, начисляем баллы: 500 за регистрацию и потом с каждого проживания. 1 балл = 1 ₽. Подробнее тут: https://home24.msk.ru/loyalty\n\nЕсли что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794410561.5858788,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Какие дополнительные услуги у вас есть?",
+    "created_at": 1794411668.938684,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо) Список услуг откроется за день до заезда, тогда и выберете.",
+    "created_at": 1794411669.7426815,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Почему за день?",
+    "created_at": 1794411877.4110925,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Прокшино, 12–15 декабря, по календарю свободны:\n\n1) «Снежные пики», 14 025 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/снежные-пики-313482\n2) «Хомлин», 14 397 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/хомлин-313498\n3) «Карма», 15 699 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/карма-313501\n4) «Нуар», 16 536 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/нуар-357464\n5) «Вояж», 18 321 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/вояж-351690\n\nКакая нравится? Напишите номер или название, передам менеджеру.",
+    "created_at": 1794411879.9138038,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v10111_iwipe_20261111_201833"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы жили у нас. Если понадобится квартира на пару дней, для отдыха, родных или на время ремонта, пишите мне. Может, скоро понадобится?",
+    "created_at": 1794417732.524068,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Нет",
+    "created_at": 1794417765.2341585,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо! Надумаете, пишите)",
+    "created_at": 1794417766.1175694,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "У вас есть дополнительные услуги для гостей?",
+    "created_at": 1794417787.2921636,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Дополнительные услуги:\n1) организация праздников\n2) оформление романтических вечеров\n3) только для двоих 🤫\n4) фотосессии и другие подробности у моего коллеги менеджера",
+    "created_at": 1794417788.158154,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А с животными можно?",
+    "created_at": 1794417814.520883,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С питомцами можно не во всех квартирах, подберу такие, где можно. Напишите даты, можно примерно.",
+    "created_at": 1794417815.3974607,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "С 6 по 9 декабря",
+    "created_at": 1794417842.153656,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С 6 по 9 декабря. Сколько вас будет?",
+    "created_at": 1794417843.033789,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "2",
+    "created_at": 1794417850.5018983,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Двое. Какой район вам удобнее?",
+    "created_at": 1794417851.3660076,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Коммунарка",
+    "created_at": 1794417861.0911412,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Коммунарка, 6–9 декабря, по календарю свободны:\n\n1) «Казбек», 10 137 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/казбек-396946\n2) «Шир», 10 416 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/шир-407397\n3) «Лориэн», 10 695 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/лориэн-407398\n4) «Хомлин», 11 532 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/хомлин-313498\n5) «Белуха», 11 811 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/белуха-396944\n\nСвободны ещё 13 квартир, напишите «ещё», покажу.\n\nКакая нравится? Напишите номер или название, передам менеджеру.",
+    "created_at": 1794417862.42616,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Подумаем",
+    "created_at": 1794417889.990467,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Давайте 3",
+    "created_at": 1794418509.2834039,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Отлично, «Лориэн», передаю менеджеру на бронь 🙂",
+    "created_at": 1794418510.1302285,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1012_iwipe_20261111_215642"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы у нас останавливались. У нас появилось кое-что новое для гостей, рассказать?",
+    "created_at": 1794423514.6826007,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794423555.0577927,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794423555.879956,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794423576.8238957,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Будем ждать!",
+    "created_at": 1794423577.6698258,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пришлите свободные квартиры с 3 по 7 декабря в Беляево",
+    "created_at": 1794423761.284736,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 3 по 7 декабря) Сколько вас будет?",
+    "created_at": 1794423762.1786263,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "2",
+    "created_at": 1794423769.847696,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Двое. Центр или спокойный район у метро?",
+    "created_at": 1794423770.659579,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Район Беляево",
+    "created_at": 1794423878.671006,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Район Беляево, 3–7 декабря: по календарю свободна «Санлайт», 13 764 ₽ за 4 ночи. Фото и описание: https://home24.msk.ru/apartments/санлайт-315549\nПередать менеджеру на бронь? Могу показать варианты и в других районах.",
+    "created_at": 1794423880.199466,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Район Очаково",
+    "created_at": 1794423899.5674145,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Район Очаково, 3–7 декабря, по календарю свободны:\n\n1) «Казбек», 14 787 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/казбек-396946\n2) «Белуха», 16 461 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/белуха-396944\n\nКакая нравится? Напишите номер или название, передам менеджеру.",
+    "created_at": 1794423900.436533,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Район коммунарка",
+    "created_at": 1794423930.8637733,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Район коммунарка, 3–7 декабря, по календарю свободны:\n\n1) «Шир», 14 973 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/шир-407397\n2) «Лориэн», 15 345 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/лориэн-407398\n3) «Феррари», 17 112 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/феррари-315405\n4) «Сиеста», 17 949 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/сиеста-413207\n5) «Идальго», 18 042 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/идальго-338458\n\nСвободны ещё 5 квартир, напишите «ещё», покажу.",
+    "created_at": 1794423931.7193558,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1013_iwipe_20261111_231426"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Пишу из Home24, вы жили у нас. Если снова понадобится квартира, можно бронировать напрямую у меня, так выходит выгоднее. Рассказать, как это работает?",
+    "created_at": 1794428163.034257,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "здравствуйте да",
+    "created_at": 1794428211.928652,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Пишете мне напрямую, без комиссии агрегаторов, так уже выгоднее. Плюс баллы: 500 за регистрацию и потом с каждого проживания, 1 балл = 1 ₽. Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794428212.798873,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "прдумаем",
+    "created_at": 1794428255.0140307,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Для вас районы на выбор:\n• Центр\n• Близко к центру\n• Зелёный / тихий\n• Спальный район\n• Подмосковье\n\nУ нас есть квартиры в районах: Бауманская, Хорошёво, Бутырская, Рокоссовского, Лефортово, Нижегородская, Нагатино, Царицыно, Беляево, Бутово, Очаково, Прокшино, Новомосковская, Коммунарка и другие. Исходя из них можете выбрать удобный район для себя 🙂",
+    "created_at": 1794428258.524468,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "спальный район",
+    "created_at": 1794428317.112562,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "На какие даты смотрите?",
+    "created_at": 1794428317.974257,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "с 5 по 8 декабря",
+    "created_at": 1794428329.7093182,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 5 по 8 декабря) Сколько вас будет?",
+    "created_at": 1794428330.5794213,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794428337.67782,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла. Сейчас сверю свободные квартиры по календарю.",
+    "created_at": 1794428338.7701776,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Свободны по календарю на 5–8 декабря:\n\n1) «Эльбрус», 14 490 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/эльбрус-396947\n2) «Дзен», 16 350 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/дзен-315404\n3) «Сойка», 18 489 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/сойка-387895\n\nЕсли подходит, напишите номер (1–3) или название.",
+    "created_at": 1794428338.774424,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "можно ли с собакой?",
+    "created_at": 1794428450.1513526,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "С собакой можно не во всех квартирах, отмечу для менеджера, он подтвердит по выбранной. Что-то из вариантов приглянулось?",
+    "created_at": 1794428451.0979335,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "а какой залог?",
+    "created_at": 1794428467.2699852,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Залог 2 000 ₽, во всех квартирах. Возвращаем после выезда, как только пройдёт клининг.",
+    "created_at": 1794428468.121707,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "хорошо",
+    "created_at": 1794428478.8820686,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "😊",
+    "created_at": 1794428479.6850984,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "давайте вариант 3",
+    "created_at": 1794428491.6921513,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Отлично, «Сойка», передаю менеджеру на бронь 🙂",
+    "created_at": 1794428492.547571,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1014_iwipe_20261111_235038"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24) Вы у нас уже бывали. Хотела рассказать про новые услуги, можно?",
+    "created_at": 1794430473.8265755,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794430489.6468303,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794430490.4946578,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Подумаем",
+    "created_at": 1794430504.5527685,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, как определитесь, напишите, и обязательно подберём для вас лучший вариант.",
+    "created_at": 1794430505.3973587,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794430516.6180203,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Будем ждать!",
+    "created_at": 1794430517.428215,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Какие у вас районы есть?",
+    "created_at": 1794430541.0017483,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В Москве у нас квартиры в центре, спокойных районах и за городом, например, Коммунарка, Хорошёво, Котельники, Одинцово. Напишу, где есть квартиры, и выберете удобный район.",
+    "created_at": 1794430547.4056885,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "У нас квартиры есть в:\n• Центр\n• Близко к центру\n• Зелёный / тихий\n• Спальный район\n• Подмосковье\nа так же для вас уточню районы:\nУ нас есть квартиры в районах: Бауманская, Хорошёво, Бутырская, Рокоссовского, Лефортово, Нижегородская, Нагатино, Царицыно, Беляево, Бутово, Очаково, Прокшино, Новомосковская, Коммунарка и другие. Исходя из них можете выбрать удобный район для себя 🙂",
+    "created_at": 1794430547.411549,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1016_iwipe_20261112_010550"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы останавливались у нас. Теперь при прямой брони начисляем баллы, 500 сразу за регистрацию. Рассказать подробнее?",
+    "created_at": 1794434828.4319422,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794434844.0629225,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Если бронировать напрямую, начисляем баллы: 500 за регистрацию и потом с каждого проживания. 1 балл = 1 ₽. Подробнее тут: https://home24.msk.ru/loyalty\n\nЕсли что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794434844.9631062,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Подумаем",
+    "created_at": 1794434878.2479308,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, как определитесь, напишите, и обязательно подберём для вас лучший вариант.",
+    "created_at": 1794434879.131812,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Какие районы у вас есть?",
+    "created_at": 1794434917.8523989,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В Москве у нас квартиры в центре, ближе к центру, в спокойных районах и за городом. Где-то конкретнее?",
+    "created_at": 1794434921.726354,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А районы?",
+    "created_at": 1794434944.6281493,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В центре: Балакиревский пер, Хорошёво, Бутырская. Спокойно: Коммунарка, Котельники, Прокшино. За городом: Одинцово, Нагатино, Ленинский проспект.",
+    "created_at": 1794434947.3124855,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В Москве у нас квартиры в:\n\n• Центре\n• Близко к центру\n• Зелёный / тихий район\n• Спальный район\n• Подмосковье\n\nа так же для вас уточню более точно районы:\n\nУ нас есть квартиры в районах: Бауманская, Хорошёво, Бутырская, Рокоссовского, Лефортово, Нижегородская, Нагатино, Царицыно, Беляево, Бутово, Очаково, Прокшино, Новомосковская, Коммунарка и другие. Исходя из них можете выбрать удобный район для себя 🙂",
+    "created_at": 1794434947.3383057,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Центр",
+    "created_at": 1794434988.2066376,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Центр. На какие даты смотрите?",
+    "created_at": 1794434988.999712,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "20.12 по 24.12",
+    "created_at": 1794435003.3485901,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 20 по 24 декабря) Сколько вас будет?",
+    "created_at": 1794435004.172736,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794435011.6206486,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла. Сейчас сверю свободные квартиры по календарю.",
+    "created_at": 1794435012.9681206,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Свободны по календарю на 20–24 декабря:\n\n1) «Шаляпин», Басманный, м. Бауманская, 17 522 ₽ за 4 ночи\nhttps://home24.msk.ru/apartments/шаляпин-313206\n\nЕсли подходит, напишите, передам менеджеру на бронь.",
+    "created_at": 1794435012.9765482,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А с животными можно?",
+    "created_at": 1794435042.8087032,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Без животных: «Шаляпин». Что-то из вариантов приглянулось?",
+    "created_at": 1794435043.6676965,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Как пользоваться телевизором?",
+    "created_at": 1794435606.543538,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, ваш адрес, пришлю инструкцию по проживанию 🙂",
+    "created_at": 1794435607.4247544,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Фитаревская дом 6",
+    "created_at": 1794435629.9794183,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "На этом адресе несколько квартир. Подскажите, пожалуйста, название, и сразу пришлю нужную инструкцию 🙂 У нас здесь: «Феррари», «Россо».",
+    "created_at": 1794435630.8621757,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Феррари",
+    "created_at": 1794435643.1865866,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Спасибо! Вот путеводитель по вашей квартире «Феррари». В нём, как пользоваться техникой, где парковка, как пройти и всё для комфортного проживания:\n\nhttps://89-111-184-212.sslip.io/g/ferrari\n\nЕсли что-то останется неясным, напишите, я рядом 🙂",
+    "created_at": 1794435644.0060258,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Спасибо",
+    "created_at": 1794435662.903166,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Пожалуйста, обращайтесь.",
+    "created_at": 1794435663.7724004,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1018_iwipe_20261112_013230"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы у нас останавливались. Теперь у нас можно устроить романтический вечер с кино на проекторе или отметить праздник в украшенной квартире. Интересно?",
+    "created_at": 1794436459.1759627,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте,да",
+    "created_at": 1794436473.5998037,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Романтический вечер с кино на проекторе подготовим, а на праздник можем украсить квартиру. Шумные вечеринки нельзя, тихо отметить можно) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794436474.4785337,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Думаем",
+    "created_at": 1794436501.1405942,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, не спешите) Могу пока скинуть пару квартир, чтобы были на примете? Сначала район: пришлю, где у нас есть квартиры.",
+    "created_at": 1794436505.160674,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пришлите районы",
+    "created_at": 1794436532.4391878,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В Москве у нас районы: центр (Чехов, Дягилев, Шаляпин, Маяковский), спокойный (Коммунарка, Прокшино, Хорошёво, Лефортово), остальные (Бутырская, Котельники, Одинцово, Нагатино, Ленинский проспект). Выбирайте.",
+    "created_at": 1794436535.1975877,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В Москве у нас квартиры в центре, ближе к центру, в спокойных районах и за городом. Где-то конкретнее?",
+    "created_at": 1794436535.2253156,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Пришлите пожалуйста коммунарку",
+    "created_at": 1794436586.5370967,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "На какие даты смотрите?",
+    "created_at": 1794436587.4201064,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "12.12 - 17.12",
+    "created_at": 1794436599.4801939,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 12 по 17 декабря) Сколько вас будет?",
+    "created_at": 1794436600.316802,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "2",
+    "created_at": 1794436607.0040262,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хорошо, смотрю, что свободно под вас.",
+    "created_at": 1794436608.3553424,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Свободны по календарю на 12–17 декабря:\n\n1) «Шир» (можно с животными, доплата 500 ₽/сутки), 17 949 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/шир-407397\n2) «Лориэн» (можно с животными, доплата 500 ₽/сутки), 18 414 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/лориэн-407398\n3) «Матисс» (можно с животными, доплата 500 ₽/сутки), 20 553 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/матисс-315543\n4) «Феррари» (можно с животными, доплата 500 ₽/сутки), 21 111 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/феррари-315405\n5) «Шамбала» (можно с животными, доплата 500 ₽/сутки), 21 762 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/шамбала-315545\n6) «Идальго» (можно с животными, доплата 500 ₽/сутки), 21 855 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/идальго-338458\n7) «Сиеста» (можно с животными, доплата 500 ₽/сутки), 21 948 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/сиеста-413207\n8) «Романс» (можно с животными, доплата 500 ₽/сутки), 22 320 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/романс-339160\n9) «Вайт» (можно с животными, доплата 500 ₽/сутки), 22 692 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/вайт-315631\n10) «Скандинавия» (можно с животными, доплата 500 ₽/сутки), 22 692 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/скандинавия-315406\n11) «Сити» (можно с животными, доплата 500 ₽/сутки), 23 529 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/сити-315546\n12) «Россо» (можно с животными, доплата 500 ₽/сутки), 24 366 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/россо-375545\n13) «Симфония» (можно с животными, доплата 500 ₽/сутки), 27 342 ₽ за 5 ночей\nhttps://home24.msk.ru/apartments/симфония-407396\n\nЕсли подходит, напишите номер (1–13) или название.",
+    "created_at": 1794436608.3607392,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "10",
+    "created_at": 1794436643.948782,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Скандинавия",
+    "created_at": 1794436708.364026,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Скандинавия, тихо, рядом метро Коммунарка.",
+    "created_at": 1794436710.8942902,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Да,выбираем ее",
+    "created_at": 1794436726.3881874,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хороший выбор, «Скандинавия», тихо и рядом метро. Подберу документы для отчёта, если нужно. Сейчас подключу менеджера, он напишет вам здесь минут через 10–15.",
+    "created_at": 1794436732.8181882,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Как пользоваться бойлером?",
+    "created_at": 1794436778.6631167,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Подскажите, пожалуйста, ваш адрес, пришлю инструкцию по проживанию 🙂",
+    "created_at": 1794436779.496913,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Магистральная 25",
+    "created_at": 1794436806.4689271,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "На этом адресе несколько квартир. Подскажите, пожалуйста, название, и сразу пришлю нужную инструкцию 🙂 У нас здесь: «Индиго», «Эверест», «Олимп».",
+    "created_at": 1794436807.3293023,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Олимп",
+    "created_at": 1794436817.5168931,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Спасибо! Вот путеводитель по вашей квартире «Олимп». В нём, как пользоваться техникой, где парковка, как пройти и всё для комфортного проживания:\n\nhttps://89-111-184-212.sslip.io/g/olimp\n\nЕсли что-то останется неясным, напишите, я рядом 🙂",
+    "created_at": 1794436818.3763785,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Спасибо",
+    "created_at": 1794436830.300266,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Будете готовы, пишите.",
+    "created_at": 1794436831.088294,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "А что у вас с залогами? Сколько?",
+    "created_at": 1794436854.0949965,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Залог 2 000 ₽, во всех квартирах. Возвращаем после выезда, как только пройдёт клининг.",
+    "created_at": 1794436854.8637364,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794436864.0721421,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "😊",
+    "created_at": 1794436864.8867927,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Спасибо",
+    "created_at": 1794436870.7664235,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Пожалуйста! Будете готовы, пишите.",
+    "created_at": 1794436871.6134365,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "manager",
+    "text": "Все",
+    "created_at": 1794437201.2041554,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "manager",
+    "text": "Плашки есть",
+    "created_at": 1794437203.8426929,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте",
+    "created_at": 1794449884.5192406,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Здравствуйте! В Москве у нас квартиры в центре, ближе к центру, в спокойных районах и за городом. Где-то конкретнее?",
+    "created_at": 1794449885.3125165,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Нет,мы бы хотели уточнить,предоставляете ли вы отчетные документы",
+    "created_at": 1794449936.2903647,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Документы для отчёта сделаем. Напишите, что нужно.",
+    "created_at": 1794449937.086414,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо",
+    "created_at": 1794449951.4452143,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "😊",
+    "created_at": 1794449952.2712562,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Скажите пожалуйста возможен ли ранний заезд и поздний выезд?",
+    "created_at": 1794466691.3552334,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Ранний заезд иногда можно, если квартира свободна. Напишите время, менеджер проверит. Поздний выезд иногда можно. Скажу, когда выберете квартиру.",
+    "created_at": 1794466692.2090607,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Скандинавия",
+    "created_at": 1794466833.2979374,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Хороший выбор, Скандинавия). Какой вариант ближе, напишите номер или название 🙂",
+    "created_at": 1794466836.4858253,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Я написала мы выбрали квартиру Скандинавия",
+    "created_at": 1794466865.335637,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Скандинавия, тихо, рядом метро. Подойдёт?",
+    "created_at": 1794466868.73587,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Да",
+    "created_at": 1794466877.1269782,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Отлично, Скандинавия подойдёт. Менеджер сейчас уточнит детали и пришлёт документы для брони.",
+    "created_at": 1794466880.4770584,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iwipe_20261112_173937"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый день, Ия! Это Home24, вы жили у нас. Если понадобится квартира на пару дней, для отдыха, родных или на время ремонта, пишите мне. Может, скоро понадобится?",
+    "created_at": 1794494494.1415544,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! В каких районах у вас есть квартиры?",
+    "created_at": 1794502373.3433619,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В Москве у нас квартиры в центре, в спокойных районах и за городом, от Хорошёва до Одинцово. Напишу, где есть квартиры, и выберете удобный район.",
+    "created_at": 1794502376.7780674,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В центре и ближе к центру, в спокойных районах (Коммунарка, Прокшино, Очаково) и за городом (Одинцово, Котельники). Напишите район или метро — подберу.",
+    "created_at": 1794502376.7817183,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Одинцово",
+    "created_at": 1794502427.381206,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В Одинцово у нас много вариантов, от современных студий до просторных квартир с видом на лес. На какие даты планируете?",
+    "created_at": 1794502430.6349165,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "7.12 - 10.12",
+    "created_at": 1794502461.3274724,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 7 по 10 декабря) Сколько вас будет?",
+    "created_at": 1794502462.2581577,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794502471.977759,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла. Сейчас сверю свободные квартиры по календарю.",
+    "created_at": 1794502473.2682796,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Свободны по календарю на 7–10 декабря:\n\n1) «Дарк Блю», 12 723 ₽ за 3 ночи\nhttps://home24.msk.ru/item/apartamenty-dark-blue-ot-home24-6\n2) «Перо», 14 955 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/перо-407394\n3) «Мондриан», 14 973 ₽ за 3 ночи\nhttps://home24.msk.ru/item/kvartira-mondrian-ot-home24-5\n4) «Экватор», 15 699 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/экватор-412788\n\nЕсли подходит, напишите номер (1–4) или название.",
+    "created_at": 1794502473.2729316,
+    "source_kind": "backup",
+    "source": "home24_backup_pre_v1020_iya_iwipe_20261112_201824"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Добрый вечер, Ия! Это Home24, вы у нас останавливались. У нас появилось кое-что новое для гостей, рассказать?",
+    "created_at": 1794504008.4992216,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Здравствуйте! Да",
+    "created_at": 1794504030.6990428,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Можно устроить романтический вечер с кино на проекторе или тихо отметить праздник, квартиру украсим. А при прямой брони начисляем баллы, 500 за регистрацию) Если что-то планируете, напишите, подберу квартиру)",
+    "created_at": 1794504031.6204026,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Хорошо,подумаем",
+    "created_at": 1794504050.4171474,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "В центре и ближе к центру, в спокойных районах (Коммунарка, Прокшино, Очаково) и за городом (Одинцово, Котельники). Напишите район или метро — подберу.",
+    "created_at": 1794504053.9605303,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Очаково",
+    "created_at": 1794504076.5290084,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "На какие даты смотрите?",
+    "created_at": 1794504077.3571446,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "5.12 - 8.12",
+    "created_at": 1794504091.8563352,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла, с 5 по 8 декабря) Сколько вас будет?",
+    "created_at": 1794504092.7410848,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "3",
+    "created_at": 1794504100.8797212,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Поняла. Сейчас сверю свободные квартиры по календарю.",
+    "created_at": 1794504102.108051,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Свободны по календарю на 5–8 декабря:\n\n1) «Эльбрус» (можно с животными, доплата 500 ₽/сутки), 14 490 ₽ за 3 ночи\nhttps://home24.msk.ru/apartments/эльбрус-396947\n\nЕсли подходит, напишите, передам менеджеру на бронь.",
+    "created_at": 1794504102.1124003,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "guest",
+    "text": "Какой залог?",
+    "created_at": 1794504194.3317525,
+    "source_kind": "live",
+    "source": "live_home24"
+  },
+  {
+    "guest": "Guest-04",
+    "role": "bot",
+    "text": "Залог 2 000 ₽, во всех квартирах. Возвращаем после выезда, как только пройдёт клининг. Что-то из вариантов приглянулось?",
+    "created_at": 1794504195.2345977,
+    "source_kind": "live",
+    "source": "live_home24"
+  }
+]

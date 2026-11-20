@@ -1,0 +1,52 @@
+{
+  "note": "Только операционные поля (лимиты, статус, тип ограничения). Токены, сессии, телефоны, API id не включены. Состояние на момент архива 13.11.2026, не живая проверка.",
+  "accounts": [
+    {
+      "id": "srv-1",
+      "status": "ok",
+      "daily_send_limit": 172,
+      "weekly_send_limit": 1200,
+      "enabled": true
+    },
+    {
+      "id": "srv-2",
+      "status": "revoked",
+      "daily_send_limit": 30,
+      "weekly_send_limit": 1200,
+      "enabled": true,
+      "restriction": "other_or_unspecified"
+    },
+    {
+      "id": "cur-1",
+      "status": "revoked",
+      "daily_send_limit": 30,
+      "weekly_send_limit": 1200,
+      "enabled": true,
+      "restriction": "other_or_unspecified"
+    },
+    {
+      "id": "cur-2",
+      "status": "revoked",
+      "daily_send_limit": 30,
+      "weekly_send_limit": 1200,
+      "enabled": true,
+      "restriction": "other_or_unspecified"
+    },
+    {
+      "id": "buy-1",
+      "status": "revoked",
+      "daily_send_limit": 30,
+      "weekly_send_limit": 1200,
+      "enabled": true,
+      "restriction": "other_or_unspecified"
+    },
+    {
+      "id": "buy-2",
+      "status": "restricted",
+      "daily_send_limit": 30,
+      "weekly_send_limit": 1200,
+      "enabled": true,
+      "restriction": "PeerFlood"
+    }
+  ]
+}

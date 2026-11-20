@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "templates": [
+    {
+      "id": "closing_thanks",
+      "category": "closing",
+      "title": "Спасибо / до встречи",
+      "body": "Спасибо, что выбрали Home24!\nЕсли что-то понадобится — пишите, я рядом. Хорошего дня 🙂",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 10,
+      "updated_at": 1793126942.2092185
+    },
+    {
+      "id": "closing_goodbye",
+      "category": "closing",
+      "title": "Мягкое прощание",
+      "body": "{имя}, тогда до связи!\nБыло очень приятно помочь. До встречи в Home24 🙂",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 20,
+      "updated_at": 1793126942.2092211
+    },
+    {
+      "id": "closing_after_stay",
+      "category": "closing",
+      "title": "После проживания",
+      "body": "{имя}, надеюсь, всё прошло комфортно 🙂\nБудем рады видеть снова — до встречи!",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 30,
+      "updated_at": 1793126942.2092237
+    },
+    {
+      "id": "closing_short",
+      "category": "closing",
+      "title": "Короткое «всего доброго»",
+      "body": "Всего доброго{, имя}! Если планы появятся — просто напишите.",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 40,
+      "updated_at": 1793126942.209226
+    },
+    {
+      "id": "greet_takeover",
+      "category": "greeting",
+      "title": "Перехват от бота",
+      "body": "{имя}, добрый день! Это Home24 — продолжаю ваш диалог 🙂\nВсе пожелания уже вижу, с радостью помогу дальше.",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 10,
+      "updated_at": 1793126942.2091956
+    },
+    {
+      "id": "greet_intro",
+      "category": "greeting",
+      "title": "Короткое представление",
+      "body": "Здравствуйте{, имя}! Это Home24.\nПереписку передали мне — дальше помогу лично.",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 20,
+      "updated_at": 1793126942.2092054
+    },
+    {
+      "id": "greet_warm",
+      "category": "greeting",
+      "title": "Тёплый вход",
+      "body": "{имя}, добрый день! Это снова Home24.\nЗабираю диалог — пишите, чем могу помочь 🙂",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 30,
+      "updated_at": 1793126942.2092118
+    },
+    {
+      "id": "greet_brief",
+      "category": "greeting",
+      "title": "Очень коротко",
+      "body": "Добрый день{, имя}! Это Home24.\nПодключилась вместо бота — продолжим 🙂",
+      "scope": "shared",
+      "owner": "",
+      "enabled": true,
+      "sort": 40,
+      "updated_at": 1793126942.2092156
+    }
+  ]
+}

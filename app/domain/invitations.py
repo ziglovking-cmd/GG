@@ -37,8 +37,84 @@ CAMPAIGN_INVITE_GAP_MIN = 15 * 60
 CAMPAIGN_INVITE_GAP_MAX = 25 * 60
 # Легитимная гигиена пула: один endpoint прокси не должен кормить десятки инвайтеров.
 SHARED_PROXY_SOFT_LIMIT = 1
+# Тримодальный джиттер паузы (идея из MIT tg-invite-machine): чаще середина диапазона.
+JITTER_FAST_SHARE = 0.25
+JITTER_MID_SHARE = 0.60
 
-TERMINAL_STATUSES = ("invited", "privacy", "already", "deleted", "failed", "skipped", "no_hash")
+
+def humanized_delay_seconds(min_delay: int, max_delay: int) -> int:
+    """Случайная пауза с уклоном в «человеческий» средний темп."""
+    low = max(0, int(min_delay))
+    high = max(low, int(max_delay))
+    if high <= 0:
+        return 0
+    # Точный интервал (min==max) не размазываем — как custom-профиль в MIT inviters.
+    if low == high:
+        return low
+    roll = random.random()
+    if roll < JITTER_FAST_SHARE:
+        return int(random.uniform(low * 0.85, low))
+    if roll < JITTER_FAST_SHARE + JITTER_MID_SHARE:
+        return int(random.uniform(low, high))
+    return int(random.uniform(high, high * 1.15))
+
+
+# Профили скорости (паттерн MIT tg-invite-machine; без обхода лимитов).
+SPEED_PROFILES = {
+    "cautious": (20 * 60, 35 * 60),
+    "normal": (15 * 60, 25 * 60),
+    "warmed": (8 * 60, 15 * 60),
+}
+DEFAULT_SPEED_PROFILE = "cautious"
+DEFAULT_INVITE_MODE = "hybrid"  # force | link | hybrid
+
+
+def speed_profile_bounds(profile: str) -> tuple[int, int]:
+    if profile in SPEED_PROFILES:
+        return SPEED_PROFILES[profile]
+    return SPEED_PROFILES[DEFAULT_SPEED_PROFILE]
+
+
+PHONE_COUNTRY_PREFIXES = (
+    ("+7", "RU"),
+    ("+380", "UA"),
+    ("+375", "BY"),
+    ("+998", "UZ"),
+    ("+996", "KG"),
+    ("+992", "TJ"),
+    ("+993", "TM"),
+    ("+994", "AZ"),
+    ("+995", "GE"),
+    ("+374", "AM"),
+    ("+90", "TR"),
+    ("+1", "US"),
+    ("+44", "GB"),
+    ("+49", "DE"),
+    ("+33", "FR"),
+    ("+48", "PL"),
+    ("+420", "CZ"),
+)
+
+
+def phone_country(phone: str) -> Optional[str]:
+    text = str(phone or "").strip().replace(" ", "")
+    if not text.startswith("+"):
+        text = "+" + text.lstrip("+")
+    for prefix, code in sorted(PHONE_COUNTRY_PREFIXES, key=lambda item: -len(item[0])):
+        if text.startswith(prefix):
+            return code
+    return None
+
+TERMINAL_STATUSES = (
+    "invited",
+    "privacy",
+    "already",
+    "deleted",
+    "failed",
+    "skipped",
+    "no_hash",
+    "need_link",
+)
 
 
 PROTECTIVE_RECOVERY_MARKERS = (

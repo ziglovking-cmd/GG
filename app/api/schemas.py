@@ -8,8 +8,10 @@ from app.config import (
     DEFAULT_BATCH_PAUSE,
     DEFAULT_BATCH_SIZE,
     DEFAULT_DAILY_LIMIT,
+    DEFAULT_INVITE_MODE,
     DEFAULT_MAX_DELAY,
     DEFAULT_MIN_DELAY,
+    DEFAULT_SPEED_PROFILE,
 )
 
 
@@ -33,6 +35,9 @@ class AccountIn(BaseModel):
     max_delay: int = DEFAULT_MAX_DELAY
     batch_size: int = DEFAULT_BATCH_SIZE
     batch_pause: int = DEFAULT_BATCH_PAUSE
+    pool_role: str = "inviter"  # parser | inviter | trust
+    proxy_country: Optional[str] = None
+    warmup_done: bool = False
 
 
 class AccountPatch(BaseModel):
@@ -45,6 +50,10 @@ class AccountPatch(BaseModel):
     max_delay: Optional[int] = None
     batch_size: Optional[int] = None
     batch_pause: Optional[int] = None
+    pool_role: Optional[str] = None
+    proxy_country: Optional[str] = None
+    warmup_done: Optional[bool] = None
+    warmup_notes: Optional[str] = None
 
 
 class CodeIn(BaseModel):
@@ -82,6 +91,13 @@ class CampaignIn(BaseModel):
     account_ids: List[int]
     source_chat_ids: List[int]
     filters: Dict[str, Any] = {}
+    invite_mode: str = DEFAULT_INVITE_MODE  # force | link | hybrid
+    speed_profile: str = DEFAULT_SPEED_PROFILE  # cautious | normal | warmed
+
+
+class WarmupIn(BaseModel):
+    done: bool = True
+    notes: str = ""
 
 
 class TargetSyncIn(BaseModel):

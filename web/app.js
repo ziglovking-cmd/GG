@@ -239,17 +239,27 @@ function accountCard(a) {
       <span class="badge ${cls}">${label}</span>
       ${inviteState}
       ${a.tg_username ? `<span class="badge">@${esc(a.tg_username)}</span>` : ""}
+      ${a.is_premium ? '<span class="badge ok">Premium</span>' : ""}
+      <span class="badge">${esc(a.pool_role || "inviter")}</span>
+      <span class="badge ${a.warmup_done ? "ok" : "warn"}">${a.warmup_done ? "warmup ✓" : "warmup ✗"}</span>
+      ${a.spambot_status ? `<span class="badge ${a.spambot_status === "clean" ? "ok" : "warn"}">SpamBot: ${esc(a.spambot_status)}</span>` : ""}
       <span class="badge ${serviceClass} account-service-status">${serviceLabel}</span>
     </div>
     <div class="item-meta">
-      ${esc(a.phone)} · сегодня успешно ${a.successful_today || 0} ·
+      ${esc(a.phone)}${a.phone_country ? ` (${esc(a.phone_country)})` : ""} ·
+      сегодня успешно ${a.successful_today || 0} ·
       попыток ${a.invites_today}/${a.daily_limit} ·
       пауза ${a.min_delay}–${a.max_delay} с · пачка ${a.batch_size} ·
       ${a.next_attempt_in > 0 ? `следующая попытка через ${fmtDuration(a.next_attempt_in)} · ` : ""}
       хэшей в базе: ${a.hashes}
       ${a.proxy ? " · прокси задан" : ' · <span style="color:var(--warn)">без прокси</span>'}
+      ${a.proxy_country ? ` · гео прокси ${esc(a.proxy_country)}` : ""}
       ${a.shared_proxy_warning
         ? `<br><span style="color:var(--warn)">${esc(a.shared_proxy_warning)}</span>` : ""}
+      ${a.geo_warning
+        ? `<br><span style="color:var(--warn)">${esc(a.geo_warning)}</span>` : ""}
+      ${a.spambot_detail
+        ? `<br><span class="hint-inline">SpamBot: ${esc(a.spambot_detail)}</span>` : ""}
       ${a.last_error ? `<br><span style="color:var(--err)">${esc(a.last_error)}</span>` : ""}
       ${a.invite_restriction_reason
         ? `<br><span style="color:var(--err)">${esc(a.invite_restriction_reason)}</span>` : ""}
@@ -258,6 +268,10 @@ function accountCard(a) {
       ${auth}
       <button onclick="checkAccount(${a.id}, this)">Проверить</button>
       <button onclick="testProxy(${a.id}, this)">Проверить прокси</button>
+      <button onclick="checkSpambot(${a.id}, this)">@SpamBot</button>
+      ${a.warmup_done
+        ? `<button onclick="markWarmup(${a.id}, false)">Снять warmup</button>`
+        : `<button class="primary" onclick="markWarmup(${a.id}, true)">Отметить warmup</button>`}
       <button onclick="editAccount(${a.id})">Настроить</button>
       ${a.can_invite
         ? `<button class="danger" onclick="setInviteEnabled(${a.id}, false)">Отключить инвайтинг</button>`
@@ -308,11 +322,38 @@ $("acc-add").onclick = async () => {
       phone,
       proxy: $("acc-proxy").value.trim() || null,
       daily_limit: Number($("acc-limit").value) || 2,
+      pool_role: $("acc-role").value || "inviter",
+      proxy_country: $("acc-proxy-country").value.trim().toUpperCase() || null,
     } });
     $("acc-label").value = $("acc-phone").value = $("acc-proxy").value = "";
+    $("acc-proxy-country").value = "";
     toast("Аккаунт добавлен — запросите код");
     loadAccounts(true);
   } catch (e) { toast(e.message, true); }
+};
+
+window.markWarmup = async (id, done) => {
+  try {
+    await api(`/accounts/${id}/warmup`, {
+      method: "POST",
+      body: { done: !!done, notes: done ? "отмечено оператором" : "" },
+    });
+    toast(done ? "Warmup отмечен" : "Warmup снят");
+    loadAccounts(true);
+  } catch (e) { toast(e.message, true); }
+};
+
+window.checkSpambot = async (id, btn) => {
+  const original = btn?.textContent;
+  if (btn) { btn.disabled = true; btn.textContent = "SpamBot…"; }
+  try {
+    const r = await api(`/accounts/${id}/spambot`, { method: "POST" });
+    toast(`@SpamBot: ${r.status} — ${r.detail || ""}`, r.status === "limited");
+    loadAccounts(true);
+  } catch (e) { toast(e.message, true); }
+  finally {
+    if (btn) { btn.disabled = false; btn.textContent = original; }
+  }
 };
 
 window.sendCode = async (id) => {
@@ -704,6 +745,8 @@ $("camp-create").onclick = async () => {
     const r = await api("/campaigns", { method: "POST", body: {
       name: $("camp-name").value.trim() || "Кампания",
       target_chat: target, account_ids, source_chat_ids,
+      invite_mode: $("camp-invite-mode")?.value || "hybrid",
+      speed_profile: $("camp-speed-profile")?.value || "cautious",
       filters: {
         skip_bots: $("f-bots").checked,
         skip_deleted: $("f-deleted").checked,
@@ -715,14 +758,15 @@ $("camp-create").onclick = async () => {
         min_messages: Number($("f-min-msg").value) || 1,
         limit: Number($("f-limit").value) || 5000,
       } } });
-    toast(`Кампания создана, целей: ${r.targets}`);
+    toast(`Кампания создана, целей: ${r.targets}, режим ${r.invite_mode || "hybrid"}`);
     openCampaign(r.id);
     loadCampaigns();
   } catch (e) { toast(e.message, true); }
 };
 
 const CAMP_STATUS = { draft: ["черновик", ""], running: ["идёт", "ok"],
-  paused: ["на паузе", "warn"], done: ["завершена", "ok"], error: ["ошибка", "err"] };
+  paused: ["на паузе", "warn"], done: ["завершена", "ok"], error: ["ошибка", "err"],
+  link_ready: ["ссылка готова", "ok"] };
 
 async function loadCampaigns() {
   const list = await api("/campaigns");
@@ -767,6 +811,7 @@ window.dropCampaign = async (id) => {
 
 const TARGET_STATUS = { pending: "в очереди", in_progress: "подготовка до отправки",
   verifying: "результат проверяется", invited: "добавление подтверждено",
+  need_link: "нужна ссылка",
   privacy: "пропущен: приватность", already: "уже в чате", deleted: "удалён",
   failed: "ошибка", no_hash: "нет access_hash", skipped: "пропущен" };
 
@@ -1059,14 +1104,31 @@ async function refreshCampaign() {
   }
   catch (e) { CURRENT_CAMPAIGN = null; $("campaign-detail").hidden = true; return; }
 
-  $("cd-title").textContent = `${c.name} → ${c.target_title || c.target_chat_id}`;
+  const mode = c.settings?.invite_mode || "hybrid";
+  const speed = c.settings?.speed_profile || "cautious";
+  $("cd-title").textContent =
+    `${c.name} → ${c.target_title || c.target_chat_id} · ${mode}/${speed}`;
   const s = c.stats;
   const cells = [["total", "целей"], ["invited", "добавлено в чат"],
     ["verifying", "ожидают подтверждения"], ["privacy", "приватность"],
-    ["already", "уже в чате"], ["no_hash", "нет хэша"], ["failed", "ошибки"], ["pending", "осталось"]];
+    ["already", "уже в чате"], ["no_hash", "нет хэша"], ["need_link", "нужна ссылка"],
+    ["failed", "ошибки"], ["pending", "осталось"]];
   $("cd-stats").innerHTML = cells.map(([k, label]) =>
     `<div class="stat"><b>${s[k] || 0}</b><span>${label}</span></div>`).join("");
   $("cd-stats").title = "Счётчик добавленных увеличивается после подтверждения членства. Результаты запросов показаны ниже у аккаунтов и в последних попытках.";
+
+  const linkPanel = $("cd-invite-link-panel");
+  const inviteLink = c.settings?.invite_link || "";
+  if (inviteLink || c.status === "link_ready") {
+    linkPanel.hidden = false;
+    linkPanel.innerHTML = inviteLink
+      ? `Ссылка-приглашение: <code id="cd-invite-link-value">${esc(inviteLink)}</code>
+         <button onclick="copyInviteLink()">Копировать</button>`
+      : "Режим link: нажмите «Ссылка-приглашение», чтобы экспортировать.";
+  } else {
+    linkPanel.hidden = true;
+    linkPanel.innerHTML = "";
+  }
 
   renderCampaignPreflight(campaignPreflight);
   $("cd-start").disabled = c.running || campaignPreflight?.status === "running";
@@ -1152,10 +1214,42 @@ window.recoverCampaignAccount = async (accountId, button) => {
 
 $("cd-start").onclick = async () => {
   try {
-    await api(`/campaigns/${CURRENT_CAMPAIGN}/start`, { method: "POST" });
-    toast("Кампания запущена");
+    const r = await api(`/campaigns/${CURRENT_CAMPAIGN}/start`, { method: "POST" });
+    if (r.mode === "link") {
+      toast("Режим link: ссылка экспортирована, force не запускался");
+    } else {
+      toast(`Кампания запущена (${r.mode || "force"})`);
+    }
+    if (r.warnings?.length) toast(r.warnings[0], true);
   } catch (e) { toast(e.message, true); }
   refreshCampaign();
+};
+
+$("cd-invite-link").onclick = async () => {
+  try {
+    const r = await api(`/campaigns/${CURRENT_CAMPAIGN}/invite-link`, { method: "POST" });
+    toast("Ссылка получена");
+    if (r.invite_link) {
+      const panel = $("cd-invite-link-panel");
+      panel.hidden = false;
+      panel.innerHTML =
+        `Ссылка-приглашение: <code id="cd-invite-link-value">${esc(r.invite_link)}</code>
+         <button onclick="copyInviteLink()">Копировать</button>`;
+    }
+  } catch (e) { toast(e.message, true); }
+  refreshCampaign();
+};
+
+window.copyInviteLink = async () => {
+  const node = $("cd-invite-link-value");
+  const text = node?.textContent || "";
+  if (!text) return toast("Ссылки нет", true);
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Ссылка скопирована");
+  } catch (_) {
+    toast(text);
+  }
 };
 
 $("cd-preflight").onclick = async () => {

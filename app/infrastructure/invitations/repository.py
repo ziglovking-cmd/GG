@@ -79,18 +79,30 @@ class SqliteInvitationRepository:
         пригласить невозможно — снимаем их с очереди, иначе воркеры будут ждать вечно."""
         if not account_ids:
             return 0
+        campaign = self.get_campaign(campaign_id)
+        settings = db.settings_of(campaign) if campaign else {}
+        mode = str(settings.get("invite_mode") or "hybrid")
+        # hybrid: без hash/username → need_link (ручная ссылка), не бесконечный force.
+        status = "need_link" if mode == "hybrid" else "no_hash"
+        error = (
+            "нужна ссылка-приглашение: нет @username и access_hash"
+            if status == "need_link"
+            else "ни один аккаунт не видел этого пользователя"
+        )
         placeholders = ",".join("?" for _ in account_ids)
-        count = db.ex(
+        db.ex(
             """
-            UPDATE targets SET status='no_hash', error='ни один аккаунт не видел этого пользователя'
+            UPDATE targets SET status=?, error=?
             WHERE campaign_id = ? AND status = 'pending'
               AND (username IS NULL OR username = '')
               AND user_id NOT IN (SELECT user_id FROM hashes WHERE account_id IN (%s))
             """ % placeholders,
-            [campaign_id] + list(account_ids),
+            [status, error, campaign_id] + list(account_ids),
         )
-        left = db.q1("SELECT COUNT(*) c FROM targets WHERE campaign_id=? AND status='no_hash'",
-                     (campaign_id,))["c"]
+        left = db.q1(
+            "SELECT COUNT(*) c FROM targets WHERE campaign_id=? AND status=?",
+            (campaign_id, status),
+        )["c"]
         return left
 
     def get_campaign(self, campaign_id):

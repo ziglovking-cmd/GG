@@ -10,7 +10,10 @@ from fastapi.responses import StreamingResponse
 
 from app import accounts, db, inviting, parsing, preflight
 from app.api.schemas import CampaignIn, TargetSyncIn
+from app.config import DEFAULT_INVITE_MODE, DEFAULT_SPEED_PROFILE
+from app.domain.invitations import settings_json, speed_profile_bounds
 from app.infrastructure.bot import client
+from app.mvp import MvpGateError, assert_campaign_start_allowed
 
 
 router = APIRouter()
@@ -50,9 +53,20 @@ async def create_campaign(body: CampaignIn):
         raise HTTPException(400, "Не удалось открыть целевой чат: %s" % e)
 
     parsing.upsert_chat(entity)
-    settings = {"account_ids": body.account_ids,
-                "source_chat_ids": body.source_chat_ids,
-                "filters": body.filters}
+    invite_mode = (body.invite_mode or DEFAULT_INVITE_MODE).strip().lower()
+    if invite_mode not in ("force", "link", "hybrid"):
+        invite_mode = DEFAULT_INVITE_MODE
+    speed_profile = (body.speed_profile or DEFAULT_SPEED_PROFILE).strip().lower()
+    gap_min, gap_max = speed_profile_bounds(speed_profile)
+    settings = {
+        "account_ids": body.account_ids,
+        "source_chat_ids": body.source_chat_ids,
+        "filters": body.filters,
+        "invite_mode": invite_mode,
+        "speed_profile": speed_profile,
+        "invite_gap_min": gap_min,
+        "invite_gap_max": gap_max,
+    }
     campaign_id = db.ex(
         "INSERT INTO campaigns (name,target_chat_id,target_title,settings,status,created_at) "
         "VALUES (?,?,?,?, 'draft', ?)",
@@ -60,9 +74,13 @@ async def create_campaign(body: CampaignIn):
          inviting.settings_json(settings), int(time.time())),
     )
     count = inviting.build_targets(campaign_id, body.source_chat_ids, body.filters)
-    db.log("Кампания «%s» создана, целей: %d" % (body.name, count),
-           scope="invite", campaign_id=campaign_id)
-    return {"id": campaign_id, "targets": count}
+    db.log(
+        "Кампания «%s» создана, целей: %d, режим %s, профиль %s"
+        % (body.name, count, invite_mode, speed_profile),
+        scope="invite",
+        campaign_id=campaign_id,
+    )
+    return {"id": campaign_id, "targets": count, "invite_mode": invite_mode}
 
 
 @router.get("/api/campaigns/{campaign_id}")
@@ -167,12 +185,95 @@ async def start_campaign_preflight(campaign_id: int):
 
 @router.post("/api/campaigns/{campaign_id}/start")
 async def start_campaign(campaign_id: int):
-    if not db.q1("SELECT id FROM campaigns WHERE id=?", (campaign_id,)):
+    campaign = db.row_to_dict(db.q1("SELECT * FROM campaigns WHERE id=?", (campaign_id,)))
+    if not campaign:
         raise HTTPException(404, "Кампания не найдена")
     if preflight.is_running(campaign_id):
         raise HTTPException(400, "Дождитесь завершения предварительной проверки")
+    try:
+        gate = assert_campaign_start_allowed(campaign)
+    except MvpGateError as exc:
+        raise HTTPException(400, str(exc))
+
+    settings = db.settings_of(campaign)
+    settings["account_ids"] = gate["account_ids"]
+    settings["invite_mode"] = gate["invite_mode"]
+    settings["speed_profile"] = gate["speed_profile"]
+    gap_min, gap_max = speed_profile_bounds(gate["speed_profile"])
+    settings.setdefault("invite_gap_min", gap_min)
+    settings.setdefault("invite_gap_max", gap_max)
+    db.ex(
+        "UPDATE campaigns SET settings=? WHERE id=?",
+        (settings_json(settings), campaign_id),
+    )
+
+    if gate["invite_mode"] == "link":
+        try:
+            link = await _export_campaign_invite_link(campaign_id, gate["account_ids"])
+        except Exception as exc:
+            raise HTTPException(400, "Не удалось получить ссылку-приглашение: %s" % exc)
+        settings["invite_link"] = link
+        db.ex(
+            "UPDATE campaigns SET settings=?, status='link_ready' WHERE id=?",
+            (settings_json(settings), campaign_id),
+        )
+        db.log(
+            "Режим link: ссылка экспортирована, force-воркеры не запускались",
+            scope="invite",
+            campaign_id=campaign_id,
+        )
+        return {
+            "ok": True,
+            "mode": "link",
+            "invite_link": link,
+            "warnings": gate.get("warnings") or [],
+        }
+
     inviting.start(campaign_id)
-    return {"ok": True}
+    return {
+        "ok": True,
+        "mode": gate["invite_mode"],
+        "warnings": gate.get("warnings") or [],
+    }
+
+
+@router.post("/api/campaigns/{campaign_id}/invite-link")
+async def export_campaign_invite_link(campaign_id: int):
+    campaign = db.row_to_dict(db.q1("SELECT * FROM campaigns WHERE id=?", (campaign_id,)))
+    if not campaign:
+        raise HTTPException(404, "Кампания не найдена")
+    settings = db.settings_of(campaign)
+    account_ids = [int(value) for value in settings.get("account_ids") or []]
+    if not account_ids:
+        raise HTTPException(400, "В кампании нет аккаунтов")
+    try:
+        link = await _export_campaign_invite_link(campaign_id, account_ids)
+    except Exception as exc:
+        raise HTTPException(400, "Не удалось получить ссылку: %s" % exc)
+    settings["invite_link"] = link
+    db.ex(
+        "UPDATE campaigns SET settings=? WHERE id=?",
+        (settings_json(settings), campaign_id),
+    )
+    return {"invite_link": link}
+
+
+async def _export_campaign_invite_link(campaign_id: int, account_ids: list[int]) -> str:
+    campaign = db.row_to_dict(db.q1("SELECT * FROM campaigns WHERE id=?", (campaign_id,)))
+    if not campaign:
+        raise RuntimeError("Кампания не найдена")
+    last_error = None
+    for account_id in account_ids:
+        try:
+            tg = await accounts.get_client(account_id)
+            entity = await inviting.resolve_target_chat(
+                tg, int(campaign["target_chat_id"])
+            )
+            return await inviting.export_invite_link(tg, entity)
+        except Exception as exc:
+            last_error = exc
+            continue
+    raise RuntimeError(last_error or "Нет доступного аккаунта для ExportChatInvite")
 
 
 @router.post("/api/campaigns/{campaign_id}/stop")

@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import asyncio
 from dataclasses import dataclass
-import random
 import time
 from typing import Any, Dict, List, Optional, Tuple
 
 from app.domain import invitations as policy
-from app.domain.invitations import settings_of, startup_stagger_delay
+from app.domain.invitations import (
+    humanized_delay_seconds,
+    settings_of,
+    speed_profile_bounds,
+    startup_stagger_delay,
+)
 
 from . import timing
 from .ports import AccountPort, InvitationRepository
@@ -104,7 +108,7 @@ class InvitationScheduler:
                     await timing.sleep(300, stop)
                     continue
 
-                delay = random.randint(
+                delay = humanized_delay_seconds(
                     int(account["min_delay"]),
                     max(int(account["min_delay"]), int(account["max_delay"])),
                 )
@@ -114,8 +118,14 @@ class InvitationScheduler:
     def campaign_gap_bounds(self, campaign_id: int) -> Tuple[int, int]:
         campaign = self.repo.get_campaign(campaign_id)
         settings = settings_of(campaign) if campaign else {}
-        low = max(0, int(settings.get("invite_gap_min", policy.CAMPAIGN_INVITE_GAP_MIN)))
-        high = max(low, int(settings.get("invite_gap_max", policy.CAMPAIGN_INVITE_GAP_MAX)))
+        if "invite_gap_min" in settings or "invite_gap_max" in settings:
+            low = max(0, int(settings.get("invite_gap_min", policy.CAMPAIGN_INVITE_GAP_MIN)))
+            high = max(low, int(settings.get("invite_gap_max", policy.CAMPAIGN_INVITE_GAP_MAX)))
+            return low, high
+        if settings.get("speed_profile"):
+            return speed_profile_bounds(str(settings["speed_profile"]))
+        low = max(0, int(policy.CAMPAIGN_INVITE_GAP_MIN))
+        high = max(low, int(policy.CAMPAIGN_INVITE_GAP_MAX))
         return low, high
 
     async def reserve_campaign_slot(
@@ -157,7 +167,7 @@ class InvitationScheduler:
                         scope="invite", campaign_id=campaign_id,
                     )
                 low, high = self.campaign_gap_bounds(campaign_id)
-                next_at = now + random.randint(low, high)
+                next_at = now + humanized_delay_seconds(low, high)
                 self.repo.reserve_campaign(next_at, campaign_id)
                 return next_at
         return None

@@ -185,6 +185,14 @@ async def _probe_account(campaign: Dict[str, Any], account_id: int,
                 "no_proxy",
                 "Нет прокси: для инвайтинга нужен отдельный IP на аккаунт",
             )
+        if not int(account.get("warmup_done") or 0):
+            return _account_result(
+                account_id,
+                label,
+                "warmup",
+                "Нет отметки прогрева — отметьте warmup перед force/hybrid",
+                ready=False,
+            )
     client = await accounts.get_client(account_id)
     if not await client.is_user_authorized():
         return _account_result(account_id, label, "unauthorized", "Telegram-сессия завершена")
@@ -200,9 +208,13 @@ async def _probe_account(campaign: Dict[str, Any], account_id: int,
         return _account_result(
             account_id, label, "no_rights", "В чате запрещено добавлять участников"
         )
-    return _account_result(
-        account_id, label, "ready", "Прокси, сессия, членство и права подтверждены", True
-    )
+    from app.mvp import geo_mismatch_warning
+
+    geo = geo_mismatch_warning(account) if account else None
+    detail = "Прокси, сессия, членство и права подтверждены"
+    if geo:
+        detail = detail + ". " + geo
+    return _account_result(account_id, label, "ready", detail, True)
 
 
 async def _check_account(campaign: Dict[str, Any], account_id: int,

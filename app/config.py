@@ -8,6 +8,12 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
+from app.domain.invitations import (
+    DEFAULT_INVITE_MODE,
+    DEFAULT_SPEED_PROFILE,
+    SPEED_PROFILES,
+)
+
 ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 SESSIONS_DIR = DATA_DIR / "sessions"
@@ -125,5 +131,7 @@ DEFAULT_MAX_DELAY = 25 * 60
 DEFAULT_BATCH_SIZE = 2        # после стольких confirmed/armed RPC — длинная пауза
 DEFAULT_BATCH_PAUSE = 45 * 60
 # Тихие потери подряд без confirmed → снять аккаунт с ротации до ручного restore.
-SILENT_LOSS_RESTRICT_THRESHOLD = 2
+SILENT_LOSS_RESTRICT_THRESHOLD = 1
 SILENT_LOSS_LOOKBACK_SECONDS = 7 * 24 * 3600
+REQUIRE_WARMUP_BEFORE_FORCE = True
+REQUIRE_PREFLIGHT_READY = True

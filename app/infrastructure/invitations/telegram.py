@@ -3,12 +3,14 @@ from __future__ import annotations
 
 import asyncio
 from functools import wraps
+import random
 import time
 from typing import Any, Optional
 
 from telethon.errors import PeerIdInvalidError, RPCError, UserNotParticipantError
+from telethon.tl.functions.account import UpdateStatusRequest
 from telethon.tl.functions.channels import InviteToChannelRequest
-from telethon.tl.functions.messages import AddChatUserRequest
+from telethon.tl.functions.messages import AddChatUserRequest, ExportChatInviteRequest
 from telethon.tl.types import (
     ChannelParticipant,
     ChannelParticipantAdmin,
@@ -139,6 +141,36 @@ class TelethonInvitationGateway:
             raise InviteNotAcceptedError(
                 "Telegram отклонил приглашение и вернул пользователя в missing_invitees"
             )
+
+    async def simulate_pre_invite_reading(self, client, target_entity) -> None:
+        """Короткое «чтение» чата перед Invite RPC (паттерн MIT inviters).
+
+        Best-effort: сбой чтения не блокирует и не считается успехом инвайта.
+        """
+        try:
+            await client(UpdateStatusRequest(offline=False))
+            message_ids: list[int] = []
+            async for message in client.iter_messages(
+                target_entity, limit=random.randint(2, 4)
+            ):
+                if message and message.id:
+                    message_ids.append(int(message.id))
+                await asyncio.sleep(random.uniform(0.4, 1.0))
+            if message_ids:
+                await client.send_read_acknowledge(
+                    target_entity, max_id=max(message_ids)
+                )
+        except Exception:
+            return
+
+    @translate_rpc_errors
+    async def export_invite_link(self, client, target_entity) -> str:
+        """Создаёт/экспортирует ссылку-приглашение для режима link."""
+        result = await client(ExportChatInviteRequest(peer=target_entity))
+        link = str(getattr(result, "link", "") or "").strip()
+        if not link:
+            raise RuntimeError("Telegram не вернул ссылку-приглашение")
+        return link
 
     async def membership_state_once(
         self,

@@ -36,6 +36,16 @@
       <label>Телефон<input id="acc-phone" placeholder="+79001234567"></label>
       <label>Прокси<input id="acc-proxy" placeholder="socks5://user:pass@host:1080"></label>
       <label>Лимит confirmed в сутки<input id="acc-limit" type="number" value="2"></label>
+      <label>Роль в пуле
+        <select id="acc-role">
+          <option value="inviter">inviter</option>
+          <option value="parser">parser</option>
+          <option value="trust">trust</option>
+        </select>
+      </label>
+      <label>Страна прокси (ISO)
+        <input id="acc-proxy-country" placeholder="RU" maxlength="2">
+      </label>
     </div>
     <button class="primary" id="acc-add">Добавить</button>
   </div>
@@ -147,6 +157,20 @@
     <div class="grid">
       <label>Название<input id="camp-name" placeholder="Перенос в новый чат"></label>
       <label>Целевой чат (@username / id)<input id="camp-target" placeholder="@newchat"></label>
+      <label>Режим приглашения
+        <select id="camp-invite-mode">
+          <option value="hybrid" selected>hybrid — force + ссылка для остальных</option>
+          <option value="force">force — только InviteToChannel</option>
+          <option value="link">link — только ссылка (без force)</option>
+        </select>
+      </label>
+      <label>Профиль скорости
+        <select id="camp-speed-profile">
+          <option value="cautious" selected>cautious — 20–35 мин</option>
+          <option value="normal">normal — 15–25 мин</option>
+          <option value="warmed">warmed — 8–15 мин (после прогрева)</option>
+        </select>
+      </label>
     </div>
     <div class="row">
       <button id="camp-sync-target">Исключить дубли</button>
@@ -188,8 +212,10 @@
       <button class="primary" id="cd-start">Запустить</button>
       <button id="cd-stop">Остановить</button>
       <button class="preflight-action" id="cd-preflight">Проверить перед запуском</button>
+      <button id="cd-invite-link">Ссылка-приглашение</button>
       <button id="cd-export">Выгрузить результат</button>
     </div>
+    <div id="cd-invite-link-panel" class="hint" hidden></div>
     <div id="cd-preflight-panel" class="preflight-panel" hidden></div>
     <h3>Аккаунты в работе</h3>
     <div id="cd-worker-summary" class="hint"></div>

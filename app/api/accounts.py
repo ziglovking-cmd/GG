@@ -5,7 +5,8 @@ import time
 from fastapi import APIRouter, HTTPException
 
 from app import accounts, db, parsing
-from app.api.schemas import AccountIn, AccountPatch, CodeIn, PasswordIn
+from app.api.schemas import AccountIn, AccountPatch, CodeIn, PasswordIn, WarmupIn
+from app.mvp import geo_mismatch_warning
 
 
 router = APIRouter()
@@ -36,6 +37,10 @@ def list_accounts():
             if twins and int(r.get("can_invite") or 0)
             else None
         )
+        r["phone_country"] = accounts.inferred_phone_country(str(r.get("phone") or ""))
+        r["geo_warning"] = geo_mismatch_warning(r)
+        r["warmup_done"] = bool(r.get("warmup_done"))
+        r["is_premium"] = bool(r.get("is_premium"))
     return rows
 
 
@@ -53,13 +58,19 @@ def create_account(body: AccountIn):
         )
     except accounts.AuthError as exc:
         raise HTTPException(400, str(exc))
+    role = (body.pool_role or "inviter").strip().lower()
+    if role not in ("parser", "inviter", "trust"):
+        role = "inviter"
+    proxy_country = (body.proxy_country or "").strip().upper() or None
     account_id = db.ex(
         """INSERT INTO accounts (label,phone,session_name,proxy,can_parse,can_invite,
-                                 daily_limit,min_delay,max_delay,batch_size,batch_pause,created_at)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
+                                 daily_limit,min_delay,max_delay,batch_size,batch_pause,
+                                 pool_role,proxy_country,warmup_done,created_at)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
         (body.label or phone, phone, session_name, body.proxy,
          int(body.can_parse), int(body.can_invite), body.daily_limit, body.min_delay,
-         body.max_delay, body.batch_size, body.batch_pause, int(time.time())),
+         body.max_delay, body.batch_size, body.batch_pause, role, proxy_country,
+         int(body.warmup_done), int(time.time())),
     )
     return {"id": account_id}
 
@@ -73,6 +84,16 @@ async def patch_account(account_id: int, body: AccountPatch):
         fields["can_parse"] = int(fields["can_parse"])
     if "can_invite" in fields:
         fields["can_invite"] = int(fields["can_invite"])
+    if "warmup_done" in fields:
+        fields["warmup_done"] = int(fields["warmup_done"])
+        fields["warmup_checked_at"] = int(time.time()) if fields["warmup_done"] else None
+    if "pool_role" in fields:
+        role = str(fields["pool_role"]).strip().lower()
+        if role not in ("parser", "inviter", "trust"):
+            raise HTTPException(400, "pool_role: parser | inviter | trust")
+        fields["pool_role"] = role
+    if "proxy_country" in fields:
+        fields["proxy_country"] = str(fields["proxy_country"]).strip().upper() or None
     current = db.row_to_dict(db.q1("SELECT * FROM accounts WHERE id=?", (account_id,)))
     if not current:
         raise HTTPException(404, "Аккаунт не найден")
@@ -177,6 +198,24 @@ def account_restore_invites(account_id: int):
         account_id=account_id,
     )
     return {"ok": True}
+
+
+@router.post("/api/accounts/{account_id}/warmup")
+def account_mark_warmup(account_id: int, body: WarmupIn):
+    try:
+        return accounts.mark_warmup(account_id, done=body.done, notes=body.notes)
+    except accounts.AuthError as error:
+        raise HTTPException(400, str(error))
+
+
+@router.post("/api/accounts/{account_id}/spambot")
+async def account_check_spambot(account_id: int):
+    try:
+        return await accounts.check_spambot(account_id)
+    except accounts.AuthError as error:
+        raise HTTPException(400, str(error))
+    except Exception as error:
+        raise HTTPException(400, str(error))
 
 
 @router.get("/api/dialogs/{account_id}")

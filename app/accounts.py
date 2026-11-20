@@ -26,6 +26,7 @@ from .config import (
     SILENT_LOSS_RESTRICT_THRESHOLD,
     get_api_credentials,
 )
+from .domain.invitations import phone_country
 
 # account_id -> TelegramClient
 _clients: Dict[int, TelegramClient] = {}
@@ -247,8 +248,9 @@ async def refresh_status(account_id: int) -> str:
         if await client.is_user_authorized():
             me = await client.get_me()
             db.ex(
-                "UPDATE accounts SET status='authorized', tg_user_id=?, tg_username=?, last_error=NULL WHERE id=?",
-                (me.id, me.username, account_id),
+                "UPDATE accounts SET status='authorized', tg_user_id=?, tg_username=?, "
+                "is_premium=?, last_error=NULL WHERE id=?",
+                (me.id, me.username, int(bool(getattr(me, "premium", False))), account_id),
             )
             return "authorized"
         set_status(account_id, "new")
@@ -533,3 +535,104 @@ def invite_eligibility(
 
 def is_available(account: Dict[str, Any]) -> bool:
     return invite_eligibility(account)[0]
+
+
+def mark_warmup(
+    account_id: int,
+    done: bool = True,
+    notes: str = "",
+) -> Dict[str, Any]:
+    """Оператор подтверждает ручной прогрев аккаунта перед force/hybrid."""
+    account = db.row_to_dict(db.q1("SELECT * FROM accounts WHERE id=?", (account_id,)))
+    if not account:
+        raise AuthError("Аккаунт не найден")
+    now_ts = int(time.time())
+    db.ex(
+        """
+        UPDATE accounts
+        SET warmup_done=?, warmup_checked_at=?, warmup_notes=?
+        WHERE id=?
+        """,
+        (1 if done else 0, now_ts if done else None, (notes or "")[:300] or None, account_id),
+    )
+    return {
+        "id": account_id,
+        "warmup_done": bool(done),
+        "warmup_checked_at": now_ts if done else None,
+        "warmup_notes": (notes or "")[:300] or None,
+    }
+
+
+_SPAMBOT_OK = (
+    "свободен от каких-либо ограничений",
+    "в данный момент у вашего аккаунта нет ограничений",
+    "никаких ограничений на ваш аккаунт нет",
+    "good news, no limits are currently applied",
+    "free as a bird",
+)
+_SPAMBOT_LIMITED = (
+    "на ваш аккаунт наложены ограничения",
+    "ваш аккаунт ограничен",
+    "you are limited",
+    "limitations",
+    "sending too many messages",
+    "temporary limitation",
+    "limited for",
+    "account is limited",
+)
+
+
+def classify_spambot_reply(reply_text: str) -> Tuple[str, str]:
+    lowered = (reply_text or "").lower()
+    for phrase in _SPAMBOT_OK:
+        if phrase in lowered:
+            return "clean", "Ограничений нет"
+    for phrase in _SPAMBOT_LIMITED:
+        if phrase in lowered:
+            return "limited", "Наложен спамблок"
+    return "unknown", (reply_text or "")[:120].strip() or "Нет ответа"
+
+
+async def check_spambot(account_id: int) -> Dict[str, Any]:
+    """Диалог с @SpamBot: только аудит, без обхода ограничений Telegram."""
+    account = db.row_to_dict(db.q1("SELECT * FROM accounts WHERE id=?", (account_id,)))
+    if not account:
+        raise AuthError("Аккаунт не найден")
+    client = await get_client(account_id)
+    if not await client.is_user_authorized():
+        payload = {"status": "unauthorized", "detail": "Сессия не авторизована"}
+        _store_spambot(account_id, payload)
+        return payload
+    try:
+        async with client.conversation("@SpamBot", timeout=12) as dialog:
+            await dialog.send_message("/start")
+            response = await dialog.get_response()
+            text = response.raw_text or ""
+            status, detail = classify_spambot_reply(text)
+            payload = {"status": status, "detail": detail, "raw": text[:300]}
+    except asyncio.TimeoutError:
+        payload = {"status": "unknown", "detail": "Таймаут ответа @SpamBot"}
+    except Exception as exc:
+        payload = {"status": "error", "detail": str(exc)[:200]}
+    _store_spambot(account_id, payload)
+    return payload
+
+
+def _store_spambot(account_id: int, payload: Dict[str, Any]) -> None:
+    db.ex(
+        """
+        UPDATE accounts
+        SET spambot_status=?, spambot_detail=?, spambot_checked_at=?
+        WHERE id=?
+        """,
+        (
+            str(payload.get("status") or "unknown"),
+            str(payload.get("detail") or "")[:300],
+            int(time.time()),
+            account_id,
+        ),
+    )
+
+
+def inferred_phone_country(phone: str) -> Optional[str]:
+    return phone_country(phone)

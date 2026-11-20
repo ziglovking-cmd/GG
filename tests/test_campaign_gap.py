@@ -68,8 +68,9 @@ class CampaignGapTests(unittest.IsolatedAsyncioTestCase):
             services.scheduler.reserve_campaign_slot(self.campaign_id, asyncio.Event(), {}),
             timeout=1,
         )
-        self.assertGreaterEqual(reserved, before + 15 * 60)
-        self.assertLessEqual(reserved, int(time.time()) + 25 * 60)
+        self.assertGreaterEqual(reserved, before + int(15 * 60 * 0.85))
+        # Тримодальный jitter может чуть выйти за верхнюю границу профиля.
+        self.assertLessEqual(reserved, int(time.time()) + int(25 * 60 * 1.15) + 1)
         self.assertEqual(self._next_invite_at(), reserved)
 
     async def test_other_account_waits_for_campaign_gap(self):
@@ -150,12 +151,15 @@ class CampaignGapTests(unittest.IsolatedAsyncioTestCase):
     async def test_sent_invite_keeps_campaign_gap(self):
         self._add_target(77)
         before = int(time.time())
-        invite = await self._run_worker_once(
-            [("not_member", ""), ("not_member", "")],
-            ("present", "", "confirmed"),
-        )
+        with patch.object(
+            services.gateway, "simulate_pre_invite_reading", AsyncMock(return_value=None)
+        ):
+            invite = await self._run_worker_once(
+                [("not_member", ""), ("not_member", "")],
+                ("present", "", "confirmed"),
+            )
         invite.assert_awaited_once()
-        self.assertGreaterEqual(self._next_invite_at(), before + 15 * 60)
+        self.assertGreaterEqual(self._next_invite_at(), before + int(15 * 60 * 0.85))
 
     async def test_worker_reconnects_after_waiting_in_campaign_queue(self):
         self._add_target(79)

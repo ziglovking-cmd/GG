@@ -233,6 +233,23 @@ def connect() -> sqlite3.Connection:
                 _conn.execute(
                     "ALTER TABLE accounts ADD COLUMN next_attempt_at INTEGER NOT NULL DEFAULT 0"
                 )
+            # MVP-поля пула (роли, прогрев, гео, premium, fair carousel).
+            for name, definition in (
+                ("pool_role", "TEXT NOT NULL DEFAULT 'inviter'"),
+                ("warmup_done", "INTEGER NOT NULL DEFAULT 0"),
+                ("warmup_checked_at", "INTEGER"),
+                ("warmup_notes", "TEXT"),
+                ("proxy_country", "TEXT"),
+                ("is_premium", "INTEGER NOT NULL DEFAULT 0"),
+                ("last_attempt_at", "INTEGER NOT NULL DEFAULT 0"),
+                ("spambot_status", "TEXT"),
+                ("spambot_detail", "TEXT"),
+                ("spambot_checked_at", "INTEGER"),
+            ):
+                if name not in columns:
+                    _conn.execute(
+                        "ALTER TABLE accounts ADD COLUMN %s %s" % (name, definition)
+                    )
             # PEER_FLOOD нельзя считать обычной временной паузой: окончание
             # cooldown не доказывает, что Telegram снял ограничение. Отдельный
             # флаг сохраняется до явного решения оператора.
@@ -507,6 +524,11 @@ def claim_invite_target(
             if changed != 1:
                 conn.rollback()
                 return None
+            # Fair carousel: кто недавно брал цель — позже в ранжировании.
+            conn.execute(
+                "UPDATE accounts SET last_attempt_at=? WHERE id=?",
+                (int(time.time()), int(account_id)),
+            )
             conn.commit()
             return dict(row)
         except Exception:

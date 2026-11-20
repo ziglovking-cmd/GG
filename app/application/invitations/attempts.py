@@ -128,6 +128,17 @@ class InvitationAttempt:
             )
         attempt.invite_marker_durable = True
         attempt.invite_rpc_started = True
+        attempt.info["state"] = "чтение чата перед приглашением %s" % (
+            attempt.target["username"] or attempt.target["user_id"]
+        )
+        try:
+            await asyncio.wait_for(
+                self.gateway.simulate_pre_invite_reading(client, target_entity),
+                timeout=policy.CAMPAIGN_ACCOUNT_REQUEST_TIMEOUT,
+            )
+        except Exception:
+            # Pre-invite reading is hygiene, not a delivery signal.
+            pass
         attempt.info["state"] = "отправляю запрос приглашения %s" % (
             attempt.target["username"] or attempt.target["user_id"]
         )

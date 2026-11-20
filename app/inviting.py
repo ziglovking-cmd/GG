@@ -17,4 +17,6 @@ campaign_stats = invitations.repository.campaign_stats
 build_targets = invitations.targets.build_targets
 resolve_target_chat = invitations.gateway.resolve_target_chat
 can_invite = invitations.gateway.can_invite
+export_invite_link = invitations.gateway.export_invite_link
+simulate_pre_invite_reading = invitations.gateway.simulate_pre_invite_reading
 set_attempt_notifier = invitations.notifier.set

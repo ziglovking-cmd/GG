@@ -2,4 +2,5 @@
 
 Telegram Business автоответчик: [`tg-ai/`](./tg-ai).
 
-**24/7 бесплатно:** не через GitHub Actions, а через Render/Fly — см. [tg-ai/README.md](./tg-ai/README.md#-бесплатно-247-render).
+**Сервер без карты:** Hugging Face Spaces — инструкция в [tg-ai/README.md](./tg-ai/README.md).  
+Render/Fly обычно просят карту — не обязательны.

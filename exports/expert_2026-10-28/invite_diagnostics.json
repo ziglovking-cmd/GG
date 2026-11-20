@@ -1,0 +1,4077 @@
+{
+ "generated_msk": "2026-10-28 03:12:40",
+ "notes": [
+  "Время — МСК. Телефоны, @username аккаунтов, строки прокси, имена/ID приглашаемых и названия чатов удалены или заменены метками.",
+  "Сырые объекты Updates от Telethon не сохраняются: в лог пишется интерпретация программы (events). Ниже — она.",
+  "За последние 24 часа инвайтов не было; последняя кампания — 21–22.10.",
+  "Проверка присутствия: get_permissions(chat, user) через 0/1/3/7/15 с после RPC (5 проверок, ~26 с). До 30.09 проверки не было.",
+  "invite_funnel_by_day строится по журналу событий. 30.09–01.10 подтверждения в журнал не писались: найденные в чате (13) есть только в membership_checks_by_day_table, к аккаунтам их не привязать — кампании удалены.",
+  "02.10 проверок 'не найден' больше, чем принятых RPC за день: перепроверялись инвайты прошлых дней."
+ ],
+ "pool_summary": {
+  "accounts_total": 100,
+  "session_status": {
+   "authorized": 46,
+   "error": 3,
+   "new": 50,
+   "needs_code": 1
+  },
+  "invite_restricted_now": 1,
+  "ever_got_peer_flood": 83,
+  "manual_restriction_clears": {
+   "2026-10-05": 1,
+   "2026-10-12": 82
+  },
+  "daily_limit": {
+   "2": 100
+  },
+  "states": {
+   "авторизован, доставлял (есть подтверждённые, тихих потерь нет)": 2,
+   "авторизован, есть тихие потери, подтверждений в журнале нет": 40,
+   "авторизован, сейчас выведен из инвайта (PEER_FLOOD)": 1,
+   "сессия не авторизована (error)": 3,
+   "авторизован, инвайтил до появления проверки (доставка неизвестна)": 1,
+   "сессия не авторизована (new)": 50,
+   "авторизован, не инвайтил": 2,
+   "сессия не авторизована (needs_code)": 1
+  },
+  "proxy": {
+   "accounts_without_proxy": 4,
+   "distinct_proxy_configs": 8,
+   "accounts_per_proxy_config": {
+    "P1": 89,
+    "P2": 1,
+    "P3": 1,
+    "P4": 1,
+    "P5": 1,
+    "P6": 1,
+    "P7": 1,
+    "P8": 1
+   },
+   "providers": {
+    "proxywing.com": 95,
+    "отдельный IP": 1
+   },
+   "types": {
+    "socks5": 96
+   }
+  },
+  "account_created_by_month": {
+   "2026-08": 1,
+   "2026-09": 98,
+   "2026-10": 1
+  }
+ },
+ "invite_funnel_by_day": {
+  "2026-08-26": {
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-08-27": {
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-08": {
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-10": {
+   "rpc_accepted": 3,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-11": {
+   "rpc_accepted": 3,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-12": {
+   "rpc_accepted": 3,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-13": {
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-15": {
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-16": {
+   "rpc_accepted": 9,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 3,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-17": {
+   "rpc_accepted": 5,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 5,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-18": {
+   "rpc_accepted": 11,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 1
+  },
+  "2026-09-19": {
+   "rpc_accepted": 16,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 3,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-20": {
+   "rpc_accepted": 17,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-21": {
+   "rpc_accepted": 14,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-22": {
+   "rpc_accepted": 8,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-23": {
+   "rpc_accepted": 26,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-24": {
+   "rpc_accepted": 21,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-25": {
+   "rpc_accepted": 21,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 3,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-26": {
+   "rpc_accepted": 15,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 5,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-27": {
+   "rpc_accepted": 12,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 4,
+   "chat_member_add_failed": 0
+  },
+  "2026-09-30": {
+   "rpc_accepted": 101,
+   "found_in_chat": 0,
+   "not_found_in_chat": 87,
+   "missing_invitees": 0,
+   "peer_flood": 72,
+   "chat_member_add_failed": 8
+  },
+  "2026-10-01": {
+   "rpc_accepted": 28,
+   "found_in_chat": 0,
+   "not_found_in_chat": 24,
+   "missing_invitees": 0,
+   "peer_flood": 25,
+   "chat_member_add_failed": 2
+  },
+  "2026-10-02": {
+   "rpc_accepted": 9,
+   "found_in_chat": 0,
+   "not_found_in_chat": 20,
+   "missing_invitees": 0,
+   "peer_flood": 17,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-05": {
+   "rpc_accepted": 2,
+   "found_in_chat": 1,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-12": {
+   "rpc_accepted": 10,
+   "found_in_chat": 1,
+   "not_found_in_chat": 9,
+   "missing_invitees": 6,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-13": {
+   "rpc_accepted": 10,
+   "found_in_chat": 1,
+   "not_found_in_chat": 9,
+   "missing_invitees": 2,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-14": {
+   "rpc_accepted": 10,
+   "found_in_chat": 1,
+   "not_found_in_chat": 9,
+   "missing_invitees": 9,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-15": {
+   "rpc_accepted": 5,
+   "found_in_chat": 2,
+   "not_found_in_chat": 3,
+   "missing_invitees": 1,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-16": {
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-21": {
+   "rpc_accepted": 2,
+   "found_in_chat": 1,
+   "not_found_in_chat": 1,
+   "missing_invitees": 2,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  "2026-10-22": {
+   "rpc_accepted": 2,
+   "found_in_chat": 1,
+   "not_found_in_chat": 1,
+   "missing_invitees": 2,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  }
+ },
+ "membership_checks_by_day_table": [
+  {
+   "day": "2026-09-30",
+   "found_in_chat": 11,
+   "not_found_after_accepted_rpc": 87
+  },
+  {
+   "day": "2026-10-01",
+   "found_in_chat": 2,
+   "not_found_after_accepted_rpc": 24
+  },
+  {
+   "day": "2026-10-05",
+   "found_in_chat": 1,
+   "not_found_after_accepted_rpc": 1
+  },
+  {
+   "day": "2026-10-21",
+   "found_in_chat": 1,
+   "not_found_after_accepted_rpc": 1
+  },
+  {
+   "day": "2026-10-22",
+   "found_in_chat": 1,
+   "not_found_after_accepted_rpc": 1
+  }
+ ],
+ "case_campaign_26": {
+  "target_chat": {
+   "alias": "chat_A",
+   "kind": "supergroup",
+   "members_count": 187,
+   "is_megagroup": 1
+  },
+  "accounts_in_campaign": [
+   3,
+   12,
+   13,
+   25,
+   35,
+   45,
+   55,
+   65,
+   76,
+   86
+  ],
+  "targets": [
+   {
+    "target": "target_24745",
+    "account_id": 45,
+    "status": "failed",
+    "attempted_msk": "2026-10-21 15:41:17",
+    "error": "Telegram отклонил приглашение и вернул пользователя в missing_invitees",
+    "verification": "not_present",
+    "verified_msk": "2026-10-21 15:41:17"
+   },
+   {
+    "target": "target_24746",
+    "account_id": 45,
+    "status": "failed",
+    "attempted_msk": "2026-10-21 15:41:18",
+    "error": "Telegram не подтвердил присутствие пользователя после 5 проверок",
+    "verification": "not_present",
+    "verified_msk": "2026-10-21 15:41:49"
+   },
+   {
+    "target": "target_24747",
+    "account_id": 3,
+    "status": "failed",
+    "attempted_msk": "2026-10-21 16:06:14",
+    "error": "Telegram отклонил приглашение и вернул пользователя в missing_invitees",
+    "verification": "not_present",
+    "verified_msk": "2026-10-21 16:06:14"
+   },
+   {
+    "target": "target_24748",
+    "account_id": 3,
+    "status": "invited",
+    "attempted_msk": "2026-10-21 16:06:15",
+    "error": null,
+    "verification": "confirmed",
+    "verified_msk": "2026-10-21 16:06:16"
+   },
+   {
+    "target": "target_24749",
+    "account_id": 45,
+    "status": "failed",
+    "attempted_msk": "2026-10-22 15:34:34",
+    "error": "Telegram не подтвердил присутствие пользователя после 5 проверок",
+    "verification": "not_present",
+    "verified_msk": "2026-10-22 15:35:09"
+   },
+   {
+    "target": "target_24750",
+    "account_id": 3,
+    "status": "failed",
+    "attempted_msk": "2026-10-22 16:02:22",
+    "error": "Telegram отклонил приглашение и вернул пользователя в missing_invitees",
+    "verification": "not_present",
+    "verified_msk": "2026-10-22 16:02:23"
+   },
+   {
+    "target": "target_24751",
+    "account_id": 3,
+    "status": "failed",
+    "attempted_msk": "2026-10-22 16:02:26",
+    "error": "Telegram отклонил приглашение и вернул пользователя в missing_invitees",
+    "verification": "not_present",
+    "verified_msk": "2026-10-22 16:02:27"
+   },
+   {
+    "target": "target_24752",
+    "account_id": 3,
+    "status": "invited",
+    "attempted_msk": "2026-10-22 16:02:30",
+    "error": null,
+    "verification": "confirmed",
+    "verified_msk": "2026-10-22 16:02:32"
+   }
+  ],
+  "events": [
+   {
+    "time_msk": "2026-10-21 15:25:49",
+    "level": "info",
+    "account_id": null,
+    "message": "Кампания «кампания» создана, целей: 2067"
+   },
+   {
+    "time_msk": "2026-10-21 15:37:09",
+    "level": "info",
+    "account_id": null,
+    "message": "Предварительная проверка: готово аккаунтов 2/10, пригодных целей 642/2067"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:40",
+    "level": "info",
+    "account_id": null,
+    "message": "Кампания «кампания» запущена"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:41",
+    "level": "warn",
+    "account_id": 55,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:41",
+    "level": "warn",
+    "account_id": 76,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:41",
+    "level": "warn",
+    "account_id": 86,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:41",
+    "level": "warn",
+    "account_id": 35,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:42",
+    "level": "warn",
+    "account_id": 12,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:42",
+    "level": "warn",
+    "account_id": 65,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:40:43",
+    "level": "warn",
+    "account_id": 13,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:41:06",
+    "level": "info",
+    "account_id": null,
+    "message": "Старт распределён волнами: до 10 аккаунтов каждые 10 минут, между параллельными кампаниями сдвиг 5 минут, разброс до 60 секунд"
+   },
+   {
+    "time_msk": "2026-10-21 15:41:06",
+    "level": "info",
+    "account_id": null,
+    "message": "В ротации 2 аккаунт(ов), ожидают соединения: 0, перепроверки доступа: 0"
+   },
+   {
+    "time_msk": "2026-10-21 15:41:06",
+    "level": "warn",
+    "account_id": 25,
+    "message": "Аккаунт не авторизован — пропущен"
+   },
+   {
+    "time_msk": "2026-10-21 15:41:17",
+    "level": "warn",
+    "account_id": 45,
+    "message": "Telegram отклонил приглашение и вернул пользователя в missing_invitees"
+   },
+   {
+    "time_msk": "2026-10-21 15:41:20",
+    "level": "info",
+    "account_id": 45,
+    "message": "Telegram принял запрос приглашения для user_1; проверяю добавление в чат"
+   },
+   {
+    "time_msk": "2026-10-21 15:41:44",
+    "level": "info",
+    "account_id": null,
+    "message": "Ожидание общего интервала кампании: ещё 1468 сек; следующее приглашение пока не отправлено"
+   },
+   {
+    "time_msk": "2026-10-21 15:41:49",
+    "level": "warn",
+    "account_id": 45,
+    "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+   },
+   {
+    "time_msk": "2026-10-21 16:06:12",
+    "level": "info",
+    "account_id": null,
+    "message": "Общий интервал кампании завершён; продолжаю подготовку приглашения"
+   },
+   {
+    "time_msk": "2026-10-21 16:06:14",
+    "level": "warn",
+    "account_id": 3,
+    "message": "Telegram отклонил приглашение и вернул пользователя в missing_invitees"
+   },
+   {
+    "time_msk": "2026-10-21 16:06:15",
+    "level": "info",
+    "account_id": 3,
+    "message": "Telegram принял запрос приглашения для user_2; проверяю добавление в чат"
+   },
+   {
+    "time_msk": "2026-10-21 16:06:16",
+    "level": "info",
+    "account_id": 3,
+    "message": "Приглашён user_2 (присутствие подтверждено)"
+   },
+   {
+    "time_msk": "2026-10-22 15:34:36",
+    "level": "info",
+    "account_id": 45,
+    "message": "Telegram принял запрос приглашения для user_3; проверяю добавление в чат"
+   },
+   {
+    "time_msk": "2026-10-22 15:35:09",
+    "level": "warn",
+    "account_id": 45,
+    "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+   },
+   {
+    "time_msk": "2026-10-22 16:02:23",
+    "level": "warn",
+    "account_id": 3,
+    "message": "Telegram отклонил приглашение и вернул пользователя в missing_invitees"
+   },
+   {
+    "time_msk": "2026-10-22 16:02:27",
+    "level": "warn",
+    "account_id": 3,
+    "message": "Telegram отклонил приглашение и вернул пользователя в missing_invitees"
+   },
+   {
+    "time_msk": "2026-10-22 16:02:31",
+    "level": "info",
+    "account_id": 3,
+    "message": "Telegram принял запрос приглашения для user_4; проверяю добавление в чат"
+   },
+   {
+    "time_msk": "2026-10-22 16:02:32",
+    "level": "info",
+    "account_id": 3,
+    "message": "Приглашён user_4 (присутствие подтверждено)"
+   },
+   {
+    "time_msk": "2026-10-23 04:33:06",
+    "level": "info",
+    "account_id": null,
+    "message": "Кампания остановлена. Приглашено 2, приватность 0, осталось 2053"
+   }
+  ]
+ },
+ "silent_drops_all": [
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 7,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 37,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 30,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 17,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 11,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 91,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 48,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 55,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 8,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 61,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 47,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 98,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 51,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 102,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 54,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 43,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 56,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 41,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 57,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 5,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 72,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 21,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 81,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 50,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 96,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 12,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 88,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 40,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 92,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 9,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 65,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 45,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 63,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 14,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 83,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 32,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 76,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 25,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 60,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 53,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 100,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 49,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 97,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 46,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 95,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 44,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 93,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 42,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 89,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 38,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 87,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 36,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 85,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 34,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 84,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 33,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 82,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 31,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 80,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 29,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 79,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 28,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 78,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 27,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 77,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 26,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 75,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 24,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 73,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 22,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 71,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 20,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 70,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 19,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 69,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 18,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 66,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 16,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 14,
+   "account_id": 86,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:39:37",
+   "campaign_id": 13,
+   "account_id": 35,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:42:09",
+   "campaign_id": 14,
+   "account_id": 57,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:42:09",
+   "campaign_id": 14,
+   "account_id": 80,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:42:09",
+   "campaign_id": 14,
+   "account_id": 89,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:42:09",
+   "campaign_id": 14,
+   "account_id": 97,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:42:09",
+   "campaign_id": 14,
+   "account_id": 74,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:42:09",
+   "campaign_id": 14,
+   "account_id": 64,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-09-30 10:42:09",
+   "campaign_id": 13,
+   "account_id": 35,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 17:52:19",
+   "campaign_id": 13,
+   "account_id": 14,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 17:52:51",
+   "campaign_id": 13,
+   "account_id": 18,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 17:52:51",
+   "campaign_id": 13,
+   "account_id": 15,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 17:52:51",
+   "campaign_id": 13,
+   "account_id": 12,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 17:53:24",
+   "campaign_id": 13,
+   "account_id": 16,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:02:28",
+   "campaign_id": 13,
+   "account_id": 28,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:02:28",
+   "campaign_id": 13,
+   "account_id": 23,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:02:59",
+   "campaign_id": 13,
+   "account_id": 20,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:03:30",
+   "campaign_id": 13,
+   "account_id": 21,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:03:30",
+   "campaign_id": 13,
+   "account_id": 27,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:03:30",
+   "campaign_id": 13,
+   "account_id": 24,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:03:30",
+   "campaign_id": 14,
+   "account_id": 81,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:03:30",
+   "campaign_id": 13,
+   "account_id": 25,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:04:01",
+   "campaign_id": 13,
+   "account_id": 26,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:12:15",
+   "campaign_id": 13,
+   "account_id": 36,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:12:46",
+   "campaign_id": 13,
+   "account_id": 38,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:12:46",
+   "campaign_id": 13,
+   "account_id": 31,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:12:46",
+   "campaign_id": 13,
+   "account_id": 33,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:12:46",
+   "campaign_id": 13,
+   "account_id": 30,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:12:46",
+   "campaign_id": 13,
+   "account_id": 35,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:13:37",
+   "campaign_id": 13,
+   "account_id": 32,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:13:37",
+   "campaign_id": 13,
+   "account_id": 29,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:13:37",
+   "campaign_id": 13,
+   "account_id": 37,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-01 18:13:37",
+   "campaign_id": 13,
+   "account_id": 34,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:05:04",
+   "campaign_id": 15,
+   "account_id": 54,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:05:35",
+   "campaign_id": 15,
+   "account_id": 53,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:05:35",
+   "campaign_id": 15,
+   "account_id": 58,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:05:35",
+   "campaign_id": 15,
+   "account_id": 57,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:05:35",
+   "campaign_id": 15,
+   "account_id": 55,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:06:06",
+   "campaign_id": 15,
+   "account_id": 60,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:06:06",
+   "campaign_id": 15,
+   "account_id": 59,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:06:06",
+   "campaign_id": 15,
+   "account_id": 61,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 17:06:06",
+   "campaign_id": 15,
+   "account_id": 56,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:26",
+   "campaign_id": 16,
+   "account_id": 82,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:26",
+   "campaign_id": 16,
+   "account_id": 77,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:26",
+   "campaign_id": 16,
+   "account_id": 81,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:26",
+   "campaign_id": 16,
+   "account_id": 74,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:26",
+   "campaign_id": 16,
+   "account_id": 83,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:56",
+   "campaign_id": 16,
+   "account_id": 75,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:56",
+   "campaign_id": 16,
+   "account_id": 80,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:56",
+   "campaign_id": 16,
+   "account_id": 79,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:56",
+   "campaign_id": 16,
+   "account_id": 78,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:12:56",
+   "campaign_id": 16,
+   "account_id": 76,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-02 18:38:58",
+   "campaign_id": 18,
+   "account_id": 94,
+   "message": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "time_msk": "2026-10-05 21:23:37",
+   "campaign_id": 18,
+   "account_id": 94,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 11:10:37",
+   "campaign_id": 21,
+   "account_id": 43,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 11:50:31",
+   "campaign_id": 21,
+   "account_id": 93,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 12:26:41",
+   "campaign_id": 21,
+   "account_id": 53,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 14:00:39",
+   "campaign_id": 21,
+   "account_id": 103,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 14:23:15",
+   "campaign_id": 21,
+   "account_id": 33,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 14:40:29",
+   "campaign_id": 21,
+   "account_id": 83,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 16:10:21",
+   "campaign_id": 21,
+   "account_id": 73,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 16:26:51",
+   "campaign_id": 21,
+   "account_id": 63,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-12 16:43:55",
+   "campaign_id": 21,
+   "account_id": 23,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 11:11:09",
+   "campaign_id": 21,
+   "account_id": 43,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 11:43:32",
+   "campaign_id": 21,
+   "account_id": 93,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 12:41:31",
+   "campaign_id": 21,
+   "account_id": 53,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 13:59:29",
+   "campaign_id": 21,
+   "account_id": 103,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 14:23:42",
+   "campaign_id": 21,
+   "account_id": 33,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 14:43:22",
+   "campaign_id": 21,
+   "account_id": 83,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 16:09:20",
+   "campaign_id": 21,
+   "account_id": 73,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 16:29:30",
+   "campaign_id": 21,
+   "account_id": 63,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-13 17:09:25",
+   "campaign_id": 21,
+   "account_id": 23,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 12:19:17",
+   "campaign_id": 21,
+   "account_id": 93,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 13:18:55",
+   "campaign_id": 21,
+   "account_id": 53,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 14:19:25",
+   "campaign_id": 21,
+   "account_id": 103,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 14:44:19",
+   "campaign_id": 21,
+   "account_id": 43,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 15:09:17",
+   "campaign_id": 21,
+   "account_id": 33,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 15:31:22",
+   "campaign_id": 21,
+   "account_id": 83,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 16:42:10",
+   "campaign_id": 21,
+   "account_id": 63,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 16:59:58",
+   "campaign_id": 21,
+   "account_id": 73,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-14 17:18:11",
+   "campaign_id": 21,
+   "account_id": 23,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-15 10:31:29",
+   "campaign_id": 22,
+   "account_id": 104,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-15 11:03:29",
+   "campaign_id": 23,
+   "account_id": 7,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-15 11:34:16",
+   "campaign_id": 25,
+   "account_id": 8,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-16 11:24:51",
+   "campaign_id": 25,
+   "account_id": 8,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-21 15:41:49",
+   "campaign_id": 26,
+   "account_id": 45,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  },
+  {
+   "time_msk": "2026-10-22 15:35:09",
+   "campaign_id": 26,
+   "account_id": 45,
+   "message": "Telegram не подтвердил присутствие пользователя после 5 проверок"
+  }
+ ],
+ "event_patterns_all_time": [
+  {
+   "count": 1709,
+   "level": "warn",
+   "pattern": "Telegram временно не подтвердил право приглашать; аккаунт остаётся в кампании, доступ будет перепроверен автоматически через N мин"
+  },
+  {
+   "count": 609,
+   "level": "error",
+   "pattern": "Непредвиденная ошибка: ConnectionError() takes no keyword arguments"
+  },
+  {
+   "count": 390,
+   "level": "warn",
+   "pattern": "подключение к Telegram: временный сетевой сбой, повтор N/N через N сек: Connection to Telegram failed N time(s)"
+  },
+  {
+   "count": 333,
+   "level": "info",
+   "pattern": "Приглашён <user>"
+  },
+  {
+   "count": 142,
+   "level": "warn",
+   "pattern": "Аккаунт на паузе N мин: PEER_FLOOD — Telegram счёл действия спамом"
+  },
+  {
+   "count": 141,
+   "level": "error",
+   "pattern": "Аккаунт получил PEER_FLOOD и выведен из ротации на сутки"
+  },
+  {
+   "count": 131,
+   "level": "warn",
+   "pattern": "Telegram не подтвердил присутствие пользователя в целевом чате"
+  },
+  {
+   "count": 83,
+   "level": "warn",
+   "pattern": "Постоянное ограничение инвайтинга снято вручную оператором"
+  },
+  {
+   "count": 78,
+   "level": "warn",
+   "pattern": "После N попыток соединение не восстановлено; воркер остаётся в кампании и повторит подключение через N мин: Connection to Telegram failed N time(s)"
+  },
+  {
+   "count": 60,
+   "level": "info",
+   "pattern": "Кампания «кампания» запущена"
+  },
+  {
+   "count": 58,
+   "level": "info",
+   "pattern": "Кампания остановлена. Приглашено N, приватность N, осталось N"
+  },
+  {
+   "count": 42,
+   "level": "warn",
+   "pattern": "Временный технический сбой; воркер остаётся в кампании: Не удалось повторно проверить членство непосредственно перед приглашением: Cannot send requests while di"
+  },
+  {
+   "count": 38,
+   "level": "warn",
+   "pattern": "подключение к Telegram: временный сетевой сбой, повтор N/N через N сек: TimeoutError"
+  },
+  {
+   "count": 37,
+   "level": "warn",
+   "pattern": "Аккаунт не может работать с целевым чатом: Could not find the input entity for PeerUser(user_id=N) (PeerUser). Please read https://docs.telethon.dev/en/stable/c"
+  },
+  {
+   "count": 34,
+   "level": "warn",
+   "pattern": "Telegram не подтвердил присутствие пользователя после N проверок"
+  },
+  {
+   "count": 33,
+   "level": "info",
+   "pattern": "В ротации N аккаунт(ов)"
+  },
+  {
+   "count": 25,
+   "level": "info",
+   "pattern": "Кампания «кампания» создана, целей: N"
+  },
+  {
+   "count": 24,
+   "level": "warn",
+   "pattern": "запуск аккаунта: временный сетевой сбой, повтор N/N через N сек: TimeoutError"
+  },
+  {
+   "count": 23,
+   "level": "info",
+   "pattern": "В ротации N аккаунт(ов), ожидают соединения: N, перепроверки доступа: N"
+  },
+  {
+   "count": 22,
+   "level": "warn",
+   "pattern": "Telegram отклонил приглашение и вернул пользователя в missing_invitees"
+  },
+  {
+   "count": 21,
+   "level": "info",
+   "pattern": "Старт распределён волнами: до N аккаунтов каждые N минут, между параллельными кампаниями сдвиг N минут, разброс до N секунд"
+  },
+  {
+   "count": 12,
+   "level": "info",
+   "pattern": "Предварительная проверка: готово аккаунтов N/N, пригодных целей N/N"
+  },
+  {
+   "count": 11,
+   "level": "info",
+   "pattern": "запуск аккаунта: соединение восстановлено с попытки N/N"
+  },
+  {
+   "count": 11,
+   "level": "info",
+   "pattern": "Запрос отправлен, ожидается подтверждение: <user>"
+  },
+  {
+   "count": 10,
+   "level": "error",
+   "pattern": "Ошибка приглашения: RPCError N: CHAT_MEMBER_ADD_FAILED (caused by InviteToChannelRequest)"
+  },
+  {
+   "count": 10,
+   "level": "warn",
+   "pattern": "запуск аккаунта: временный сетевой сбой, повтор N/N через N сек: Прокси не смог установить соединение с Telegram"
+  },
+  {
+   "count": 9,
+   "level": "warn",
+   "pattern": "Аккаунт не авторизован — пропущен"
+  },
+  {
+   "count": 8,
+   "level": "info",
+   "pattern": "подключение к Telegram: соединение восстановлено с попытки N/N"
+  },
+  {
+   "count": 8,
+   "level": "info",
+   "pattern": "Приглашён <user> (присутствие подтверждено)"
+  },
+  {
+   "count": 6,
+   "level": "warn",
+   "pattern": "Аккаунт на паузе N мин: аккаунт ограничен в приглашениях"
+  },
+  {
+   "count": 6,
+   "level": "error",
+   "pattern": "Аккаунт ограничен Telegram в приглашениях (спамблок), пауза N часов"
+  },
+  {
+   "count": 6,
+   "level": "warn",
+   "pattern": "После N попыток соединение не восстановлено; воркер остаётся в кампании и повторит подключение через N мин: TimeoutError"
+  },
+  {
+   "count": 5,
+   "level": "warn",
+   "pattern": "Тайм-аут подключения аккаунта — пропущен, остальные продолжают работу"
+  },
+  {
+   "count": 4,
+   "level": "error",
+   "pattern": "Нет прав добавлять участников в целевой чат — аккаунт снят с кампании"
+  },
+  {
+   "count": 4,
+   "level": "warn",
+   "pattern": "Недоступно N целей: нет @username и ни один аккаунт из ротации их не парсил. Заведите инвайтеры в чат-донор и спарсите его каждым из них."
+  },
+  {
+   "count": 4,
+   "level": "info",
+   "pattern": "Telegram принял запрос приглашения для <user>; проверяю добавление в чат"
+  },
+  {
+   "count": 3,
+   "level": "info",
+   "pattern": "Аккаунт проверен и возвращён в текущую кампанию без её остановки"
+  },
+  {
+   "count": 3,
+   "level": "warn",
+   "pattern": "дубль подтверждённого приглашения параллельной кампании"
+  },
+  {
+   "count": 2,
+   "level": "warn",
+   "pattern": "Аккаунт на паузе N мин: FloodWait Ns"
+  },
+  {
+   "count": 2,
+   "level": "warn",
+   "pattern": "Аккаунт не может работать с целевым чатом: Прокси не смог установить соединение с Telegram"
+  },
+  {
+   "count": 2,
+   "level": "info",
+   "pattern": "В ротации N аккаунт(ов), из них ожидают восстановления соединения: N"
+  },
+  {
+   "count": 2,
+   "level": "warn",
+   "pattern": "приглашение: временный сетевой сбой, повтор N/N через N сек: TimeoutError"
+  },
+  {
+   "count": 2,
+   "level": "warn",
+   "pattern": "При запуске выполнено N попыток подключения; аккаунт остаётся в кампании и повторит подключение автоматически: Прокси не смог установить соединение с Telegram"
+  },
+  {
+   "count": 2,
+   "level": "warn",
+   "pattern": "При запуске выполнено N попыток подключения; аккаунт остаётся в кампании и повторит подключение автоматически: TimeoutError"
+  },
+  {
+   "count": 2,
+   "level": "warn",
+   "pattern": "Временный технический сбой; воркер остаётся в кампании: N bytes read on a total of N expected bytes"
+  },
+  {
+   "count": 1,
+   "level": "error",
+   "pattern": "Непредвиденная ошибка: RPCError N: CHAT_MEMBER_ADD_FAILED (caused by InviteToChannelRequest)"
+  },
+  {
+   "count": 1,
+   "level": "warn",
+   "pattern": "Аккаунт не может работать с целевым чатом: ConnectionError() takes no keyword arguments"
+  },
+  {
+   "count": 1,
+   "level": "warn",
+   "pattern": "Аккаунт на паузе N мин: сбой подключения; проверьте прокси и перезапустите кампанию"
+  },
+  {
+   "count": 1,
+   "level": "error",
+   "pattern": "Аккаунт снят с текущего запуска: Прокси не смог установить соединение с Telegram"
+  },
+  {
+   "count": 1,
+   "level": "info",
+   "pattern": "приглашение: соединение восстановлено с попытки N/N"
+  },
+  {
+   "count": 1,
+   "level": "info",
+   "pattern": "Создана одиночная тестовая кампания с подтверждённым согласием пользователя"
+  },
+  {
+   "count": 1,
+   "level": "warn",
+   "pattern": "Временный технический сбой; воркер остаётся в кампании: Не удалось проверить членство перед приглашением: N bytes read on a total of N expected bytes"
+  },
+  {
+   "count": 1,
+   "level": "error",
+   "pattern": "Аккаунт получил PEER_FLOOD и выведен из ротации до ручного восстановления"
+  },
+  {
+   "count": 1,
+   "level": "info",
+   "pattern": "Ожидание общего интервала кампании: ещё N сек; следующее приглашение пока не отправлено"
+  },
+  {
+   "count": 1,
+   "level": "info",
+   "pattern": "Общий интервал кампании завершён; продолжаю подготовку приглашения"
+  }
+ ],
+ "accounts": [
+  {
+   "id": 3,
+   "label": "ПервыйСАШИН",
+   "created": "2026-08-23",
+   "age_days": 65,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P2",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4075,
+   "last_invite_attempt": "2026-10-22 16:02:32",
+   "rpc_accepted": 43,
+   "found_in_chat": 7,
+   "not_found_in_chat": 0,
+   "missing_invitees": 6,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 5,
+   "label": "ТестовыйФронт",
+   "created": "2026-09-10",
+   "age_days": 47,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": null,
+   "proxy_type": "без прокси",
+   "proxy_provider": null,
+   "known_access_hashes": 81,
+   "last_invite_attempt": "2026-09-30 10:06:14",
+   "rpc_accepted": 36,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 5,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 6,
+   "label": "Третий",
+   "created": "2026-09-15",
+   "age_days": 42,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": null,
+   "proxy_type": "без прокси",
+   "proxy_provider": null,
+   "known_access_hashes": 323,
+   "last_invite_attempt": "2026-10-15 11:30:37",
+   "rpc_accepted": 34,
+   "found_in_chat": 1,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 7,
+   "label": "Четвертый",
+   "created": "2026-09-15",
+   "age_days": 42,
+   "session_status": "authorized",
+   "can_invite": false,
+   "invite_restricted_now": true,
+   "restriction_reason": "PEER_FLOOD — Telegram счёл действия спамом",
+   "daily_limit": 2,
+   "proxy_group": null,
+   "proxy_type": "без прокси",
+   "proxy_provider": null,
+   "known_access_hashes": 115,
+   "last_invite_attempt": "2026-10-15 11:03:29",
+   "rpc_accepted": 12,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 6,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 8,
+   "label": "пятый",
+   "created": "2026-09-15",
+   "age_days": 42,
+   "session_status": "error",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P3",
+   "proxy_type": "socks5",
+   "proxy_provider": "отдельный IP",
+   "known_access_hashes": 88,
+   "last_invite_attempt": "2026-10-16 11:24:51",
+   "rpc_accepted": 17,
+   "found_in_chat": 0,
+   "not_found_in_chat": 3,
+   "missing_invitees": 0,
+   "peer_flood": 5,
+   "chat_member_add_failed": 2
+  },
+  {
+   "id": 9,
+   "label": "шестой",
+   "created": "2026-09-15",
+   "age_days": 42,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P4",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 69,
+   "last_invite_attempt": "2026-09-30 10:06:12",
+   "rpc_accepted": 27,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 4,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 10,
+   "label": "семь",
+   "created": "2026-09-15",
+   "age_days": 42,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P5",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 206,
+   "last_invite_attempt": "2026-09-30 16:34:31",
+   "rpc_accepted": 28,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 4,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 11,
+   "label": "восьмой",
+   "created": "2026-09-17",
+   "age_days": 41,
+   "session_status": "error",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P6",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 65,
+   "last_invite_attempt": "2026-09-30 10:36:18",
+   "rpc_accepted": 13,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 5,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 12,
+   "label": "девятый",
+   "created": "2026-09-17",
+   "age_days": 41,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P7",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 30,
+   "last_invite_attempt": "2026-10-01 17:51:01",
+   "rpc_accepted": 13,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 6,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 13,
+   "label": "десятый",
+   "created": "2026-09-17",
+   "age_days": 41,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P8",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": null,
+   "rpc_accepted": 0,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 14,
+   "label": "11",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 17:50:43",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 15,
+   "label": "12",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": "2026-10-01 17:51:10",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 16,
+   "label": "cd",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 5,
+   "last_invite_attempt": "2026-10-01 17:51:38",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 17,
+   "label": "14",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": "2026-10-01 17:50:42",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 18,
+   "label": "15",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 5,
+   "last_invite_attempt": "2026-10-01 17:51:16",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 19,
+   "label": "16",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 163,
+   "last_invite_attempt": "2026-09-30 10:06:11",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 20,
+   "label": "17",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 18:01:17",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 21,
+   "label": "18",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 18:01:47",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 22,
+   "label": "19",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": "2026-09-30 10:06:11",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 23,
+   "label": "20",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 42,
+   "last_invite_attempt": "2026-10-14 17:18:11",
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 4,
+   "missing_invitees": 2,
+   "peer_flood": 2,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 24,
+   "label": "21",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 18:01:44",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 25,
+   "label": "22",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 5,
+   "last_invite_attempt": "2026-10-01 18:01:43",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 26,
+   "label": "23",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 5,
+   "last_invite_attempt": "2026-10-01 18:02:03",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 27,
+   "label": "24",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 165,
+   "last_invite_attempt": "2026-10-01 18:01:45",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 28,
+   "label": "25",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 18:00:52",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 29,
+   "label": "26",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": "2026-10-01 18:11:32",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 30,
+   "label": "27",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": "2026-10-01 18:10:56",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 31,
+   "label": "28",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 5,
+   "last_invite_attempt": "2026-10-01 18:11:12",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 32,
+   "label": "29",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 18:11:35",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 33,
+   "label": "30",
+   "created": "2026-09-29",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 38,
+   "last_invite_attempt": "2026-10-14 15:09:17",
+   "rpc_accepted": 5,
+   "found_in_chat": 0,
+   "not_found_in_chat": 5,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 34,
+   "label": "cd2",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 18:11:18",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 35,
+   "label": "32",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 5,
+   "last_invite_attempt": "2026-10-01 18:10:47",
+   "rpc_accepted": 3,
+   "found_in_chat": 0,
+   "not_found_in_chat": 3,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 36,
+   "label": "33",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": "2026-10-01 18:10:41",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 37,
+   "label": "34",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 165,
+   "last_invite_attempt": "2026-10-01 18:11:26",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 38,
+   "label": "35",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-10-01 18:11:13",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 39,
+   "label": "36",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 160,
+   "last_invite_attempt": "2026-10-01 03:47:44",
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 40,
+   "label": "37",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:12",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 41,
+   "label": "38",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:06:14",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 42,
+   "label": "39",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "error",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:11",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 43,
+   "label": "40",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 43,
+   "last_invite_attempt": "2026-10-14 14:44:19",
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 4,
+   "missing_invitees": 5,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 44,
+   "label": "41",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:11",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 45,
+   "label": "42",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 34,
+   "last_invite_attempt": "2026-10-22 15:35:09",
+   "rpc_accepted": 3,
+   "found_in_chat": 0,
+   "not_found_in_chat": 3,
+   "missing_invitees": 1,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 46,
+   "label": "43",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:11",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 47,
+   "label": "44",
+   "created": "2026-09-30",
+   "age_days": 28,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:36",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 48,
+   "label": "45",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:36:15",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 49,
+   "label": "46",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:11",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 50,
+   "label": "47",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:13",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 51,
+   "label": "48",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 52,
+   "label": "49",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 7,
+   "last_invite_attempt": null,
+   "rpc_accepted": 0,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 53,
+   "label": "50",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 168,
+   "last_invite_attempt": "2026-10-14 13:18:55",
+   "rpc_accepted": 5,
+   "found_in_chat": 0,
+   "not_found_in_chat": 5,
+   "missing_invitees": 1,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 54,
+   "label": "51",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 300,
+   "last_invite_attempt": "2026-10-02 17:03:29",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 55,
+   "label": "52",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 287,
+   "last_invite_attempt": "2026-10-02 17:03:42",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 56,
+   "label": "53",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 305,
+   "last_invite_attempt": "2026-10-02 17:04:06",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 57,
+   "label": "54",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 146,
+   "last_invite_attempt": "2026-10-02 17:03:49",
+   "rpc_accepted": 3,
+   "found_in_chat": 0,
+   "not_found_in_chat": 3,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 58,
+   "label": "55",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 147,
+   "last_invite_attempt": "2026-10-02 17:03:54",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 59,
+   "label": "56",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 143,
+   "last_invite_attempt": "2026-10-02 17:04:10",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 60,
+   "label": "57",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 300,
+   "last_invite_attempt": "2026-10-02 17:04:30",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 61,
+   "label": "58",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 149,
+   "last_invite_attempt": "2026-10-02 17:04:09",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 62,
+   "label": "59",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 142,
+   "last_invite_attempt": null,
+   "rpc_accepted": 0,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 63,
+   "label": "60",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 172,
+   "last_invite_attempt": "2026-10-14 16:42:10",
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 4,
+   "missing_invitees": 2,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 64,
+   "label": "61",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:40:33",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 65,
+   "label": "62",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:35",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 66,
+   "label": "63",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:06:33",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 67,
+   "label": "64",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 1,
+   "last_invite_attempt": null,
+   "rpc_accepted": 0,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 69,
+   "label": "65",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 70,
+   "label": "66",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 71,
+   "label": "67",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 72,
+   "label": "68",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:32",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 73,
+   "label": "69",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 40,
+   "last_invite_attempt": "2026-10-14 16:59:58",
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 4,
+   "missing_invitees": 3,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 74,
+   "label": "70",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 156,
+   "last_invite_attempt": "2026-09-30 10:40:34",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 75,
+   "label": "71",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 143,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 76,
+   "label": "72",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 307,
+   "last_invite_attempt": "2026-09-30 10:06:33",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 77,
+   "label": "73",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 150,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 78,
+   "label": "74",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 154,
+   "last_invite_attempt": "2026-09-30 10:06:33",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 79,
+   "label": "75",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 154,
+   "last_invite_attempt": "2026-09-30 10:06:33",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 80,
+   "label": "76",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 311,
+   "last_invite_attempt": "2026-09-30 10:40:36",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 3,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 81,
+   "label": "77",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 154,
+   "last_invite_attempt": "2026-10-01 18:01:43",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 3,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 82,
+   "label": "78",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 155,
+   "last_invite_attempt": "2026-09-30 10:06:35",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 83,
+   "label": "79",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 346,
+   "last_invite_attempt": "2026-10-14 15:31:22",
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 5,
+   "missing_invitees": 0,
+   "peer_flood": 2,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 84,
+   "label": "80",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 151,
+   "last_invite_attempt": "2026-09-30 10:06:33",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 85,
+   "label": "81",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 86,
+   "label": "82",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 87,
+   "label": "83",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 88,
+   "label": "84",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:06:35",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 89,
+   "label": "85",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:40:35",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 90,
+   "label": "86",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": "2026-09-30 10:06:32",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 91,
+   "label": "87",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 6,
+   "last_invite_attempt": "2026-09-30 10:06:37",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 92,
+   "label": "88",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:06:35",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 93,
+   "label": "89",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 35,
+   "last_invite_attempt": "2026-10-14 12:19:17",
+   "rpc_accepted": 4,
+   "found_in_chat": 0,
+   "not_found_in_chat": 4,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 94,
+   "label": "90",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "needs_code",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 163,
+   "last_invite_attempt": "2026-10-05 21:23:37",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 95,
+   "label": "91",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:34",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 96,
+   "label": "92",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:06:35",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 97,
+   "label": "93",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": "2026-09-30 10:40:34",
+   "rpc_accepted": 2,
+   "found_in_chat": 0,
+   "not_found_in_chat": 2,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 98,
+   "label": "94",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:35",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 99,
+   "label": "95",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 3,
+   "last_invite_attempt": null,
+   "rpc_accepted": 0,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 100,
+   "label": "96",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:33",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 101,
+   "label": "97",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 4,
+   "last_invite_attempt": null,
+   "rpc_accepted": 0,
+   "found_in_chat": 0,
+   "not_found_in_chat": 0,
+   "missing_invitees": 0,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 102,
+   "label": "98",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "new",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 2,
+   "last_invite_attempt": "2026-09-30 10:06:33",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 0,
+   "peer_flood": 1,
+   "chat_member_add_failed": 0
+  },
+  {
+   "id": 103,
+   "label": "99",
+   "created": "2026-09-30",
+   "age_days": 27,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": "P1",
+   "proxy_type": "socks5",
+   "proxy_provider": "proxywing.com",
+   "known_access_hashes": 40,
+   "last_invite_attempt": "2026-10-14 14:19:25",
+   "rpc_accepted": 3,
+   "found_in_chat": 0,
+   "not_found_in_chat": 3,
+   "missing_invitees": 1,
+   "peer_flood": 0,
+   "chat_member_add_failed": 1
+  },
+  {
+   "id": 104,
+   "label": "100",
+   "created": "2026-10-15",
+   "age_days": 12,
+   "session_status": "authorized",
+   "can_invite": true,
+   "invite_restricted_now": false,
+   "restriction_reason": null,
+   "daily_limit": 2,
+   "proxy_group": null,
+   "proxy_type": "без прокси",
+   "proxy_provider": null,
+   "known_access_hashes": 32,
+   "last_invite_attempt": "2026-10-15 10:31:29",
+   "rpc_accepted": 1,
+   "found_in_chat": 0,
+   "not_found_in_chat": 1,
+   "missing_invitees": 1,
+   "peer_flood": 0,
+   "chat_member_add_failed": 0
+  }
+ ]
+}

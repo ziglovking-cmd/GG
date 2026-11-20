@@ -1,4 +1,5 @@
-import os, json, time, sqlite3, logging, io, zipfile, re
+import os, json, time, sqlite3, logging, io, zipfile, re, threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import requests
 from dotenv import load_dotenv
 
@@ -8,9 +9,16 @@ OWNER = int(os.environ['OWNER_ID'])
 KEY = os.environ['AI_API_KEY']
 BASE = os.getenv('AI_BASE_URL', 'https://api.openai.com/v1').rstrip('/')
 MODEL = os.getenv('AI_MODEL', 'gpt-4o-mini')
+DATA_DIR = os.getenv('DATA_DIR', '.')
+os.makedirs(DATA_DIR, exist_ok=True)
+DB_PATH = os.path.join(DATA_DIR, 'bot.sqlite3')
+WEBHOOK_URL = (os.getenv('WEBHOOK_URL') or '').rstrip('/')
+WEBHOOK_SECRET = os.getenv('WEBHOOK_SECRET') or TOKEN.split(':')[-1][:32]
+PORT = int(os.getenv('PORT', '8080'))
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
-db = sqlite3.connect('bot.sqlite3', check_same_thread=False)
+db = sqlite3.connect(DB_PATH, check_same_thread=False)
+_run_lock = threading.Lock()
 db.executescript('''
 create table if not exists chats(
   c text, k integer, onoff integer default 0, mode text default 'me',
@@ -489,9 +497,24 @@ def run(u):
         )
 
 
-if __name__ == '__main__':
+def safe_run(u):
+    try:
+        with _run_lock:
+            run(u)
+    except Exception as e:
+        logging.warning('Ошибка обновления %s: %s', u.get('update_id'), type(e).__name__)
+        try:
+            admin(
+                'Не удалось обработать событие. Проверь баланс и модель API, '
+                'сеть и права Telegram Business. Повторной отправки не будет.'
+            )
+        except Exception:
+            pass
+
+
+def run_polling():
     tg('deleteWebhook', drop_pending_updates=False)
-    logging.info('Бот запущен')
+    logging.info('Polling на %s', DB_PATH)
     while True:
         try:
             row = db.execute('select v from state where id=1').fetchone()
@@ -502,19 +525,64 @@ if __name__ == '__main__':
                 allowed_updates=['message', 'business_message'],
             )
             for u in updates:
-                try:
-                    run(u)
-                except Exception as e:
-                    logging.warning('Ошибка обновления %s: %s', u['update_id'], type(e).__name__)
-                    try:
-                        admin(
-                            'Не удалось обработать событие. Проверь баланс и модель API, '
-                            'сеть и права Telegram Business. Повторной отправки не будет.'
-                        )
-                    except Exception:
-                        pass
+                safe_run(u)
                 with db:
                     db.execute('insert or replace into state values(1,?)', (u['update_id'] + 1,))
         except Exception as e:
             logging.warning('Ошибка polling: %s', type(e).__name__)
             time.sleep(5)
+
+
+class Handler(BaseHTTPRequestHandler):
+    def log_message(self, fmt, *args):
+        logging.info('%s ' + fmt, self.address_string(), *args)
+
+    def _send(self, code, body=b'ok', ctype='text/plain; charset=utf-8'):
+        self.send_response(code)
+        self.send_header('Content-Type', ctype)
+        self.send_header('Content-Length', str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        if self.path in ('/', '/health', '/healthz'):
+            self._send(200, b'ok')
+        else:
+            self._send(404, b'not found')
+
+    def do_POST(self):
+        # /telegram/<secret>
+        parts = self.path.split('?', 1)[0].rstrip('/').split('/')
+        if len(parts) != 3 or parts[1] != 'telegram' or parts[2] != WEBHOOK_SECRET:
+            self._send(403, b'forbidden')
+            return
+        n = int(self.headers.get('Content-Length') or 0)
+        raw = self.rfile.read(n) if n else b'{}'
+        try:
+            u = json.loads(raw.decode('utf-8'))
+        except Exception:
+            self._send(400, b'bad json')
+            return
+        self._send(200, b'ok')
+        threading.Thread(target=safe_run, args=(u,), daemon=True).start()
+
+
+def run_webhook():
+    url = f'{WEBHOOK_URL}/telegram/{WEBHOOK_SECRET}'
+    args = dict(
+        url=url,
+        allowed_updates=['message', 'business_message'],
+        drop_pending_updates=False,
+    )
+    if re.fullmatch(r'[A-Za-z0-9_-]{1,256}', WEBHOOK_SECRET or ''):
+        args['secret_token'] = WEBHOOK_SECRET
+    tg('setWebhook', **args)
+    logging.info('Webhook → %s (db %s)', url, DB_PATH)
+    ThreadingHTTPServer(('0.0.0.0', PORT), Handler).serve_forever()
+
+
+if __name__ == '__main__':
+    if WEBHOOK_URL:
+        run_webhook()
+    else:
+        run_polling()

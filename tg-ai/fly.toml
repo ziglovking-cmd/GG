@@ -1,0 +1,29 @@
+# fly launch --config fly.toml  (из папки tg-ai)
+# Потом: fly secrets set BOT_TOKEN=... OWNER_ID=... AI_API_KEY=... WEBHOOK_URL=https://<app>.fly.dev
+#        fly volumes create tgdata --size 1
+#        fly deploy
+
+app = "tg-ai-bot"
+primary_region = "fra"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  DATA_DIR = "/data"
+  PORT = "8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
+
+[mounts]
+  source = "tgdata"
+  destination = "/data"

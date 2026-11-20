@@ -1,0 +1,29 @@
+# Бесплатный деплой: https://render.com → New → Blueprint → этот репо, путь tg-ai
+# После деплоя скопируй URL сервиса (https://xxx.onrender.com) в WEBHOOK_URL
+services:
+  - type: web
+    name: tg-ai-bot
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: OWNER_ID
+        sync: false
+      - key: AI_API_KEY
+        sync: false
+      - key: AI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: AI_MODEL
+        value: gpt-4o-mini
+      - key: WEBHOOK_URL
+        sync: false
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: DATA_DIR
+        value: /data
+      - key: PORT
+        value: "8080"

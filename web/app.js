@@ -248,6 +248,8 @@ function accountCard(a) {
       ${a.next_attempt_in > 0 ? `следующая попытка через ${fmtDuration(a.next_attempt_in)} · ` : ""}
       хэшей в базе: ${a.hashes}
       ${a.proxy ? " · прокси задан" : ' · <span style="color:var(--warn)">без прокси</span>'}
+      ${a.shared_proxy_warning
+        ? `<br><span style="color:var(--warn)">${esc(a.shared_proxy_warning)}</span>` : ""}
       ${a.last_error ? `<br><span style="color:var(--err)">${esc(a.last_error)}</span>` : ""}
       ${a.invite_restriction_reason
         ? `<br><span style="color:var(--err)">${esc(a.invite_restriction_reason)}</span>` : ""}
@@ -305,7 +307,7 @@ $("acc-add").onclick = async () => {
       label: $("acc-label").value.trim() || phone,
       phone,
       proxy: $("acc-proxy").value.trim() || null,
-      daily_limit: Number($("acc-limit").value) || 25,
+      daily_limit: Number($("acc-limit").value) || 2,
     } });
     $("acc-label").value = $("acc-phone").value = $("acc-proxy").value = "";
     toast("Аккаунт добавлен — запросите код");

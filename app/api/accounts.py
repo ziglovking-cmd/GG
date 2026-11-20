@@ -24,6 +24,18 @@ def list_accounts():
         r["invite_eligibility_code"] = eligibility_code
         r["invite_eligibility_detail"] = eligibility_detail
         r["hashes"] = db.q1("SELECT COUNT(*) c FROM hashes WHERE account_id=?", (r["id"],))["c"]
+        endpoint = accounts.proxy_endpoint(r.get("proxy"))
+        r["proxy_endpoint"] = endpoint
+        twins = accounts.shared_proxy_accounts(
+            r.get("proxy"), exclude_account_id=int(r["id"]), invite_only=True
+        )
+        r["shared_proxy_count"] = len(twins)
+        r["shared_proxy_warning"] = (
+            "Прокси host:port совпадает с %d другим(и) инвайтером(ами) — нужен отдельный IP"
+            % len(twins)
+            if twins and int(r.get("can_invite") or 0)
+            else None
+        )
     return rows
 
 
@@ -35,6 +47,12 @@ def create_account(body: AccountIn):
     session_name = "acc_" + "".join(ch for ch in phone if ch.isdigit())
     if db.q1("SELECT id FROM accounts WHERE session_name=?", (session_name,)):
         raise HTTPException(400, "Аккаунт с таким номером уже добавлен")
+    try:
+        accounts.assert_unique_invite_proxy(
+            body.proxy, can_invite=bool(body.can_invite)
+        )
+    except accounts.AuthError as exc:
+        raise HTTPException(400, str(exc))
     account_id = db.ex(
         """INSERT INTO accounts (label,phone,session_name,proxy,can_parse,can_invite,
                                  daily_limit,min_delay,max_delay,batch_size,batch_pause,created_at)
@@ -55,6 +73,22 @@ async def patch_account(account_id: int, body: AccountPatch):
         fields["can_parse"] = int(fields["can_parse"])
     if "can_invite" in fields:
         fields["can_invite"] = int(fields["can_invite"])
+    current = db.row_to_dict(db.q1("SELECT * FROM accounts WHERE id=?", (account_id,)))
+    if not current:
+        raise HTTPException(404, "Аккаунт не найден")
+    next_proxy = fields["proxy"] if "proxy" in fields else current.get("proxy")
+    next_can_invite = (
+        bool(fields["can_invite"])
+        if "can_invite" in fields
+        else bool(current.get("can_invite"))
+    )
+    if "proxy" in fields or "can_invite" in fields:
+        try:
+            accounts.assert_unique_invite_proxy(
+                next_proxy, account_id=account_id, can_invite=next_can_invite
+            )
+        except accounts.AuthError as exc:
+            raise HTTPException(400, str(exc))
     sql = "UPDATE accounts SET " + ",".join("%s=?" % k for k in fields) + " WHERE id=?"
     db.ex(sql, list(fields.values()) + [account_id])
     if "proxy" in fields:

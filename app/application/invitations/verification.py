@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import time
 from typing import Any, Dict
 
+from app import accounts as accounts_service
 from app.domain import invitations as policy
 from app.domain.invitations import friendly_error, invite_verification_note
 
@@ -89,6 +90,7 @@ class MembershipVerification:
 
         if membership == "present":
             self.repo.finalize_invite_confirmation(int(target["id"]), True)
+            accounts_service.register_delivery_outcome(account_id, "invited")
             info.pop("verification_retry_at", None)
             info["state"] = "присутствие подтверждено повторной проверкой"
         elif membership == "not_member":
@@ -98,8 +100,17 @@ class MembershipVerification:
                 error=detail,
                 result=result,
             )
+            restricted = accounts_service.register_delivery_outcome(
+                account_id, "unconfirmed"
+            )
             info.pop("verification_retry_at", None)
-            info["state"] = "Telegram не добавил пользователя"
+            info["state"] = (
+                "снят с ротации после тихих потерь"
+                if restricted
+                else "Telegram не добавил пользователя"
+            )
+            if restricted:
+                info["halt_after_silent_loss"] = True
         else:
             self.repo.save_verification_error(invite_verification_note(detail), int(target['id']))
             info["verification_retry_at"] = now_ts + policy.MEMBERSHIP_RETRY_PAUSE
@@ -123,6 +134,9 @@ class MembershipVerification:
             if final_status == "invited":
                 attempt.outcome = "invited"
                 attempt.info["state"] = "присутствие подтверждено"
+                accounts_service.register_delivery_outcome(
+                    attempt.account_id, "invited"
+                )
             else:
                 attempt.outcome = "pending_confirmation"
                 attempt.notification_error = (
@@ -138,7 +152,15 @@ class MembershipVerification:
                 result=confirmation_result,
             )
             attempt.outcome = "unconfirmed"
-            attempt.info["state"] = "Telegram не добавил пользователя"
+            restricted = accounts_service.register_delivery_outcome(
+                attempt.account_id, "unconfirmed"
+            )
+            if restricted:
+                attempt.halt_worker = True
+                attempt.info["state"] = "снят с ротации после тихих потерь"
+                attempt.notification_error = restricted
+            else:
+                attempt.info["state"] = "Telegram не добавил пользователя"
         else:
             # UNKNOWN нельзя превращать ни в invited, ни в достоверное
             # отсутствие. Оставляем durable verifying для последующей

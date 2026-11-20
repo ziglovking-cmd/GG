@@ -157,6 +157,34 @@ async def _reset_account_client(account_id: int) -> None:
 async def _probe_account(campaign: Dict[str, Any], account_id: int,
                          label: str) -> Dict[str, Any]:
     """Один ограниченный по времени сетевой проход проверки аккаунта."""
+    account = db.row_to_dict(db.q1("SELECT * FROM accounts WHERE id=?", (account_id,)))
+    if account:
+        eligible, code, detail = accounts.invite_eligibility(
+            account, check_cooldown=True, check_quota=False
+        )
+        if not eligible and code == "restricted":
+            return _account_result(account_id, label, "restricted", detail)
+        twins = accounts.shared_proxy_accounts(
+            account.get("proxy"), exclude_account_id=account_id, invite_only=True
+        )
+        if twins:
+            names = ", ".join(
+                str(row.get("label") or row["id"]) for row in twins[:3]
+            )
+            return _account_result(
+                account_id,
+                label,
+                "shared_proxy",
+                "Общий прокси host:port с: %s. Нужен отдельный стабильный IP"
+                % names,
+            )
+        if not account.get("proxy"):
+            return _account_result(
+                account_id,
+                label,
+                "no_proxy",
+                "Нет прокси: для инвайтинга нужен отдельный IP на аккаунт",
+            )
     client = await accounts.get_client(account_id)
     if not await client.is_user_authorized():
         return _account_result(account_id, label, "unauthorized", "Telegram-сессия завершена")

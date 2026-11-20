@@ -76,6 +76,9 @@ class AccountWorker:
                 info["state"] = "доступ к чату подтверждён · готов к работе"
 
             if await self.verification.retry_pending(campaign_id, account_id, info):
+                if info.pop("halt_after_silent_loss", None):
+                    info["state"] = "снят с ротации после тихих потерь"
+                    return
                 if not self.repo.has_unresolved_targets(campaign_id):
                     info["state"] = "цели закончились"
                     return

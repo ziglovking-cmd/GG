@@ -35,6 +35,8 @@ START_STAGGER_JITTER = 60
 # ключами invite_gap_min / invite_gap_max (секунды).
 CAMPAIGN_INVITE_GAP_MIN = 15 * 60
 CAMPAIGN_INVITE_GAP_MAX = 25 * 60
+# Легитимная гигиена пула: один endpoint прокси не должен кормить десятки инвайтеров.
+SHARED_PROXY_SOFT_LIMIT = 1
 
 TERMINAL_STATUSES = ("invited", "privacy", "already", "deleted", "failed", "skipped", "no_hash")
 

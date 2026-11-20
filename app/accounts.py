@@ -20,7 +20,12 @@ from telethon.errors import (
 )
 
 from . import db
-from .config import SESSIONS_DIR, get_api_credentials
+from .config import (
+    SESSIONS_DIR,
+    SILENT_LOSS_LOOKBACK_SECONDS,
+    SILENT_LOSS_RESTRICT_THRESHOLD,
+    get_api_credentials,
+)
 
 # account_id -> TelegramClient
 _clients: Dict[int, TelegramClient] = {}
@@ -59,6 +64,121 @@ def parse_proxy(raw: Optional[str]):
             raise AuthError("Для mtproxy нужен секрет: mtproxy://SECRET@host:port")
         return (u.hostname, u.port, secret)
     raise AuthError("Неизвестный тип прокси: " + scheme)
+
+
+def proxy_endpoint(raw: Optional[str]) -> Optional[str]:
+    """Стабильный ключ прокси без пароля: host:port (схема игнорируется)."""
+    if not raw or not str(raw).strip():
+        return None
+    text = str(raw).strip()
+    if "://" not in text:
+        text = "socks5://" + text
+    parsed = urlparse(text)
+    if not parsed.hostname or not parsed.port:
+        return None
+    return "%s:%d" % (parsed.hostname.lower(), int(parsed.port))
+
+
+def shared_proxy_accounts(
+    proxy: Optional[str],
+    *,
+    exclude_account_id: Optional[int] = None,
+    invite_only: bool = True,
+) -> list[Dict[str, Any]]:
+    """Аккаунты, уже сидящие на том же host:port."""
+    endpoint = proxy_endpoint(proxy)
+    if not endpoint:
+        return []
+    rows = db.rows_to_dicts(
+        db.q(
+            """
+            SELECT id, label, phone, proxy, can_invite, status
+            FROM accounts
+            ORDER BY id
+            """
+        )
+    )
+    shared: list[Dict[str, Any]] = []
+    for row in rows:
+        if exclude_account_id is not None and int(row["id"]) == int(exclude_account_id):
+            continue
+        if invite_only and not int(row.get("can_invite") or 0):
+            continue
+        if proxy_endpoint(row.get("proxy")) == endpoint:
+            shared.append(row)
+    return shared
+
+
+def assert_unique_invite_proxy(
+    proxy: Optional[str],
+    *,
+    account_id: Optional[int] = None,
+    can_invite: bool = True,
+) -> None:
+    """Легитимное правило: один invite-аккаунт — один endpoint прокси."""
+    if not can_invite:
+        return
+    if not proxy or not str(proxy).strip():
+        raise AuthError(
+            "Для инвайтинга нужен отдельный стабильный прокси (1 аккаунт = 1 IP). "
+            "Без прокси Telegram связывает аккаунты по вашему IP."
+        )
+    twins = shared_proxy_accounts(proxy, exclude_account_id=account_id, invite_only=True)
+    if twins:
+        labels = ", ".join(
+            str(row.get("label") or row.get("phone") or row["id"]) for row in twins[:5]
+        )
+        raise AuthError(
+            "Этот прокси (host:port) уже используется другим инвайтером: %s. "
+            "Нужен отдельный стабильный IP на каждый аккаунт — ротация двух IP "
+            "на одном аккаунте не помогает."
+            % labels
+        )
+
+
+def register_delivery_outcome(account_id: int, outcome: str) -> Optional[str]:
+    """После тихих потерь без confirmed снимает аккаунт с ротации.
+
+    Не обходит лимиты Telegram: просто перестаёт жечь плохой аккаунт/IP.
+    """
+    if outcome != "unconfirmed":
+        return None
+    account = db.row_to_dict(db.q1("SELECT * FROM accounts WHERE id=?", (int(account_id),)))
+    if not account or bool(account.get("invite_restricted")):
+        return None
+    since = int(time.time()) - int(SILENT_LOSS_LOOKBACK_SECONDS)
+    silent = db.q1(
+        """
+        SELECT COUNT(*) c
+        FROM invite_confirmations c
+        JOIN targets t ON t.id = c.target_id
+        WHERE t.account_id=? AND c.result='not_present' AND c.checked_at>=?
+        """,
+        (int(account_id), since),
+    )
+    confirmed = db.q1(
+        """
+        SELECT COUNT(*) c
+        FROM invite_confirmations c
+        JOIN targets t ON t.id = c.target_id
+        WHERE t.account_id=? AND c.result='confirmed' AND c.checked_at>=?
+        """,
+        (int(account_id), since),
+    )
+    silent_count = int(silent["c"] if silent else 0)
+    confirmed_count = int(confirmed["c"] if confirmed else 0)
+    if silent_count < int(SILENT_LOSS_RESTRICT_THRESHOLD) or confirmed_count > 0:
+        return None
+    reason = (
+        "Тихие потери: Telegram принял Invite RPC, но пользователя в чате нет "
+        "(%d раз за 7 дней без confirmed). Аккаунт снят с ротации — смените на "
+        "отдельный стабильный residential/mobile IP и прогрейте аккаунт, затем "
+        "восстановите вручную."
+        % silent_count
+    )
+    restrict_invites(int(account_id), reason)
+    db.log(reason, level="error", scope="invite", account_id=int(account_id))
+    return reason
 
 
 def build_client(account: Dict[str, Any]) -> TelegramClient:

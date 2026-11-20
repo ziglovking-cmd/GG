@@ -117,9 +117,13 @@ def save_bot_update_offset(offset: int) -> None:
 
 
 # Дефолты лимитов для нового аккаунта. Специально консервативные:
-# превышение приводит к PEER_FLOOD и спамблоку номера.
-DEFAULT_DAILY_LIMIT = 25
-DEFAULT_MIN_DELAY = 90       # секунд между инвайтами одного аккаунта
-DEFAULT_MAX_DELAY = 240
-DEFAULT_BATCH_SIZE = 8       # после стольких инвайтов — длинная пауза
+# превышение приводит к PEER_FLOOD, silent loss и риску для целевого чата.
+# Масштаб — числом аккаунтов с отдельным IP, не скоростью одного.
+DEFAULT_DAILY_LIMIT = 2
+DEFAULT_MIN_DELAY = 15 * 60   # секунд между инвайтами одного аккаунта
+DEFAULT_MAX_DELAY = 25 * 60
+DEFAULT_BATCH_SIZE = 2        # после стольких confirmed/armed RPC — длинная пауза
 DEFAULT_BATCH_PAUSE = 45 * 60
+# Тихие потери подряд без confirmed → снять аккаунт с ротации до ручного restore.
+SILENT_LOSS_RESTRICT_THRESHOLD = 2
+SILENT_LOSS_LOOKBACK_SECONDS = 7 * 24 * 3600

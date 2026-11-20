@@ -28,13 +28,14 @@
 <section id="tab-accounts" class="pane active">
   <div class="card">
     <h2>Добавить аккаунт</h2>
-    <p class="hint">Каждому аккаунту — свой прокси. Десять аккаунтов с одного IP Telegram
-      связывает между собой, и блокировка прилетает всему пулу разом.</p>
+    <p class="hint">Легитимный режим: <b>1 аккаунт = 1 стабильный residential/mobile IP</b>.
+      Общий прокси на пачку аккаунтов и ротация IP на одном аккаунте повышают silent loss
+      и риск для целевого чата. Масштаб — числом аккаунтов, не скоростью одного.</p>
     <div class="grid">
       <label>Название<input id="acc-label" placeholder="Аккаунт 1"></label>
       <label>Телефон<input id="acc-phone" placeholder="+79001234567"></label>
       <label>Прокси<input id="acc-proxy" placeholder="socks5://user:pass@host:1080"></label>
-      <label>Лимит попыток в сутки<input id="acc-limit" type="number" value="25"></label>
+      <label>Лимит confirmed в сутки<input id="acc-limit" type="number" value="2"></label>
     </div>
     <button class="primary" id="acc-add">Добавить</button>
   </div>

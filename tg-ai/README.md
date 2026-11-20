@@ -49,19 +49,10 @@ python bot.py
 3. Чтобы не убило: `pkg install termux-services` + держи зарядку / отключи оптимизацию батареи для Termux.  
    Или `ssh` на телефон и `nohup python bot.py &`.
 
-### Вариант C — Serv00 (бесплатный хост с SSH, без карты)
+### Вариант C — Serv00 (без карты) → пошагово
 
-1. Рега на [serv00.com](https://www.serv00.com) → ждут активации (иногда очередь).  
-2. SSH на сервер, залей `tg-ai`, поставь python/venv, `.env` с **пустым** `WEBHOOK_URL`.  
-3. Запуск:
-```bash
-cd ~/tg-ai
-nohup python3 bot.py >> bot.log 2>&1 &
-```
-4. В панели Serv00 добавь **cron** раз в 10 минут (перезапуск если упал):
-```bash
-pgrep -f 'python3 bot.py' >/dev/null || (cd ~/tg-ai && nohup python3 bot.py >> bot.log 2>&1 &)
-```
+Полная инструкция: **[SERV00.md](./SERV00.md)**  
+Коротко: рега → Enable «Run your own applications» → SSH → venv → `.env` → `./start.sh` → cron каждые 5 мин.
 
 ### Где НЕ ждать чуда
 

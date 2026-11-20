@@ -286,6 +286,9 @@ def connect() -> sqlite3.Connection:
                 ("preflight_checked_at", "INTEGER"),
                 # Общий для всех аккаунтов кампании момент следующего приглашения.
                 ("next_invite_at", "INTEGER NOT NULL DEFAULT 0"),
+                # Frankenstein waves: confirmed в текущей волне + пауза между волнами.
+                ("wave_progress", "INTEGER NOT NULL DEFAULT 0"),
+                ("wave_pause_until", "INTEGER NOT NULL DEFAULT 0"),
             ):
                 if name not in campaign_columns:
                     _conn.execute(
@@ -671,6 +674,11 @@ def finalize_invite_confirmation(
                             "Приглашён %s (присутствие подтверждено)" % label,
                         ),
                     )
+                    _advance_wave_on_confirmed(
+                        conn,
+                        campaign_id=int(target["campaign_id"]),
+                        now_ts=now_ts,
+                    )
                 conn.commit()
                 return "invited" if changed else current_status
 
@@ -716,6 +724,75 @@ def finalize_invite_confirmation(
         except Exception:
             conn.rollback()
             raise
+
+
+def _advance_wave_on_confirmed(
+    conn: sqlite3.Connection,
+    *,
+    campaign_id: int,
+    now_ts: int,
+) -> None:
+    """После confirmed: +1 к волне; при заполнении — пауза hours_between_waves."""
+    campaign = conn.execute(
+        "SELECT settings, wave_progress, wave_pause_until, next_invite_at "
+        "FROM campaigns WHERE id=?",
+        (campaign_id,),
+    ).fetchone()
+    if not campaign:
+        return
+    try:
+        settings = json.loads(campaign["settings"] or "{}")
+    except Exception:
+        settings = {}
+    per_wave = max(1, int(settings.get("per_wave") or 0))
+    hours = max(0, int(settings.get("hours_between_waves") or 0))
+    if not settings.get("per_wave") or hours <= 0:
+        return
+    progress = int(campaign["wave_progress"] or 0) + 1
+    if progress < per_wave:
+        conn.execute(
+            "UPDATE campaigns SET wave_progress=? WHERE id=?",
+            (progress, campaign_id),
+        )
+        return
+    pause_until = now_ts + hours * 3600
+    next_invite = max(int(campaign["next_invite_at"] or 0), pause_until)
+    conn.execute(
+        """
+        UPDATE campaigns
+        SET wave_progress=0, wave_pause_until=?, next_invite_at=?
+        WHERE id=?
+        """,
+        (pause_until, next_invite, campaign_id),
+    )
+    conn.execute(
+        """
+        INSERT INTO events (ts,level,scope,campaign_id,account_id,message)
+        VALUES (?,'info','invite',?,?,?)
+        """,
+        (
+            now_ts,
+            campaign_id,
+            None,
+            "Волна закрыта (%d confirmed) — пауза %d ч до следующей"
+            % (per_wave, hours),
+        ),
+    )
+
+
+def chat_confirmed_today(target_chat_id: int, now_ts: Optional[int] = None) -> int:
+    """Сколько presence-confirmed приглашений в этот чат за сегодня (все кампании)."""
+    day_start = int(datetime.combine(date.today(), datetime_time.min).timestamp())
+    row = q1(
+        """
+        SELECT COUNT(*) c
+        FROM targets t
+        JOIN campaigns c ON c.id=t.campaign_id
+        WHERE c.target_chat_id=? AND t.status='invited' AND t.attempted_at>=?
+        """,
+        (int(target_chat_id), day_start),
+    )
+    return int(row["c"] if row else 0)
 
 
 def row_to_dict(row: Optional[sqlite3.Row]) -> Optional[Dict[str, Any]]:

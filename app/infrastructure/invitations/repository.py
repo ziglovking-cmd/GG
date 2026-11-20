@@ -144,7 +144,16 @@ class SqliteInvitationRepository:
         return db.ex("UPDATE targets SET error=? WHERE id=? AND status='verifying'", (error, target_id,))
 
     def campaign_next_invite(self, campaign_id):
-        return db.row_to_dict(db.q1('SELECT next_invite_at FROM campaigns WHERE id=?', (campaign_id,)))
+        return db.row_to_dict(
+            db.q1(
+                "SELECT next_invite_at, wave_pause_until, wave_progress, settings, "
+                "target_chat_id FROM campaigns WHERE id=?",
+                (campaign_id,),
+            )
+        )
+
+    def chat_confirmed_today(self, target_chat_id: int) -> int:
+        return db.chat_confirmed_today(int(target_chat_id))
 
     def reserve_campaign(self, next_at, campaign_id):
         return db.ex('UPDATE campaigns SET next_invite_at=? WHERE id=?', (next_at, campaign_id,))

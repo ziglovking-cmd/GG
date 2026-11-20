@@ -12,11 +12,21 @@ from app import accounts, db, inviting, parsing, preflight
 from app.api.schemas import CampaignIn, TargetSyncIn
 from app.config import DEFAULT_INVITE_MODE, DEFAULT_SPEED_PROFILE
 from app.domain.invitations import settings_json, speed_profile_bounds
+from app.frankenstein import (
+    apply_template_to_settings,
+    list_templates,
+    template_warnings,
+)
 from app.infrastructure.bot import client
 from app.mvp import MvpGateError, assert_campaign_start_allowed
 
 
 router = APIRouter()
+
+
+@router.get("/api/campaign-templates")
+def campaign_templates():
+    return list_templates()
 
 
 @router.post("/api/campaigns/sync-target")
@@ -67,6 +77,26 @@ async def create_campaign(body: CampaignIn):
         "invite_gap_min": gap_min,
         "invite_gap_max": gap_max,
     }
+    if body.template_id:
+        settings = apply_template_to_settings(settings, body.template_id)
+        # Ручной override режима/профиля из формы имеет приоритет над шаблоном.
+        if body.invite_mode:
+            settings["invite_mode"] = invite_mode
+        if body.speed_profile and body.speed_profile != DEFAULT_SPEED_PROFILE:
+            settings["speed_profile"] = speed_profile
+            settings["invite_gap_min"], settings["invite_gap_max"] = speed_profile_bounds(
+                speed_profile
+            )
+        invite_mode = str(settings.get("invite_mode") or invite_mode)
+        speed_profile = str(settings.get("speed_profile") or speed_profile)
+        if body.apply_account_daily_limits:
+            daily = int(settings.get("daily_limit_per_account") or 0)
+            if daily > 0:
+                for account_id in body.account_ids:
+                    db.ex(
+                        "UPDATE accounts SET daily_limit=? WHERE id=?",
+                        (daily, int(account_id)),
+                    )
     campaign_id = db.ex(
         "INSERT INTO campaigns (name,target_chat_id,target_title,settings,status,created_at) "
         "VALUES (?,?,?,?, 'draft', ?)",
@@ -74,13 +104,26 @@ async def create_campaign(body: CampaignIn):
          inviting.settings_json(settings), int(time.time())),
     )
     count = inviting.build_targets(campaign_id, body.source_chat_ids, body.filters)
+    warnings = template_warnings(len(body.account_ids), settings.get("template_id"))
     db.log(
-        "Кампания «%s» создана, целей: %d, режим %s, профиль %s"
-        % (body.name, count, invite_mode, speed_profile),
+        "Кампания «%s» создана, целей: %d, режим %s, профиль %s, шаблон %s"
+        % (
+            body.name,
+            count,
+            invite_mode,
+            speed_profile,
+            settings.get("template_id") or "—",
+        ),
         scope="invite",
         campaign_id=campaign_id,
     )
-    return {"id": campaign_id, "targets": count, "invite_mode": invite_mode}
+    return {
+        "id": campaign_id,
+        "targets": count,
+        "invite_mode": invite_mode,
+        "template_id": settings.get("template_id"),
+        "warnings": warnings,
+    }
 
 
 @router.get("/api/campaigns/{campaign_id}")
@@ -91,6 +134,20 @@ def get_campaign(campaign_id: int):
     row["settings"] = db.settings_of(row)
     row["stats"] = inviting.campaign_stats(campaign_id)
     row["running"] = campaign_id in inviting.RUNNERS and not inviting.RUNNERS[campaign_id].done()
+    settings = row["settings"]
+    per_wave = int(settings.get("per_wave") or 0)
+    row["wave"] = {
+        "progress": int(row.get("wave_progress") or 0),
+        "per_wave": per_wave,
+        "pause_until": int(row.get("wave_pause_until") or 0),
+        "pause_in": max(0, int(row.get("wave_pause_until") or 0) - int(time.time())),
+        "hours_between": int(settings.get("hours_between_waves") or 0),
+        "template_id": settings.get("template_id"),
+        "chat_confirmed_today": db.chat_confirmed_today(int(row["target_chat_id"])),
+        "chat_soft_cap": int(
+            settings.get("chat_daily_confirmed_soft_cap") or 0
+        ),
+    }
     state = inviting.STATE.get(campaign_id, {})
     result_counts = {
         int(item["account_id"]): item

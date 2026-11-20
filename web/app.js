@@ -695,9 +695,20 @@ $("members-export").onclick = () => location.href = `/api/members/export?chat_id
 
 // ─────────────────────────────────────────────────────── кампании
 
+let CAMPAIGN_TEMPLATES = [];
+
 async function loadCampaignForm() {
   await loadAccounts();
   CHATS = await api("/chats");
+  try { CAMPAIGN_TEMPLATES = await api("/campaign-templates"); } catch (_) { CAMPAIGN_TEMPLATES = []; }
+  const tpl = $("camp-template");
+  if (tpl) {
+    const keep = tpl.value;
+    tpl.innerHTML = '<option value="">— вручную —</option>' + CAMPAIGN_TEMPLATES.map((t) =>
+      `<option value="${esc(t.id)}">${esc(t.name)} · ${esc(t.result_per_day_hint || "")}</option>`
+    ).join("");
+    if (keep) tpl.value = keep;
+  }
   $("camp-accounts").innerHTML = ACCOUNTS.filter((a) =>
     a.status === "authorized" && a.can_invite && !a.invite_restricted)
     .map((a) => `<label><input type="checkbox" class="camp-acc" value="${a.id}" checked>
@@ -709,6 +720,26 @@ async function loadCampaignForm() {
     .join("") || '<p class="hint">Сначала спарсите хотя бы один чат.</p>';
   loadCampaigns();
 }
+
+function applyTemplateToForm(templateId) {
+  const t = CAMPAIGN_TEMPLATES.find((item) => item.id === templateId);
+  const hint = $("camp-template-hint");
+  if (!t) {
+    if (hint) hint.textContent = "Шаблон задаёт волны confirmed + daily caps. Масштаб — числом аккаунтов с отдельным IP, не секундами.";
+    return;
+  }
+  if ($("camp-invite-mode")) $("camp-invite-mode").value = t.invite_mode || "hybrid";
+  if ($("camp-speed-profile")) $("camp-speed-profile").value = t.speed_profile || "cautious";
+  if (hint) {
+    hint.textContent =
+      `${t.description} · волна ${t.per_wave} confirmed / пауза ${t.hours_between_waves}ч · ` +
+      `daily ${t.daily_limit_per_account}/акк · риск ${t.risk_level}`;
+  }
+}
+
+document.addEventListener("change", (ev) => {
+  if (ev.target && ev.target.id === "camp-template") applyTemplateToForm(ev.target.value);
+});
 
 $("camp-sync-target").onclick = async () => {
   const target = $("camp-target").value.trim();
@@ -742,11 +773,14 @@ $("camp-create").onclick = async () => {
   const target = $("camp-target").value.trim();
   if (!target) return toast("Укажите целевой чат", true);
   try {
+    const template_id = $("camp-template")?.value || null;
     const r = await api("/campaigns", { method: "POST", body: {
       name: $("camp-name").value.trim() || "Кампания",
       target_chat: target, account_ids, source_chat_ids,
       invite_mode: $("camp-invite-mode")?.value || "hybrid",
       speed_profile: $("camp-speed-profile")?.value || "cautious",
+      template_id: template_id || null,
+      apply_account_daily_limits: !!template_id,
       filters: {
         skip_bots: $("f-bots").checked,
         skip_deleted: $("f-deleted").checked,
@@ -758,7 +792,9 @@ $("camp-create").onclick = async () => {
         min_messages: Number($("f-min-msg").value) || 1,
         limit: Number($("f-limit").value) || 5000,
       } } });
-    toast(`Кампания создана, целей: ${r.targets}, режим ${r.invite_mode || "hybrid"}`);
+    toast(`Кампания создана, целей: ${r.targets}, режим ${r.invite_mode || "hybrid"}` +
+      (r.template_id ? `, шаблон ${r.template_id}` : ""));
+    if (r.warnings?.length) toast(r.warnings[0], true);
     openCampaign(r.id);
     loadCampaigns();
   } catch (e) { toast(e.message, true); }
@@ -1106,8 +1142,9 @@ async function refreshCampaign() {
 
   const mode = c.settings?.invite_mode || "hybrid";
   const speed = c.settings?.speed_profile || "cautious";
+  const tpl = c.settings?.template_id || c.wave?.template_id || "—";
   $("cd-title").textContent =
-    `${c.name} → ${c.target_title || c.target_chat_id} · ${mode}/${speed}`;
+    `${c.name} → ${c.target_title || c.target_chat_id} · ${mode}/${speed} · ${tpl}`;
   const s = c.stats;
   const cells = [["total", "целей"], ["invited", "добавлено в чат"],
     ["verifying", "ожидают подтверждения"], ["privacy", "приватность"],
@@ -1116,6 +1153,14 @@ async function refreshCampaign() {
   $("cd-stats").innerHTML = cells.map(([k, label]) =>
     `<div class="stat"><b>${s[k] || 0}</b><span>${label}</span></div>`).join("");
   $("cd-stats").title = "Счётчик добавленных увеличивается после подтверждения членства. Результаты запросов показаны ниже у аккаунтов и в последних попытках.";
+  const wave = c.wave || {};
+  const waveHint = wave.per_wave
+    ? `Волна confirmed ${wave.progress || 0}/${wave.per_wave}` +
+      (wave.pause_in > 0 ? ` · пауза ${fmtDuration(wave.pause_in)}` : "") +
+      (wave.chat_soft_cap
+        ? ` · чат сегодня ${wave.chat_confirmed_today || 0}/${wave.chat_soft_cap}`
+        : "")
+    : "";
 
   const linkPanel = $("cd-invite-link-panel");
   const inviteLink = c.settings?.invite_link || "";
@@ -1139,17 +1184,18 @@ async function refreshCampaign() {
   const removedCount = workerViews.filter(({ view }) => view.kind === "removed").length;
   const waitingCount = workerViews.filter(({ view }) => view.kind === "waiting").length;
   const activeCount = workerViews.length - removedCount;
+  const waveLine = waveHint ? `<div class="hint">${esc(waveHint)}</div>` : "";
   if (!workerViews.length) {
-    $("cd-worker-summary").textContent = "";
+    $("cd-worker-summary").innerHTML = waveLine;
   } else if (!c.running && c.status === "draft") {
-    $("cd-worker-summary").innerHTML =
+    $("cd-worker-summary").innerHTML = waveLine +
       `<b>Кампания ещё не запускалась.</b> Выбрано аккаунтов: ${workerViews.length}. ` +
       "Проверка доступа к целевому чату начнётся после запуска.";
   } else if (!c.running) {
-    $("cd-worker-summary").innerHTML =
+    $("cd-worker-summary").innerHTML = waveLine +
       `<b>Кампания на паузе.</b> Выбрано аккаунтов: ${workerViews.length}.`;
   } else {
-    $("cd-worker-summary").innerHTML =
+    $("cd-worker-summary").innerHTML = waveLine +
       `<b>В ротации: ${activeCount} из ${workerViews.length}</b> · ` +
       `ожидают: ${waitingCount} · сняты: ${removedCount}. ` +
       "Технически снятый аккаунт можно проверить и вернуть кнопкой в его карточке.";

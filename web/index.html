@@ -171,7 +171,13 @@
           <option value="warmed">warmed — 8–15 мин (после прогрева)</option>
         </select>
       </label>
+      <label>Шаблон нагрузки (Frankenstein)
+        <select id="camp-template">
+          <option value="">— вручную —</option>
+        </select>
+      </label>
     </div>
+    <p id="camp-template-hint" class="hint">Шаблон задаёт волны confirmed + daily caps. Масштаб — числом аккаунтов с отдельным IP, не секундами.</p>
     <div class="row">
       <button id="camp-sync-target">Исключить дубли</button>
       <span id="camp-sync-status" class="hint-inline">Сначала укажите целевой чат</span>

@@ -39,9 +39,28 @@
 - Pre-invite reading чата перед Invite RPC
 - `SILENT_LOSS_RESTRICT_THRESHOLD = 1`
 
+## Frankenstein (волны × confirmed)
+
+Идея волн/шаблонов из SoCloseSociety, но:
+- успех только после presence-confirm;
+- 1 аккаунт = 1 proxy;
+- паузы в **минутах**, не 30–75 сек;
+- нет шаблона «Aggressive 200/день».
+
+| Шаблон | Акков | confirmed/день·акк | Волна | Пауза волн |
+|---|---|---|---|---|
+| ultra_safe | 1 | 2 | 2 | 8ч |
+| safe | 1 | 3 | 3 | 6ч |
+| conservative | 3 | 3 | 4 | 5ч |
+| standard | 5 | 4 | 5 | 4ч |
+| growth | 10 | 5 | 6 | 4ч |
+
+Мягкий потолок чата: ~40 confirmed/сутки (все кампании на этот `target_chat_id`).
+
 ## API
 
-- `POST /api/campaigns` — `invite_mode`, `speed_profile`
+- `GET /api/campaign-templates`
+- `POST /api/campaigns` — `invite_mode`, `speed_profile`, `template_id`
 - `POST /api/campaigns/{id}/start` — gates; link-режим возвращает `invite_link`
 - `POST /api/campaigns/{id}/invite-link`
 - `POST /api/accounts/{id}/warmup`

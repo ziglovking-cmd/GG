@@ -147,17 +147,33 @@ class InvitationScheduler:
                 if not row:
                     return None
                 now = int(time.time())
-                remaining = int(row["next_invite_at"] or 0) - now
+                wave_remaining = int(row.get("wave_pause_until") or 0) - now
+                queue_remaining = int(row["next_invite_at"] or 0) - now
+                remaining = max(wave_remaining, queue_remaining)
                 if remaining > 0:
-                    if logged_wait_until != int(row["next_invite_at"]):
-                        self.repo.log(
-                            "Ожидание общего интервала кампании: ещё %d сек; "
-                            "следующее приглашение пока не отправлено" % remaining,
-                            scope="invite", campaign_id=campaign_id,
-                        )
-                        logged_wait_until = int(row["next_invite_at"])
-                    info["state"] = "очередь кампании: запрос ещё не отправлен, ожидание %d мин" % max(
-                        1, (remaining + 59) // 60
+                    wait_until = max(
+                        int(row.get("wave_pause_until") or 0),
+                        int(row["next_invite_at"] or 0),
+                    )
+                    if logged_wait_until != wait_until:
+                        if wave_remaining >= queue_remaining and wave_remaining > 0:
+                            self.repo.log(
+                                "Ожидание паузы между волнами: ещё %d сек; "
+                                "следующее приглашение пока не отправлено" % remaining,
+                                scope="invite",
+                                campaign_id=campaign_id,
+                            )
+                        else:
+                            self.repo.log(
+                                "Ожидание общего интервала кампании: ещё %d сек; "
+                                "следующее приглашение пока не отправлено" % remaining,
+                                scope="invite",
+                                campaign_id=campaign_id,
+                            )
+                        logged_wait_until = wait_until
+                    info["state"] = (
+                        "очередь кампании: запрос ещё не отправлен, ожидание %d мин"
+                        % max(1, (remaining + 59) // 60)
                     )
                     await timing.sleep(min(remaining, 60), stop)
                     continue
@@ -166,10 +182,37 @@ class InvitationScheduler:
                         "Общий интервал кампании завершён; продолжаю подготовку приглашения",
                         scope="invite", campaign_id=campaign_id,
                     )
+                # Мягкий потолок confirmed/сутки на целевой чат (Frankenstein).
+                soft_cap = self._chat_soft_cap_message(campaign_id, row)
+                if soft_cap is not None:
+                    info["state"] = soft_cap
+                    await timing.sleep(600, stop)
+                    continue
                 low, high = self.campaign_gap_bounds(campaign_id)
                 next_at = now + humanized_delay_seconds(low, high)
                 self.repo.reserve_campaign(next_at, campaign_id)
                 return next_at
+        return None
+
+    def _chat_soft_cap_message(
+        self, campaign_id: int, row: Dict[str, Any]
+    ) -> Optional[str]:
+        settings = settings_of({"settings": row.get("settings") or "{}"})
+        cap = int(settings.get("chat_daily_confirmed_soft_cap") or 0)
+        if cap <= 0:
+            return None
+        chat_id = int(row.get("target_chat_id") or 0)
+        if not chat_id:
+            campaign = self.repo.get_campaign(campaign_id)
+            chat_id = int((campaign or {}).get("target_chat_id") or 0)
+        if not chat_id:
+            return None
+        confirmed = self.repo.chat_confirmed_today(chat_id)
+        if confirmed >= cap:
+            return (
+                "мягкий лимит чата: %d confirmed сегодня (cap %d) — жду до завтра"
+                % (confirmed, cap)
+            )
         return None
 
     def release_campaign_slot(self, campaign_id: int, reserved_at: int) -> None:

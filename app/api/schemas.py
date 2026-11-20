@@ -93,6 +93,8 @@ class CampaignIn(BaseModel):
     filters: Dict[str, Any] = {}
     invite_mode: str = DEFAULT_INVITE_MODE  # force | link | hybrid
     speed_profile: str = DEFAULT_SPEED_PROFILE  # cautious | normal | warmed
+    template_id: Optional[str] = None  # frankenstein: ultra_safe|safe|conservative|standard|growth
+    apply_account_daily_limits: bool = True
 
 
 class WarmupIn(BaseModel):

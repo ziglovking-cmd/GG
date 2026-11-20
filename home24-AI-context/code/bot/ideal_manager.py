@@ -3,11 +3,12 @@
 
 Владелец: «начальница сказала вот этот диалог был идеальным — настраивайся под него»
 и «сделай его пиздец умным». Этот модуль держит правила тона и подмешивает
-похожие живые реплики из guest-dialogs / ideal_dialog в промпт вместе с RAG.
+похожие живые реплики из guest-dialogs / ideal_dialog / reply_playbook в промпт.
 """
 
 from __future__ import annotations
 
+import json
 import os
 import re
 from functools import lru_cache
@@ -21,17 +22,30 @@ _STOP = {
     "можно", "будет", "или", "что", "как", "здравствуйте", "добрый", "день", "вечер",
 }
 
+_BAD_STYLE = re.compile(
+    r"(?i)("
+    r"залог\s+не\s+везде|"
+    r"по\s+вашей\s+(квартире\s+)?скажет\s+менеджер|"
+    r"бесплатн\w*\s+парков|"
+    r"залог\s+(?!2\s*000|2000)\d|"
+    r"точно\s+свободн|всегда\s+свободн"
+    r")"
+)
 
-PERSONA_BLOCK = """Идеальный менеджер Home24 (тон + факты):
+PERSONA_BLOCK = """Идеальный менеджер Home24 (тон + факты + как отвечать на любое соо):
 - Пиши как живой человек в Telegram: коротко, тепло, на «вы», женский род.
 - Одна законченная фраза за ход; без канцелярита и без повторного приветствия.
 - Принял факты гостя сразу; не переспрашивай уже сказанное.
+- Воронка: даты → условия (гости/район/что важно) → карточки → выбор → бронь/менеджер.
 - Жёстко: цена, метро, адрес, залог, животные, «свободно», бесплатная парковка —
   только из RAG/каталога/календаря. Нет строки в базе → не додумывай, скажи «уточню»
   или uncertain=true. Лучше короткий честный ответ, чем красивая выдумка.
-- Не обещай то, чего нет в карточке или FAQ.
-- «Спасибо» → «Пожалуйста)» без нового вопроса.
-- Эталон стиля — ЭТАЛОННЫЙ ДИАЛОГ №1 (не копируй из него даты, имена и факты)."""
+- Залог всегда 2 000 ₽, возврат после клининга. Чужую сумму не называй.
+- Парковку бесплатной не обещай. Питомцы — не во всех, метка в карточке + доплата.
+- «Спасибо» → «Пожалуйста)» без нового вопроса. «Подумаем» → «Хорошо, будете готовы, напишите.»
+- Техника/вайфай/ТВ во время проживания → спроси адрес, пришли путеводитель.
+- Документы/оплата/отмена/жалоба/выбор квартиры → по факту FAQ или escalate менеджеру.
+- Эталон стиля — ЭТАЛОННЫЙ ДИАЛОГ №1 и reply_playbook (не копируй даты, имена и факты)."""
 
 
 def ideal_enabled() -> bool:
@@ -48,16 +62,40 @@ def _stems(text: str) -> frozenset[str]:
     return frozenset(w[:5] for w in words if len(w) > 1 and w not in _STOP)
 
 
+def _load_playbook_pairs() -> list[tuple[frozenset[str], str, str]]:
+    path = ROOT / "data" / "reply_playbook.jsonl"
+    rows: list[tuple[frozenset[str], str, str]] = []
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return rows
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            row = json.loads(line)
+        except ValueError:
+            continue
+        guest = str(row.get("guest") or "").strip()
+        bot = str(row.get("bot") or "").strip()
+        if 3 <= len(guest) <= 220 and 4 <= len(bot) <= 320:
+            rows.append((_stems(guest), guest, bot))
+    return rows
+
+
 @lru_cache(maxsize=2)
 def _style_pairs(path_key: str) -> tuple[tuple[frozenset[str], str, str], ...]:
-    """Пары гость→бот из guest-dialogs и ideal_dialog (для тона)."""
+    """Пары гость→бот из playbook + guest-dialogs + ideal_dialog (для тона)."""
     del path_key
     rows: list[tuple[frozenset[str], str, str]] = []
+    # curated playbook — первым (правильные ответы на все типы соо)
+    rows.extend(_load_playbook_pairs())
     sources = [
         ROOT / "data" / "ideal_dialog_1.md",
         ROOT / "data" / "style_dialogs.md",
-        ROOT / "data" / "style_external_tone.md",  # MultiWOZ/шаблоны: тон, не факты
-        ROOT.parents[0] / "guest-dialogs" / "dialogs.md",  # AI-context пакет (если рядом)
+        ROOT / "data" / "style_external_tone.md",
+        ROOT.parents[0] / "guest-dialogs" / "dialogs.md",
         ROOT / "training" / "dialogs_home24_sample.md",
     ]
     for path in sources:
@@ -67,7 +105,6 @@ def _style_pairs(path_key: str) -> tuple[tuple[frozenset[str], str, str], ...]:
             text = path.read_text(encoding="utf-8")
         except OSError:
             continue
-        # markdown: **Гость:** / **Бот:** или "- ts · guest:" / "- ts · bot:"
         guest = ""
         for line in text.splitlines():
             s = line.strip()
@@ -94,9 +131,12 @@ def _style_pairs(path_key: str) -> tuple[tuple[frozenset[str], str, str], ...]:
                     if "[КАРТОЧКИ" in bot or "1)" in bot[:8]:
                         guest = ""
                         continue
+                    if _BAD_STYLE.search(bot):
+                        guest = ""
+                        continue
                     rows.append((_stems(guest), guest, bot))
                 guest = ""
-    # дедуп
+    # дедуп: первое вхождение выигрывает (playbook раньше)
     seen: set[str] = set()
     out: list[tuple[frozenset[str], str, str]] = []
     for stems, g, b in rows:
@@ -108,13 +148,13 @@ def _style_pairs(path_key: str) -> tuple[tuple[frozenset[str], str, str], ...]:
     return tuple(out)
 
 
-def similar_style(text: str, k: int = 2, max_chars: int = 480) -> str:
+def similar_style(text: str, k: int = 3, max_chars: int = 640) -> str:
     """Блок «Как отвечал живой менеджер» для system prompt."""
     if not ideal_enabled():
         return ""
     if os.getenv("IDEAL_STYLE_OFF", "").strip().lower() in ("1", "true", "yes"):
         return ""
-    idx = _style_pairs("v1")
+    idx = _style_pairs("v2")
     q = _stems(text)
     if not idx or not q:
         return ""
@@ -125,10 +165,12 @@ def similar_style(text: str, k: int = 2, max_chars: int = 480) -> str:
         if len(inter) < min_inter:
             continue
         score = len(inter) / (len(q | stems) ** 0.5)
+        if guest.casefold() in (text or "").casefold():
+            score += 2.0
         scored.append((score, guest, reply))
     scored.sort(key=lambda x: -x[0])
     lines: list[str] = []
-    min_score = 0.35 if len(q) <= 2 else 0.55
+    min_score = 0.28 if len(q) <= 2 else 0.45
     for score, guest, reply in scored[:k]:
         if score < min_score:
             continue

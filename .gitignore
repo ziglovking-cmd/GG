@@ -2,3 +2,6 @@ home24-AI-context/code/.venv/
 **/__pycache__/
 *.pyc
 .env
+# тяжёлые синтетические наборы (есть на проде /opt/home24/training/)
+home24-AI-context/code/training/dialogs_home24.jsonl
+home24-AI-context/code/training/finetune_home24.jsonl

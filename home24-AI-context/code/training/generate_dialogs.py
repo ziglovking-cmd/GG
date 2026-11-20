@@ -697,7 +697,9 @@ def build(n: int, seed: int) -> list[dict[str, Any]]:
         tries += 1
         maker = rng.choices([m for m, _ in makers], weights=[w for _, w in makers])[0]
         d = maker(random.Random(rng.random()))
-        [REDACTED] for t in d.turns], ensure_ascii=False).encode()).hexdigest()
+        key = hashlib.sha1(
+            json.dumps([t for t in d.turns], ensure_ascii=False).encode()
+        ).hexdigest()
         if key in seen:
             continue
         seen.add(key)
@@ -737,12 +739,12 @@ def sample_md(dialogs: list[dict[str, Any]], k: int = 60) -> str:
         by_outcome.setdefault(dlg["outcome"], []).append(dlg)
     lines = [f"# Эталонные диалоги Home24 — выборка ({k} из {len(dialogs)})", "",
              "| Исход | Диалогов |", "| --- | --- |"]
-    for o, ds in sorted(by_outcome.items(), [REDACTED] x: -len(x[1])):
+    for o, ds in sorted(by_outcome.items(), key=lambda x: -len(x[1])):
         lines.append(f"| {o} | {len(ds)} |")
     lines.append("")
     rng = random.Random(1)
     picked: list[dict[str, Any]] = []
-    for o, ds in sorted(by_outcome.items(), [REDACTED] x: -len(x[1])):
+    for o, ds in sorted(by_outcome.items(), key=lambda x: -len(x[1])):
         picked += rng.sample(ds, k=min(len(ds), max(2, k * len(ds) // len(dialogs))))
     for dlg in picked[:k]:
         lines.append(f"## {dlg['id']} · {dlg['outcome']} · {', '.join(dlg['tags'][:3])}")
